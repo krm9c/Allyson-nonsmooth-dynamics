@@ -1,0 +1,635 @@
+
+
+\documentclass[a4paper,fleqn]{cas-dc}
+
+
+\usepackage[toc,page]{appendix} 
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{lineno,hyperref}
+\usepackage{dirtytalk}
+\usepackage{multirow}
+\usepackage[outdir=./]{epstopdf}
+\usepackage[export]{adjustbox}
+\usepackage{subfig}
+\usepackage{array}
+\usepackage{color, colortbl}
+
+\usepackage{newunicodechar}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{algorithmic}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+
+\usepackage{amsmath}	% For Math
+\usepackage{fancyhdr}	% For fancy header/footer
+\usepackage{graphicx}	% For including figure/image
+\usepackage{cancel}		% To use the slash to cancel 
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{bigints}
+\usepackage{eucal}
+\usepackage{algorithm2e}\RestyleAlgo{ruled}
+
+
+% If the frontmatter runs over more than one page
+% use the longmktitle option.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-dc}
+
+%\usepackage[numbers]{natbib}
+%\usepackage[authoryear]{natbib}
+\usepackage[authoryear,longnamesfirst]{natbib}
+
+
+%%%Author macros
+\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+\tsc{WGM}
+\tsc{QE}
+%%%
+
+
+% Uncomment and use as if needed
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newdefinition{remark}{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+%\newproof{pf}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+
+\begin{document}
+
+%----------------New Commands---------------%
+\newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\bigabs}[1]{\left \lvert #1 \right \rvert}
+
+\newcommand{\sobkp}[1]{W^{k,p}(#1)}
+\newcommand{\sob}{W^{k,p}}
+\newcommand{\Lloc}[1]{L_1^{loc}(#1)}
+\newcommand{\totalV}[1]{D_t^{\abs{#1}}V(t)}
+\newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
+\newcommand{\D}{\textbf{D}}
+\newcommand{\fhat}{\hat{f}}
+
+%minGW
+\newcommand{\argminpsi}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
+
+%minSmoothGW
+\newcommand{\minSmoothGW}{\min\limits_{g(\textbf{w}(t),\delta(\psi(t)))\in \sob}}
+
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% Short title
+\shorttitle{}    
+
+% Short author
+\shortauthors{}  
+
+% Main title of the paper
+\title [mode = title]{The Effect of Architechture on Learning Behavior of Deep Neural Networks}  
+
+% Title footnote mark
+% eg: \tnotemark[1]
+%\tnotemark[1] 
+
+% Title footnote 1.
+% eg: \tnotetext[1]{Title footnote text}
+\tnotetext[1]{} 
+
+% First author
+%
+% Options: Use if required
+% eg: \author[1,3]{Author Name}[type=editor,
+%       style=chinese,
+%       auid=000,
+%       bioid=1,
+%       prefix=Sir,
+%       orcid=0000-0000-0000-0000,
+%       facebook=<facebook id>,
+%       twitter=<twitter id>,
+%       linkedin=<linkedin id>,
+%       gplus=<gplus id>]
+
+\author[1]{}%[<options>]
+
+% Corresponding author indication
+\cormark[1]
+
+% Footnote of the first author
+\fnmark[1]
+
+% Email id of the first author
+\ead{}
+
+% URL of the first author
+\ead[url]{}
+
+% Credit authorship
+% eg: \credit{Conceptualization of this study, Methodology, Software}
+\credit{}
+
+% Address/affiliation
+\affiliation[1]{organization={},
+            addressline={}, 
+            city={},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={}, 
+            state={},
+            country={}}
+
+\author[2]{}%[]
+
+% Footnote of the second author
+\fnmark[2]
+
+% Email id of the second author
+\ead{}
+
+% URL of the second author
+\ead[url]{}
+
+% Credit authorship
+\credit{}
+
+% Address/affiliation
+\affiliation[2]{organization={},
+            addressline={}, 
+            city={},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={}, 
+            state={},
+            country={}}
+
+% Corresponding author text
+\cortext[1]{Corresponding author}
+
+% Footnote text
+\fntext[1]{}
+
+% For a title note without a number/mark
+%\nonumnote{}
+
+%-------------------Abstract-----------------------%
+\begin{abstract}
+We consider the effects of Neural Network architecture
+\end{abstract}
+
+% Use if graphical abstract is present
+%\begin{graphicalabstract}
+%\includegraphics{}
+%\end{graphicalabstract}
+
+%-----------------Highlights------------------%
+\begin{highlights}
+\item The first quantification of NN architecture on the learning behavior
+\item Demonstrate the conditions to ensure stability of neural networks.
+\item A novel measure to efficiently perform neural architecture search and hyper-parameter search.
+\end{highlights}
+
+%-------------------Keywords-------------------%
+\begin{keywords}
+ Neural Network \sep Architecture Search\sep  \sep
+\end{keywords}
+\maketitle
+\section{Introduction}
+Ever since the conception of the multi-layer perceptrons and more so with the advent of deep neural networks~(NN); understanding and controlling
+the behavior of neural networks during their learning process has been as important as it has been elusive. Typically studying this behavior involves
+assumptions that are so stringent that the insights rarely translate to practice. The reason is that, studying the learning behavior of NN is hard, the process would involve
+two phase. In the first phase, one must understand how the NN reacts to changes in the data, the weight of the NN, and other hyper-parameters in the NN. 
+This phase is concerned with the question ``how does the NN learn?" and can be thought of as ``transient behavior of learning." 
+In the second phase, the goal is to understand, what is the result that was achieved by the NN. This essentially means, ``what did the NN learn?'' and can be thought of as 
+the ``steady state behavior of the learning''
+
+
+Although the study of both these phases is hard, the steady state behavior of learning has been paid more attention relative to the transient behavior of learning.
+Since, NNs are function approximators in their core, understanding the steady state learning behavior requires us to understand how well the NN approximates an unknown function -- 
+the approximation properties of NN. Approximation properties of NN have been long studied with \cite{cybenkoApproximationSuperpositionsSigmoidal1989,hornikMultilayerFeedforwardNetworks1989} establishing
+the first known results in this domain. Since then, to the present, there have been numerous results that establish the notion of approximation by NN. A good survey for different appoximation results is given in 
+\cite{guhringExpressivityDeepNeural2020}. Many of these notions describe the idea of neural network learning as not being closed in the corresponding function spaces, 
+since not all of these functions can be represented exactly by a neural network with networks of any width.  This idea of non-closedness describe the irreducible
+approximation error that is present in NN learning. More recently, the work in \cite{mahanNonclosednessSetsNeural2021a} show that closedness in Sobolev spaces 
+can be achieved with uniformly bounded parameters. 
+The result in \cite{mahanNonclosednessSetsNeural2021a} provides a couple of key insights. The first insight is due to the idea that, neural networks can be used to approximate
+target functions if and only if the network weights are bounded. The second insight stems from the constructions of their proof. In \cite{mahanNonclosednessSetsNeural2021a}, a series of 
+functions is constructed in Sobolev space with an appropriate $L_p$ norm. Although the steady state of this series is studied, the evolution of these functions in the Sobolev space is not attempted in \cite{mahanNonclosednessSetsNeural2021a}.
+Moreover, despite such progress in understanding the steady state behavior of neural networks, there has been very little research into the transient behavior of learning. {\color{red} Do literature survey  ...}
+
+
+In this work, we seek to study the transient behavior of learning by formulating the learning problem as a dynamical system. In other words, we will study the evolution of the Sobolev space functions. 
+Since, these functions are essentially NNs, this evolution is a function of the network architecture, the weight parameters and the data. We will use tools from the dynamic programming literature to formalize this evolution as a Hamilton Jacobi Bellman equation. Equipped with this equation, we will provide insights into the transient behavior of NN learning. We will also describe, how the learning 
+behavior is effected by the network architecture, the data and the parameters. 
+\section{Literature Review}
+
+\section{Preliminaries}
+These notation are adapted from \cite{kolda2009tensor}, please refer to the original paper for additional details. We begin by describing the notation for the paper. We use $\mathbb{N}$ to denote the set of natural numbers with $\mathbb{R}$ denoting the set of real numbers. We also use $\|.\|$ to denote the Euclidean norm for vectors, Frobenius norm for matrices.  Further, let $\innerprod{\cdot,\cdot}$ denote the dot product for vectors.  A $m^{th}$ order tensor is viewed as a multi-dimensional array contained in $\mathbb{R}^{I_1 \times I_2 \times I_3 \times I_4 \times \cdots I_{m}}$,  where the order can be thought of as the number of dimensions in the tensor. In this paper we will be mostly concerned with tensors of order $0, 1,2$ and $3$ which correspond to scalars, vectors and matrices and a list of matrices. Therefore, we will write a tensor of order $0$; a scalar, with lowercase letters, i.e., $x;$  a tensor of order one is denoted by lowercase bold alphabets such as $\bold{x}.$ A tensor of order $2$ is a matrix denoted by uppercase bold alphabets $\boldsymbol{X}$ and any tensor of order greater than $2$ are denoted by bolder Euler scripts letters such as $\boldsymbol{\mathcal{X}}.$ We will make one exception in our notation regarding the tensors that represent learnable/user defined parameters~(weights, architecture, step-size/learning rate, etc.), we will denote these with greek letters. The $i^{th}$ element of a vector $\bf{x}$ is denoted by $x_{[i]},$ while the $(i,j)^{th}$ element of a matrix $\boldsymbol{X}$ is denoted by $x_{[ij]}.$ Moreover, we denote the $i^{th}$ matrix in a tensor of order $3$ by $X_i.$  We will make the indices run from 1 to their capital letters such that $i = 1, \cdots, I.$ 
+
+We consider the problem of continual learning for this paper. Continual learning is the problem of learning a sequence of tasks where each task is represented by a data set obtained at a task instance, i.e. $t \in \mathcal{T}, \mathcal{T} = \{0,1,\ldots, T\}.$ We will assume that the dataset~(a list of matrices/vectors/graphs) represented by $\boldsymbol{\mathcal{X}}(t)$ is provided at each task $t\in \mathcal{T},$ where $\boldsymbol{\mathcal{X}}(t)$ is sampled according to the distribution $\mathbb{P}$ where $\boldsymbol{\mathcal{X}}(t) \subset \mathcal{D}$ such that $\mathcal{D}$ -- the domain, is a measurable set with a non-empty interior. Moreover, $(\mathcal{D}, \mathcal{B}(\mathcal{D}), \mathbb{P})$ forms the probability triplet with $\mathcal{B}(\mathcal{D})$ being the Borel sigma algebra over the domain. 
+
+The problem of interest to us is to understand the behavior of the neural network operator on a task such that the operator learns the new task in order to assimilate the new information on prior data. To this end, we will describe a neural network  as a member of the class of functions. We will let these classes of functions represent a Sobolev space.
+
+\subsection{Neural Networks belong to a class of Sobolev space functions}
+We will let the class of functions the neural network may represent form a Sobolev space with $k$ bounded derivatives. we take the Sobolev space approach to ensure that the following definition is that given in \cite{mahanNonclosednessSetsNeural2021a}.
+
+\begin{definition}\label{defn:sobo}
+    Let $k \in \mathbb{N},$ $\mathcal{D}$ a measurable set with non-empty interior, and $1< p < \infty.$ Then, the Sobolev space $W^{k,p}(\mathcal{D})$ consists of all functions $h$ on $\mathcal{D}$ such that 
+for all multi-indices $\alpha$ with $|\alpha| \leq k,$ the mixed partial derivative $\partial^{(\alpha)} h$ exists in the weak sense and belongs to $L^p(\mathcal{D})$. That is, 
+    \[ W^{k,p}(\mathcal{D})  = \{ h \in L^p(\mathcal{D}) : \partial^{|\alpha|} h \in L^{p}(\mathcal{D}) \forall |\alpha| \leq k \}.\]
+    The number $k$ is the order of the Sobolev space and the Sobolev space norm is defined as 
+    \[ \| h\|_{W^{k,p}(\mathcal{D})} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} h \|_{L^{p}(\mathcal{D})}.\]
+\end{definition}
+
+To represent the class of functions described in Definition \ref{defn:sobo}, we will define a neural network as a function  $\fhat(w(t),  \psi(t) )$ with $d \in \mathbb{N}$ layers. In this notation of a neural network, $w(t)$ is comprised of all the weight parameters and $\psi(t)$ is comprised of the architecture and other user-defined parameters that are present in the neural network. Typically, the user-defined parameters are a combination of integer, categorical, and floating point values. We may therefore define
+\begin{definition} \label{defn:NN}
+A $d$  layered neural network is given by an operator~(essentially a function) 
+$\fhat(w(t), \psi(t) )\in W^{k,p}$ with $W^{k,p}$ being a Sobolev space. Furthermore, 
+\begin{align}
+  \fhat(w(t), \psi(t)) \big( . \big) & = \fhat_{d}(w_{d}(t), \psi_{d}(t)) \nonumber\\
+                                 &\circ \fhat_{d-1}(w_{d-1}(t), \psi_{d-1}(t)) \nonumber\\
+                                &\vdots\nonumber \\
+                                &\circ \fhat_{2}(w_{2}(t), \psi_{2}(t))\nonumber \\
+                                &\circ \fhat_{1}(w_{1}(t), \psi_{1}(t)) \big( . \big)                 
+\end{align}
+describes the layerwise compositions and $\big( . \big)$ represents the input tensor to which the operator is applied.
+\end{definition}
+Note that this definition of neural networks can be used to define feedforward neural networks, recurrent, convolutional and even graph neural networks or a combination of the three. 
+The distinction will come from how each layerwise composition is defined with this setup. Therefore, any analysis from this point will describe the behavior of 
+all types of networks. Moreover, the parameters corresponding to the architecture are assumed to be a function of $t.$ The setup is provided to perform optimization
+on both the architecture and the weights of the neural network model.
+
+To describe the neural network training mechanism and the learning problem. We first describe the ideal function that must be approximated.
+
+ \begin{definition}\label{defn:NN_learning}
+        Let $f(t)\in W^{k,p}(\mathcal{D})$ for all $t\in \{0,\ldots, T\}$ denote the \textit{target function} which is to be approximated. If $\hat{f}(w(t),\psi(t))$ denotes a neural network determined to approximate $f(t)$ at task $t,$ then the \textit{loss function} (or error of approximation) for $x\in \mathcal{X}(t)$ is given by 
+        \begin{align*}
+            \ell(\fhat(w(t),\psi(t)))(x) & = \| \fhat(w(t),\psi(t))(x)-f(t)(x)\|_{W^{k,p}(\mathcal{D})}.
+        \end{align*} 
+    \end{definition}
+The function $f$ in the context of ML is an ideal forecasting model that can forecast temperature perfectly or an ideal classification model that performs some classification problem. 
+In particular, this function $f(t)$ exists in a Sobolev space $W^{k,p}(\mathcal{D})$ and is approximated by a  
+parametric map $ \fhat(\textbf{w}(t), \psi(t)) \big( . \big)   \in W^{k,p}(\mathcal{D})$ in the same Sobolev space as the function $f$ to be approximated.
+
+
+
+\subsection{Understanding the impact of similar and dissimilar tasks}
+For illustration, consider Fig.~\ref{fig:CL}, there are three tasks shown to the model in order with a fixed architecture.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/CL.png}
+    \caption{The basic problem of Continual Learning}
+    \label{fig:CL}
+\end{figure}
+As we want to transfer learning across tasks, finding the optimal weights, and hence NN, can pose a problem. Generally speaking, if the data in task $\boldsymbol{\mathcal{X}}(t)$ is similar to $\boldsymbol{\mathcal{X}}(t+1),$ we can find a NN $g$ which allows for learning the new task and transferring learning from the previous tasks. However, if the data in the tasks are too dissimilar, we will not be able to find a NN solution. To make this more precise, consider Fig. \ref{fig:challenge}.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/problem.png}
+    \caption{The actual problem}
+    \label{fig:challenge}
+\end{figure}
+ Let $\mathcal{F}_t = \{\fhat(w,\psi)\in W^{k,p}\}$ represent the search space for the set of all possible NN solutions for learning task $t.$ Note that this is indeed a Sobolev space. In Fig. \ref{fig:challenge}, we can view each Sobolev space as a ball. Then each \say{plus} represents the NN solution for only the ball $\mathcal{F}_t.$ We want a transfer of learning across tasks, so the NN solution we desire must lie in the intersection of the solution space for the new task and the solution space for all previous tasks. This is represented in Fig. \ref{fig:challenge} by the \say{smiley} at each step. This poses a problem though, as the intersection is not required to be nonempty. Before proposing a solution to this, let us prove that the intersection of these solution spaces shrinks with dissimilar task data. Consider the following definition.
+ 
+ %definition of continuous w.r.t measure
+ \begin{definition}
+ \label{defintersect}
+     Let $(S, \Omega,m)$ be an arbitrary measure space and let $g:S\rightarrow \mathbb{R}$ a measurable function. Set $F:\Omega\rightarrow \mathbb{R}$ to be the function
+     \begin{align*}
+         F(A) & = \int_A g(s)d\mu.
+     \end{align*}
+     Then, we say $F$ is continuous with respect to the measure if for every $\varepsilon>0,$ there exists $\delta >0$ such that 
+     \begin{align*}
+         \abs{F(A)-F(B)} & < \varepsilon
+     \end{align*}
+     whenever $A,B\in \Omega$ such that $m(A\bigtriangleup B)<\delta.$
+ \end{definition}
+The definition above can be deduced from basic measure theory results. The intuition behind this definition is that sets which are similar (with respect to measure) will result in integrals of $f$ over the respect sets which are close in value.
+ 
+We aim to use this definition in our context. Set $\overline{\boldsymbol{\mathcal{X}}} = \bigcup_{t=1}^\infty \boldsymbol{\mathcal{X}}(t).$ Let the topology $\tau$ on $\overline{\mathcal{X}}$ be the power set, denoted $\mathcal{P}(\overline{\boldsymbol{\mathcal{X}}}).$ Further, let $\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ be the Borel $\sigma$-algebra on $\overline{\boldsymbol{\mathcal{X}}}.$ We can then define a probability measure $\mu$ on $\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}),$ such that $(\overline{\boldsymbol{\mathcal{X}}},\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu)$ is a probability measure space. Moreover, let $\ell$ be the loss function for the NN, which describes the error in accuracy of the NN. The theorem below then describes that tasks with similar data will result in similar values for the integral of the loss function. 
+
+%theorem proving EV is cont. w.r.t. meausre
+\begin{theorem}\label{contMeasure}
+    Let $(\overline{\boldsymbol{\mathcal{X}}},\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu)$ be the measure space as defined above. Then, the expected value function:
+    \begin{align}
+        E(A) = \int_A \ell((\fhat(w,\psi))(x))d\mu
+    \end{align}
+    is continuous with respect to the measure.
+\end{theorem}
+\begin{proof}
+    We can assume that the loss function $\ell$ is continuous and bounded across all tasks. Suppose that the constant $M_0>0$ is the value which bounds $\ell$ on every task. Let $\varepsilon>0$ and  set $\delta = \varepsilon/M_0.$ Further let $A,B\in \mathcal{\mathcal{B}}(\mathcal{X})$ such that $\mu(A\bigtriangleup B)< \delta.$ By disjoint additivity of $\mu$ and triangle inequality, 
+    \begin{align*}
+        \abs{E(A) -E(B)} & = \bigabs{\int_A \ell(\fhat(w,\psi)(x))d\mu-\int_B\ell(\fhat(w,\psi)(x))d\mu}\\
+        & = \Big\vert\int_{A\setminus B} \ell(\fhat(w,\psi)(x))d\mu\\
+        &\hspace{10mm} + \int_{A\cap B} \ell(\fhat(w,\psi)(x))d\mu\\
+        & \hspace{10mm}-\int_{B\setminus A}\ell(\fhat(w,\psi)(x))d\mu\\
+        & \hspace{10mm}-\int_{A\cap B}\ell(\fhat(w,\psi)(x))d\mu\big\vert\\
+        & \leq \int_{A\setminus B} \abs{\ell(\fhat(w,\psi)(x))}d\mu\\
+        & \hspace{10mm}+\int_{B\setminus A}\abs{\ell(\fhat(w,\psi)(x))}d\mu.
+    \end{align*}
+    Then, by the boundedness of $\ell,$
+    \begin{align*}
+        \int_{A\setminus B} \abs{\ell(\fhat(w,\psi)(x))}d\mu+\int_{B\setminus A}\abs{\ell(\fhat(w,\psi)(x))}d\mu\\
+        \leq M_0\mu(A\setminus B) + M_0\mu(B\setminus A).
+    \end{align*}
+    Hence,
+    \begin{align*}
+        M_0\mu(A\setminus B) + M_0\mu(B\setminus A) & = M_0(\mu(A\setminus B) + \mu(B\setminus A))\\
+        & = M_0\mu(A\bigtriangleup B)\\
+        & < M_0 \delta\\
+         & = M_0 \frac{\varepsilon}{M_0}\\
+         & = \varepsilon,
+    \end{align*}
+    as desired.
+\end{proof}
+
+%remark justifying loss bounded on all tasks
+\begin{remark}\label{boundedremark}
+    It is clear that $\ell$ is bounded on each individual task with bound $M_i$ for tasks $i\in \mathbb{N}.$ However, it is reasonable to also assume that there is some constant $M_0<\infty$ for which $M_i\leq M_0$ for all $i\in \mathbb{N}$ because if one did not exist then the problem would be unsolvable. 
+\end{remark}
+
+Theorem \ref{contMeasure} solidifies that similar tasks give similar loss values and dissimilar tasks give dissimilar loss values. In other words, if two tasks $A$ and $B$ are too dissimilar, then $\mu(A\bigtriangleup B)\geq \delta.$ Moreover, we can conclude that a larger difference in loss values results in a smaller intersection of our solution spaces. 
+
+Now that we see the relationship between similarity of tasks and size of the intersection of the corresponding solution spaces, let us determine what to do when the tasks are too dissimilar, drastically shrinking the solution space. This equates to considering what impacts the value of the loss function. So far, we have fixed the architecture $\psi$ for all tasks and found optimal weights $w$ as previously described. What if we allow for changing the architecture as well? Intuitively, we know changing the architecture via some architecture search will result in a better performing NN (i.e. small loss value). However, let us provide a concrete proof to support this intuition. Consider the following theorem and corollary,
+
+%theorem 
+\begin{theorem}\label{M_0bound}
+    Suppose $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+1)$ are two consecutive tasks in the measure space $(\mathcal{X}, \mathcal{B}(\mathcal{X}), \mu).$ Let $L_1,L_2>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upperbound on the loss function $\ell$ across all tasks. Then, for $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\geq \delta,$ the following holds
+    \begin{align}
+        \frac{\abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} + L_1\cdot \abs{\Delta w}^2+ L_2\cdot \abs{\Delta \psi}^2}{M_0} & \geq \delta.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    Let $\boldsymbol{\mathcal{X}}(t),\boldsymbol{\mathcal{X}}(t+1)$ be two consecutive tasks. Notice,
+    \begin{align*}
+        \abs{E(\boldsymbol{\mathcal{X}}(t))-E(\boldsymbol{\mathcal{X}}(t+1))} & = \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}
+    \end{align*}
+    By Taylor series expansion, we have
+    \begin{align*}
+        \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} & = \big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell \cdot \mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)) \\
+        & + \nabla_w\ell \cdot \Delta w + \nabla_\psi\ell \cdot \Delta \psi\big\vert.
+    \end{align*}
+    By reverse triangle inequality,
+    \begin{align*}
+        \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} & \geq  \big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell \cdot \mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\big\vert \\
+        & - \big\vert\nabla_w\ell \cdot \Delta w\big\vert - \big\vert\nabla_\psi\ell \cdot \Delta \psi\big\vert.
+    \end{align*}
+    Rearranging gives,
+    \begin{align}
+        \big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell \cdot \mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\big\vert & \leq \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}\nonumber\\
+        & + \big\vert\nabla_w\ell \cdot \Delta w\big\vert\nonumber\\
+        & +\big\vert\nabla_\psi\ell \cdot \Delta \psi\big\vert\label{reversetriangle}.
+    \end{align}
+    It is reasonable to assume that $\ell$ is $L_1$-Lipschitz continuous with respect to $w$ and $L_2$-Lipschitz continuous with respect to $\psi.$ Thus,
+    \begin{align}
+        \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} + \big\vert\nabla_w\ell \cdot \Delta w\big\vert\nonumber+ \big\vert\nabla_\psi\ell \cdot \Delta \psi\big\vert & \leq \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}\nonumber\\
+        & + L_1\cdot \abs{\Delta w}^2\nonumber\\
+        & + L_2\cdot \abs{\Delta \psi}^2\label{lipschitz}.
+    \end{align}
+    Thus, from \ref{reversetriangle} and \ref{lipschitz}, we have
+    \begin{align}
+        \big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell \cdot \mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\big\vert & \leq \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}\nonumber\\
+        & + L_1\cdot \abs{\Delta w}^2\nonumber\\
+        & + L_2\cdot \abs{\Delta \psi}^2.\label{combined}
+    \end{align}
+    We assumed $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\geq\delta$ for some $\delta >0,$ so from \ref{combined} 
+    \begin{align*}
+         \big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell\big\vert\cdot \delta & \leq \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}+ L_1\cdot \abs{\Delta w}^2+ L_2\cdot \abs{\Delta \psi}^2.
+    \end{align*}
+    Rearranging, we have
+    \begin{align*}
+        \frac{\abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} + L_1\cdot \abs{\Delta w}^2+ L_2\cdot \abs{\Delta \psi}^2}{\big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell\big\vert} & \geq \delta .
+    \end{align*}
+    As $M_0$ is the upperbound on $\ell$ across all tasks, we can assume that $\big\vert\nabla_{\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1)}\ell\big\vert\approx M_0.$ Thus,
+    \begin{align}
+        \frac{\abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} + L_1\cdot \abs{\Delta w}^2+ L_2\cdot \abs{\Delta \psi}^2}{M_0} & \geq \delta.\label{final}
+    \end{align}
+    as desired.
+\end{proof}
+
+\begin{corollary}\label{archCor}
+    Suppose $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+1)$ are two consecutive tasks in the measure space $(\overline{\boldsymbol{\mathcal{X}}}, \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu).$ Let $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\geq \delta$ for $0<\delta \leq 1.$ The architecture $\psi$ of a network can be changed to absorb the impact of $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\geq \delta.$
+\end{corollary}
+
+\begin{proof}
+Since we assumed $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+1))\geq \delta,$ values of $\delta$ near $1,$ imply the tasks $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+1)$ are very different. As shown by theorem \ref{contMeasure}, we can then conclude the loss values will differ substantially over each of these tasks. If we rearrange \ref{final}, we see that
+\begin{align}
+        \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} & \geq \delta M_0 - L_1\cdot \abs{\Delta w}^2- L_2\cdot \abs{\Delta \psi}^2.\label{final}
+\end{align}
+However, by adjusting the architecture of the network (i.e. $\abs{\Delta \psi}$) we can increase the right-hand side of the inequality. Making enough of a change to the architecture will allow for the inequality to become 
+\begin{align*}
+        \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} & \leq \delta M_0 - L_1\cdot \abs{\Delta w}^2- L_2\cdot \abs{\Delta \psi}^2.\label{final}
+\end{align*}
+Thus, changing the architecture of the network can off set the impact of consecutive tasks whose data differ substantially.
+\end{proof}
+
+With the knowledge of Corollary \ref{archCor}, we introduce a solution to the issue of a vanishing intersection. In particular, we propose a method that allows us to change the size of the intersection space by introducing capacity, via hyper parameters. This will guarantee that the intersection space at each new task will always be non-empty. This is visualized in Fig. \ref{fig:solution}. Rather than fixing the architecture at $\psi^*$ for all tasks, allowing an architecture search at each step affords us the opportunity for a larger intersection space. 
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/solution.png}
+    \caption{The Solution, where we change the size of the intersection space by introducing more capacity, through choosing novel hyperparameters}
+    \label{fig:solution}
+\end{figure}
+To understand how this is accomplished, consider Fig. \ref{fig:method}, which describes the method for the first and second task. We begin at task $t = 1$ and determine an optimal weight denoted $w^*(1) = w^\infty(1).$ This gives us a NN solution in $\mathcal{F}_1.$ Then, we perform a derivative free hyper-parameter search on the architecture. The solution to this search is denoted $\psi^\infty(2).$ Using this new optimal architecture we complete a Low Rank transfer on the previous optimal weights accomplishing a transfer of learning. This produces $g(w^N(2),\psi^\infty(2)).$ Then, we train on the next data task producing a NN solution $g(w^\infty(2),\psi^\infty(2))$ which is optimal for both the first and second task. In the process of Low Rank transfer, we guarantee transfer of learning, allowing for the intersection of the NN search spaces for the task one and task two increase. Continuing to complete this process for all tasks will require the intersection $\cap_{i=1}^t \mathcal{F}_i$ to be nonempty.
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{Figures/method.png}
+    \caption{How we do this?}
+    \label{fig:method}
+\end{figure}
+
+\subsection{NN-Based Learning Problem}
+In the CL setting, we design a regime which will be able to learn a target function. Thus, we seek to approximate the target function $f(t),$ with a small error. Such error can be described by the loss function $\ell$ calculated as an expected value on the data. Specifically, for weights parameter $w(t)$ and architecture parameter $\psi(t),$ 
+\begin{align*}
+    J(w(t),\psi(t),\boldsymbol{\mathcal{X}}(t)) & = \sum_{q = 0}^\tau \ell(g(w(t),\psi(t))(X(q)))
+\end{align*}
+A traditional learning structure seeks to minimize the cost $J(t)$ through an iterative 
+procedure that drives $J(t) \rightarrow 0$ as $t \rightarrow \infty.$ Moreover, this learning 
+structure is also mathematically guaranteed to converge with standard optimizers such as 
+Adam~\cite{kingmaAdamMethodStochastic2017}. A typical learning process for these approaches 
+involve extracting batches of data from $\boldsymbol{\mathcal{X}}(t)$ and then updating the network 
+based on these batches of data. All of these updates are performed with a fixed architecture. 
+
+The traditional learning process provides two key insights. First, the learning process is always done with a fixed architecture. 
+Second, there is a cumulative impact of batches of data on the learning problem. The convergence of a neural network should be shown 
+by demonstrating that the cumulative effect of these batches of data exhibits a pointwise convergence. Although, in standard proofs
+of gradient-based approaches, the cumulative effect is considered by defining a series of gradients and then summing across gradients,
+the analysis structure is still performed assuming a fixed architecture. In this paper, we will consider a scenario
+when the architecture and the model parameters are learned. Subsequently, we will precisely quantify the effects of the model, the data, and 
+the architecture on the learning problem.
+
+Towards this end, we begin by writing a cumulative learning problem. In order to learn the optimal weights and architecture for our network for all tasks, we must complete a bilevel optimization. First, we determine the optimal architecture, denoted $\psi^*(t)$ for the $t$th task. This optimization is completed below
+\begin{align}
+    \psi^*(t) & = \mathrm{arg }\min_{\psi\in \Psi} J(w(t),\psi,\boldsymbol{\mathcal{X}}(t)),\label{opt1}
+\end{align}
+where $\Psi$ is our architecture search space. Once completed, we determine  
+\begin{align*}
+    V^*(t,w(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} V(t,w(t)),
+\end{align*}
+where $\mathcal{W}(\psi^*(t))$ is the weights search space for the optimal architecture determined \ref{opt1}, and $V(t,w(t))$ is given below
+\begin{align*}
+    V(t,w(t)) & = \sum_{\tau = t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau)).
+\end{align*}
+This provides a holistic view of a learning problem for all tasks, which incorporates the impact of architecture and weights.
+
+ensure transfer of learning occurs when both the architecture and weights of the network are learned at each task. To this end, we will start by describing the neural network operator and the class of functions this neural network operator may represent.
+
+
+
+\section{CL Solution}
+To learn the weights and architecture while accounting for the transfer of learning, we must first incorporate a form of architecture search before describing our solution to this learning problem.
+
+\subsection{Broad DDS Search Method}
+This method is similar to the directional direct-search (DDS) method described in the survey by \cite{larson2019derivative}. However, we begin with a step size $10.$ Currently, we will ``learn" one facet of the architecture of a NN. For example, we can use the algorithm to learn the optimal number of neurons for a fixed number of layers.
+
+We will be implementing this search for each task $t,$ so we can explain it in a traditional machine learning fashion. In other words, we consider the process for a single task. For task $t\in \mathcal{T},$ set $\boldsymbol{\boldsymbol{\mathcal{X}}(t)} = \mathcal{Y}$ to be our training data and $J(w(t),\psi(t), \mathcal{Y})$ the loss function. Begin with architecture $\psi(t) = x_s$ and let $D_s$ be a finite set of directions and $\alpha_s$ our step size. To determine the optimal architecture for $x_{s+1},$ we generate a finite set of points near the current point $x_s,$ which are called \textit{poll points}. The poll points are determined by taking $x_s$ and adding $\alpha_s d$ for all $d\in D_s.$ Using a randomly selected subset $Y_s$ of $\mathcal{Y}$ to train the NN, we then evaluate the loss function at each poll point and determine whether the poll points have a smaller loss value than the current $x_s.$ If so then the corresponding poll point becomes $x_{s+1},$ and we decrease the step size $\alpha_{s+1}$ using a parameter $\gamma_{dec}.$  If none of the poll points were more optimal, we set $x_{s+1} = x_s,$ and increase the step size $\alpha_{s+1}$ with a parameter $\gamma_{inc}$ in order to continue our broad search. The broad search stops once the loss value falls below a chosen threshold.  Such threshold is a hyper-parameter. The architecture chosen at the end of the search becomes the new architecture for the network. Algorithm $1$ describes the entire process.
+
+
+Let us walk through an example in traditional machine learning. Suppose we would like to learn the optimal number of neurons per layer in our hidden layers for training a NN on the MNIST data set. Due to the data, the input layer is fixed at $784$ neurons and the output layer is fixed at $10$ neurons per layer. Let us fix the number of hidden layers at $2$ each with $50$ neurons. We set $Y_s = Y$ to be a randomly chosen $1000$ image subset of $\mathcal{Y}.$  Our direction set is $D_s = D = \{[0,0,1,0],[0,1,0,0]\}$ and will be the same for every $s.$ For our search, we start by setting $\alpha_s = 10.$ For the first round, we have $x_0 = [784,50,50,10],$ so our poll points are $[784,60,50,10]$ and $[784,50,60,10].$ We then train NN of each size on the data set $Y$ and determine the corresponding loss values. If the loss value of say the NN $[784,60,50,10]$ is smaller than that of the NN $[784,50,50,10],$ then $x_1 = [784,60,50,10].$ Suppose we chose our threshold to be $0.3.$ Once we find $S\in \mathbb{N}$ such that loss value of a NN with the architecture of $x_S$ is trained to less than $0.3,$ we end our search.
+
+\begin{algorithm}
+\caption{Broad DDS}\label{alg:three}
+Choose initial point $x_0,$ large step size $\alpha_0$\\
+Set step parameters $\gamma_{inc},\gamma_{dec}\in \mathbb{N}$\\
+ loss $\gets$ \texttt{pre\_train} ($x_0,\ell,Y$)\\
+ \While{$j< \mathrm{threshold}$}{
+    $\mathrm{loss}_s,x_s^+\gets$ \texttt{test\_polls}$(x_s,\ell, Y,\{x_s+\alpha_sd_i:d_i\in D_s\})$\\
+  \eIf{$\mathrm{loss}\leq\mathrm{loss}_s$}{
+   $x_{s+1} = x_s$\;
+   $\alpha_{s+1} = \alpha_s-\gamma_{dec}$\;
+   }{
+   $x_{s+1} = x_s^+$\;
+   $\mathrm{loss} = \mathrm{loss}_s$\\
+   $\alpha_{s+1} = \alpha_s+\gamma_{inc}$
+  }
+ }
+\end{algorithm}
+
+\subsection{Learning Process}
+
+Our goal is to construct an algorithm which learns both the ideal weights and ideal number of neurons per layer while retaining as much learned information at each step as possible. For our purposes, we will let our network have a fixed number of $d$ layers. Moreover, we fix all other architecture parameters except for the number of neurons in our hidden layers. We complete this process in seven main steps.
+
+Before diving into the process, let us set some notation. From our layered neural network definition, $\psi_i(t)$  provides the dimensions for the corresponding weights matrix. In order of appearance, we assign the values of $\psi(t)$ to the values  $r_i,s_i$ for each $i$ such that $1\leq i\leq d.$ Likewise we assign the values of $\psi_i^*(t)$ to be $a_i,b_i.$
+
+We begin at task $t$ by first completing a standard training of weights $w(t)$ on $\boldsymbol{\mathcal{X}}(t)$ for a chosen number of epochs. The trained weights are stored back in $w(t).$ Now that we have found an optimal weight for the current architecture, we search for a new optimal architecture. In step $2,$ we make use of the Broad DDS architecture search method described in the previous section. The architecture returned from Broad DDS is $\psi^*(t),$ and we store this architecture in $\psi(t+1).$ After acquiring the architecture, we must determine the new weights $w(t+1),$ as the dimensions of $w(t)$ do not match the new architecture of the network. We could randomly initialize a new $w(t+1)$ according $\psi(t+1).$ However, this will lead to substantial loss of information and increased run time. Thus, we attempt to transfer learned information from $w(t)$ by projecting $w(t)$ into the new weights space. We accomplish this in the remaining five steps. 
+
+For step $3,$ we initialize dimension $3$ tensors $A(t),B(t),$ which are each comprised of $d$ matrices. Let each matrix $A_i(t)$ in $A(t)$ be randomly generated with size $a_i\times r_i$ for $1\leq i\leq d.$ Similarly, let each matrix $B_i(t)$ in $B(t)$ be randomly generated with size $b_i\times s_i$ for $1\leq i\leq d.$ In step $4,$ we set $C(t) = A(t)w(t)B^T(t).$ More specifically $C(t)$ is comprised of $d$ matrices such that $C_i(t) = A_i(t)w_i(t)B^T_i(t)$ for all $1\leq i\leq d.$ Notice, that the dimensions of $C_i(t)$ are $a_i\times b_i.$ These are the dimensions of the weights matrices for a NN with architecture $\psi(t+1),$ which is our goal. To prevent loss of information from $w(t),$ for step $5,$ we shall train only the $A(t)$ and $B(t)$ parts of the weights matrix $C(t)$ for the NN $g(C(t),\psi(t+1)).$ We let $C^*(t)$ represent $C(t)$ after $A(t)$ and $B(t)$ were trained for a chosen number of epochs on the data in $\boldsymbol{\mathcal{X}}(t).$ In step $6,$ we then set $C^*(t)$ to be the new weights $w(t+1).$ Finally, for step $7,$ we complete a standard training of the new weights for the new NN $g(w(t+1),\psi(t+1))$ on the data $\boldsymbol{\mathcal{X}}(t).$ Once completed, we then start the process over for the next set of data $\boldsymbol{\mathcal{X}}(t+1).$ This entire algorithm is stated in Algorithm $2.$
+
+\begin{algorithm}
+\caption{Main Training Loop}\label{alg:three}
+Choose $w(t)$ and $\psi(t)$ to begin\\
+Set epoch hyper-parameter $M\in \mathbb{N}$\\
+\For{$t = 0,1,\ldots, T$}{
+ \textbf{Step 1:} Standard Training of $w(t)$\\
+    $w(t) \gets $\texttt{training\_loop}($w(t),\psi(t),$ $\boldsymbol{\mathcal{X}}(t)$, \texttt{epochs})\\
+
+ \textbf{Step 2:} Architecture Search\\
+    $\psi(t+1) \gets$ \texttt{broad\_DDS}$(\psi(t),$ $\boldsymbol{\mathcal{X}}(t)$)\\
+    
+\textbf{Step 3:} Initialize $A(t), B(t)$\\
+\For{$i = 1,...,d$}{
+    $A_i(t), B_i(t) \gets$\texttt{init\_AB}($a_i,b_i,r_i,s_i)$}
+
+ \textbf{Step 4:} Set $C(t)$\\
+    \For{$i = 1,...,d$}{$C_i(t) = A_i(t)w_i(t)B_i^T(t)$}
+
+ \textbf{Step 5:} Fix $w(t),$ Train $A(t),B(t)$ for $g(C(t),\psi(t+1))$\\
+    $C^*(t) \gets$ \texttt{train\_AB}($C(t), \psi(t+1),$ $\boldsymbol{\mathcal{X}}(t)$, \texttt{epochs})\\
+
+ \textbf{Step 6:} Set New Weights\\
+    $w(t+1) = C^*(t)$\\
+
+ \textbf{Step 7:} Standard Training on New NN
+    \texttt{training\_loop}\\($w(t+1),\psi(t+1),$ $\boldsymbol{\mathcal{X}}(t)$, \texttt{epochs})
+}
+\end{algorithm}
+
+\subsection{HJB Derivation}
+Now, we must derive the HJB equation. 
+\begin{proposition}
+    Let $J(w(t),\psi(t),\boldsymbol{\mathcal{X}}(t)) = \sum_{q = 0}^\tau \ell(g(w(t),\psi(t))(X(q)))$ and suppose we have the bilevel optimization problem where we first solve
+    \begin{align*}
+    \psi^*(t) & = \arg\min_{\psi\in \Psi} J(w(t),\psi,\boldsymbol{\mathcal{X}}(t)).
+    \end{align*}
+    Then, we set $V(t,w(t)) = \sum_{\tau = t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))$ and consider the optimization problem as
+    \begin{align*}
+        V^*(t,w(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} V(t,w(t)).
+    \end{align*}
+    Then, the total variation in $V^*(t)$ is given by
+    \begin{align*}
+        -(V^*(t+1)-V^*(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\\
+        & + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}\\
+        & + \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)],
+    \end{align*}
+    where $A^*(t),B^*(t)$ are optimal $A(t)$ and $B(t)$ for task $t$ and $u(t)$ and $u(t)$ represents the updates made to the each weights matrix of the new dimensions. 
+\end{proposition}
+
+\begin{proof}
+    Let $J, V,$ and $V^*$ be as defined above. To begin, we split the sum in $V(t)$ over the discrete intervals $[t,t+1]$ and $[t+1, T].$ Observe,
+    \begin{align}
+        V^*(t) & = \min_{w\in \mathcal{W}(\psi^*(t))} \sum_{\tau = t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))\nonumber\\
+                & = \min_{w\in \mathcal{W}(\psi^*(t))} \biggr[\sum_{\tau = t}^{t+1} J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))\nonumber\\
+                & \hspace{8mm} + \sum_{\tau = t+1}^{T} J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))\biggr]\nonumber\\
+                & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))+ V^*(t+1).\label{b}
+    \end{align}
+    Now, we provide the Taylor series expansion of $V^*(t+1)$ about $t.$
+    \begin{align}
+        V^*(t+1) & = V^*(t) + \frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt} + \frac{\partial V^*}{\partial w}\frac{\partial w}{dt}\nonumber\\
+                & = V^*(t) + (V^*(t+1)-V^*(t)) + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}\nonumber\\
+                & + \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)],\label{a}
+    \end{align}
+    where $u(t)$ represents the updates made to the each weights matrix of the new dimensions. Substituting \ref{a} into \ref{b}, we have
+    \begin{align*}
+        V^*(t) & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))+ V^*(t)\\
+        & + (V^*(t+1)-V^*(t)) + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}\\
+        & + \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)].
+    \end{align*}
+    Cancelling $V^*(t)$ gives
+    \begin{align*}
+        0 & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))+ (V^*(t+1)-V^*(t))\\
+        & + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt} + \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)].
+    \end{align*}
+    Finally, reordering gives
+    \begin{align*}
+        -(V^*(t+1)-V^*(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\\
+        & + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}\\
+        & + \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)],
+    \end{align*}
+    as desired.
+\end{proof}
+
+
+
+
+% To print the credit authorship contribution details
+\printcredits
+
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+\bibliographystyle{cas-model2-names}
+
+% Loading bibliography database
+\bibliography{NewNNbib}
+
+% Biography
+%\bio{}
+% Here goes the biography details.
+%\endbio
+
+%\bio{pic1}
+% Here goes the biography details.
+%\endbio
+
+\end{document}
+
+
+

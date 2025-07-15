@@ -1,0 +1,877 @@
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[toc,page]{appendix} 
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{lineno,hyperref}
+\usepackage{multirow}
+\usepackage[outdir=./]{epstopdf}
+\usepackage[export]{adjustbox}
+\usepackage{subfig}
+\usepackage{array}
+\usepackage{color, colortbl}
+
+\usepackage{newunicodechar}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{algorithmic}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+
+\usepackage{amsmath}	% For Math
+\usepackage{fancyhdr}	% For fancy header/footer
+\usepackage{graphicx}	% For including figure/image
+\usepackage{cancel}		% To use the slash to cancel 
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{bigints}
+
+% If the frontmatter runs over more than one page
+% use the longmktitle option.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-dc}
+
+%\usepackage[numbers]{natbib}
+%\usepackage[authoryear]{natbib}
+\usepackage[authoryear,longnamesfirst]{natbib}
+
+%%%Author macros
+\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+\tsc{WGM}
+\tsc{QE}
+%%%
+
+% Uncomment and use as if needed
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newdefinition{rmk}{Remark}
+%\newproof{pf}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+
+\begin{document}
+
+%----------------New Commands---------------%
+\newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+
+\newcommand{\sobkp}[1]{W^{k,p}(#1)}
+\newcommand{\sob}{W^{k,p}}
+\newcommand{\Lloc}[1]{L_1^{loc}(#1)}
+\newcommand{\totalV}[1]{D_t^{\abs{#1}}V(t)}
+\newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
+\newcommand{\D}{\textbf{D}}
+
+%minGW
+\newcommand{\minGW}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
+
+%minSmoothGW
+\newcommand{\minSmoothGW}{\min\limits_{g(\textbf{w}(t),\delta(\psi(t)))\in \sob}}
+
+
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+% Short title
+\shorttitle{}    
+
+% Short author
+\shortauthors{}  
+
+% Main title of the paper
+\title [mode = title]{The Effect of Architecture on Learning Behavior of Deep Neural Networks}  
+
+% Title footnote mark
+% eg: \tnotemark[1]
+%\tnotemark[1] 
+
+% Title footnote 1.
+% eg: \tnotetext[1]{Title footnote text}
+\tnotetext[1]{} 
+
+% First author
+%
+% Options: Use if required
+% eg: \author[1,3]{Author Name}[type=editor,
+%       style=chinese,
+%       auid=000,
+%       bioid=1,
+%       prefix=Sir,
+%       orcid=0000-0000-0000-0000,
+%       facebook=<facebook id>,
+%       twitter=<twitter id>,
+%       linkedin=<linkedin id>,
+%       gplus=<gplus id>]
+
+\author[1]{}%[<options>]
+
+% Corresponding author indication
+\cormark[1]
+
+% Footnote of the first author
+\fnmark[1]
+
+% Email id of the first author
+\ead{}
+
+% URL of the first author
+\ead[url]{}
+
+% Credit authorship
+% eg: \credit{Conceptualization of this study, Methodology, Software}
+\credit{}
+
+% Address/affiliation
+\affiliation[1]{organization={},
+            addressline={}, 
+            city={},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={}, 
+            state={},
+            country={}}
+
+\author[2]{}%[]
+
+% Footnote of the second author
+\fnmark[2]
+
+% Email id of the second author
+\ead{}
+
+% URL of the second author
+\ead[url]{}
+
+% Credit authorship
+\credit{}
+
+% Address/affiliation
+\affiliation[2]{organization={},
+            addressline={}, 
+            city={},
+%          citysep={}, % Uncomment if no comma needed between city and postcode
+            postcode={}, 
+            state={},
+            country={}}
+
+% Corresponding author text
+\cortext[1]{Corresponding author}
+
+% Footnote text
+\fntext[1]{}
+
+% For a title note without a number/mark
+%\nonumnote{}
+
+%-------------------Abstract-----------------------%
+\begin{abstract}
+We consider the effects of Neural Network architecture on the learning behavior. Towards this end, we begin by modelling the learning behavior of machine learning models through a dynamic programming point of view. The differential equation that is obtained as a result of this viewpoint explicitly quantifies the impact of data, the NN parameters, the NN architecture on the solution to the NN learning problem. Subsequently, we illustrate how the well-posedness of the learning problem is directly proportional to the stability of the differential equation. We finally demonstrate in theory and in simulation that with appropriate conditions on the NN architecture the stability of learning can be guaranteed and subsequently provide a novel measure that can be utilized to affirm neural architecture search and hyper-parameter search to obtain the best neural network for any application at hand.
+\end{abstract}
+
+% Use if graphical abstract is present
+%\begin{graphicalabstract}
+%\includegraphics{}
+%\end{graphicalabstract}
+
+%-----------------Highlights------------------%
+\begin{highlights}
+\item The first quantification of NN architecture on the learning behavior
+\item Demostrate the conditions to ensure stability of neural networks.
+\item A novel measure to efficiently perform neural architecture search and hyper-parameter search.
+\end{highlights}
+
+%-------------------Keywords-------------------%
+\begin{keywords}
+ Neural Network \sep Differential Equation \sep  \sep
+\end{keywords}
+
+\maketitle
+
+
+%==================Introduction====================%
+\section{Introduction}\label{}
+Ever since the conception of the multi-layer perceptrons and more so with the advent of deep neural networks~(NN); understanding and controlling
+the behavior of neural networks during their learning process has been as important as it has been elusive. Typically studying this behavior involves
+assumptions that are so stringent that the insights rarely translate to practice. The reason is that, studying the learning behavior of NN is hard, the process would involve
+two phase. In the first phase, one must understand how the NN reacts to changes in the data, the weight of the NN, and other hyper-parameters in the NN. 
+This phase is concerned with the question ``how does the NN learn?" and can be thought of as ``transient behavior of learning." 
+In the second phase, the goal is to understand, what is the result that was achieved by the NN. This essentially means, ``what did the NN learn?'' and can be thought of as 
+the ``steady state behavior of the learning''
+
+
+Although the study of both these phases is hard, the steady state behavior of learning has been paid more attention relative to the transient behavior of learning.
+Since, NNs are function approximators in their core, understanding the steady state learning behavior requires us to understand how well the NN approximates an unknown function -- 
+the approximation properties of NN. Approximation properties of NN have been long studied with \cite{cybenkoApproximationSuperpositionsSigmoidal1989,hornikMultilayerFeedforwardNetworks1989} establishing
+the first known results in this domain. Since then, to the present, there have been numerous results that establish the notion of approximation by NN. A good survey for different appoximation results is given in 
+\cite{guhringExpressivityDeepNeural2020}. Many of these notions describe the idea of neural network learning as not being closed in the corresponding function spaces, 
+since not all of these functions can be represented exactly by a neural network with networks of any width.  This idea of non-closedness describe the irreducible
+approximation error that is present in NN learning. More recently, the work in \cite{mahanNonclosednessSetsNeural2021a} show that closedness in Sobolev spaces 
+can be achieved with uniformly bounded parameters. 
+The result in \cite{mahanNonclosednessSetsNeural2021a} provides a couple of key insights. The first insight is due to the idea that, neural networks can be used to approximate
+target functions if and only if the network weights are bounded. The second insight stems from the constructions of their proof. In \cite{mahanNonclosednessSetsNeural2021a}, a series of 
+functions is constructed in Sobolev space with an appropriate $L_p$ norm. Although the steady state of this series is studied, the evolution of these functions in the Sobolev space is not attempted in \cite{mahanNonclosednessSetsNeural2021a}.
+Moreover, despite such progress in understanding the steady state behavior of neural networks, there has been very little research into the transient behavior of learning. {\color{red} Do literature survey  ...}
+
+
+In this work, we seek to study the transient behavior of learning by formulating the learning problem as a dynamical system. In other words, we will study the evolution of the Sobolev space functions. 
+Since, these functions are essentially NNs, this evolution is a function of the network architecture, the weight parameters and the data. We will use tools from the dynamic programming literature to 
+formalize this evolution as a Hamilton Jacobi Bellman equation. Equipped with this equation, we will provide insights into the transient behavior of NN learning. We will also describe, how the learning 
+behavior is effected by the network architecture, the data and the parameters. 
+
+
+
+%-------------------Contributions----------------------%
+\subsection{Contributions}
+
+%===========Preliminaries and Problem setup==========%
+\section{Preliminaries and Problem Setup}\label{}
+%--------------------Notation----------------------%
+\subsection{Notation}
+We use $\mathbb{N}$ to denote the set of natural numbers with $\mathbb{R}$ denoting the set of real numbers. We also use $\|.\|$ to denote the Euclidean norm for vectors, Frobenius norm for matrices. Further, let $\innerprod{\cdot,\cdot}$ denote the dot product for vectors.  A $p^{th}$ order tensor $\mathscr{X}$ is viewed as a multi-dimensional array such that 
+$\mathscr{X} \in  \mathbb{R}^{I_1 \times I_2 \times I_3 \times I_4 \times \cdots I_{p}}$, 
+where the order can be thought of as the number of dimensions in the tensor. 
+In this paper we will be mostly concerned with tensors of order 0, 1,2 and 3 which correspond to scalars, vectors and matrices and a list of matrices. For instance, a tensor of order $0$ is a scalar denoted by a lowercase letters, i.e., $x$ 
+whereas a vector is an order one tensor which we will denote with lowercase bold alphabets such as $\bold{x}.$ 
+A tensor of order $2$ is a matrix denoted by uppercase bold alphabets $\boldsymbol{\mathscr{X}}$. 
+Any tensor of order greater than $2$ are denoted by bolder Euler scripts letters such as $\mathscr{X}.$ We will make one exception in 
+our notation regarding the tensors that represent learnable/user defined parameters~(weights, architecture, step-size/learning rate, etc.), 
+we will denote these with \textbf{bold greek letters}. These notations are adapted from \cite{koldaTensorDecompositionsApplications2009}, please refer to the original paper for additional details.
+
+The $i_{th}$ element of a vector $\bf{x}$ is denoted by $x_{[i]},$ while the $(i,j)_{th}$ element of a matrix $\mathscr{X}$ is denoted by $x_{[ij]}.$ 
+We will make the indices run from 1 to their capital letters such that $i = 1, \cdots, I.$ 
+For any sequence $A$, the $n^{th}$ element is denoted by a superscript in parenthesis 
+as $A^{(n)}.$ Subarrays are formed when a subset of the indices is fixed. For matrices, these are the rows and columns. A colon is used to indicate all elements of a node. 
+Thus the $j_{th}$ column of a matrix $\mathscr{X}$ is denoted $\bf{x}_{[:j]}$ and the $i_{th}$ row of a matrix is indicated $\bf{x}_{[i:]}.$
+
+
+%--------------Typical Machine Learning-------------%
+\subsection{Typical Machine Learning}
+
+ We denote a step of learning by the index $t$ such that $ t \in [0, T]$ and we will assume that a batch of data $\mathscr{X}(t)$ is provided at each step of learning as sampled according to the distribution $\mathbb{P}$ where $\mathscr{X}(t) \subset \mathcal{D}$ such that $\mathcal{D}$ -- the domain is a measurable set with a non-empty interior. Moreover, $(\mathbb{P}, \mathcal{D}, \mathcal{B}(\mathcal{D}) )$  forms the probability triplet, where $\mathcal{B}(\mathcal{D})$ is the Borel sigma algebra over the domain. We will let $\mathscr{X}(t)$ be a batch of data representing a list of matrices. In typical machine learning applications, the data is split into training and testing,  but for the sake of simplicity we will ignore this distinction in this paper and only consider training data. The problem of interest is now to understand the application of a neural network operator on a batch of data. To this end, we will start by describing the neural network operator and the class of functions this neural network operator may represent.
+
+ %-----------NN as class of Sob Space Func-----------%
+\subsection{Neural Networks as class of Sobolev space functions}
+The class of functions the neural network may represent form a Sobolev space with $k$ bounded derivates. The following definition is that given in \cite{mahan2021nonclosedness}.
+
+\begin{definition}\label{defn:sobo}
+    Let $k \in \mathbb{N},$ $\mathcal{D}$ a measurable set with non-empty interior, and $1< p < \infty.$ Then, the Sobolev space $W^{k,p}(\mathcal{D})$ consists of all functions $f$ on $\mathcal{D}$ such that 
+for all multi-indices $\alpha$ with $|\alpha| \leq k,$ the mixed partial derivative $\partial^{(\alpha)} f$ exists in the weak sense and belongs to $L^p(\mathcal{D})$. That is, 
+    \[ W^{k,p}(\mathcal{D})  = \{ f \in L^p(\mathcal{D}) : \partial^{|\alpha|} f \in L^{p}(\mathcal{D}) \forall |\alpha| \leq k \}.\]
+    The number $k$ is the order of the Sobolev space and the Sobolev space norm is defined as 
+    \[ \| f\|_{W^{k,p}(\mathcal{D})} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} f \|_{L^{p}(\mathcal{D})}.\]
+\end{definition}
+
+To represent the class of functions described in Definition \ref{defn:sobo}, we will define a neural network as a function  $g(w(t),  \psi(t) )$ with $d \in \mathbb{N}$ layers. In this notation of a neural network, $w(t)$ is comprised of all the weight parameters and $\psi(t)$ is comprised of the architecture and other user-defined parameters that are present in the neural network. Typically, the user-defined parameters are a combination of integer, categorical, and floating point values. We may therefore define
+\begin{definition} \label{defn:NN}
+A $d$  layered neural network is given by an operator~(essentially a function) 
+$g(w(t), \psi(t) )\in W^{k,p}$ with $W^{k,p}$ being a Sobolev space. Furthermore, 
+\begin{align}
+  g(w(t), \psi(t)) \big( . \big) & = g_{d}(w_{d}(t), \psi_{d}(t)) \\
+                                 &\circ g_{d-1}(w_{d-1}(t), \psi_{d-1}(t)) \\
+                                &\vdots \\
+                                &\circ g_{2}(w_{2}(t), \psi_{2}(t))  \\
+                                &\circ g_{1}(w_{1}(t), \psi_{1}(t)) \big( . \big)                 
+\end{align}
+describes the layerwise compositions and $\big( . \big)$ represents the input tensor to which the operator is applied.
+\end{definition}
+Note that this definition of neural networks can be used to define feedforward neural networks, recurrent, convolutional and even graph neural networks or a combination of the three. 
+The distinction will come from how each layerwise composition is defined with this setup. Therefore, any analysis from this point will describe the behavior of 
+all types of networks. Moreover, the parameters corresponding to the architecture are assumed to be a function of $t.$ The setup is provided to perform a joint optimization
+over the hyperparameter and the weights of the neural network model
+\begin{table}
+\adjustbox{max width=\linewidth}{
+\begin{tabular}{cccc}
+\toprule
+       Name  &  $\rho(x)$ &  Smoothness & Corresponsding $W^{k,p}$\\
+        &   & /Boundedness & \\
+       \hline  \hline
+        Rectified Linear  & $max\{0,x\}$ & absolutely  & $W^{0,p}(T)$ \\
+ Unit (ReLU) &  &  continuous, $\rho' \in L^{p}(T)$ & 
+\\ & &  &\\ 
+
+ Exponential Linear  & $ x. \chi_{x\geq 0}$ & $C^1(\mathbb{R})$, absolutely  & $W^{1,p}(T)$ \\
+ Unit (eLU) & $+ (e^{x}-1) \chi x<0 $  & continuous $\rho'' \in L^{p}(T)$ & 
+\\ & & &  \\ 
+ 
+Softsign & $\frac{x}{1+ |x|}$ & $C^1(\mathbb{R})$, $\rho'$ absolutely  & $W^{2,p}$  \\
+& &  continuous, $\rho'' \in L^{p}(T)$ &  \\
+\\ & & &  \\ 
+
+
+Inverse Square  & $ x . \chi_{x\geq 0}  $ & $C^2(\mathbb{R})$, $\rho''$ absolutely  & $W^{3,p}$  \\ 
+Root Linear Unit & $ + \frac{x}{\sqrt{1+ax^2}} . \chi x<0 $ & continuous, $\rho''' \in L^{p}(T)$ & 
+\\ & & &  \\ 
+Inverse Square Root Unit & $ \frac{x}{\sqrt{1+ax^2}} $ & real analytic,  & $W^{k,p} \forall k $ \\
+&  & real all derivatives bounded &  \\
+
+\\ & & &  \\ 
+Sigmoid & $ \frac{1}{1+ e^x} $ & real analytic,  & $W^{k,p} \forall k $ \\
+&  & real all derivatives bounded &  \\
+
+\\ & & &  \\ 
+tanh & $ \frac{e^x - e^{-x}}{e^x + e^{-x}} $ & real analytic,  & $W^{k,p} \forall k $ \\
+&  & real all derivatives bounded &  \\
+\bottomrule
+\end{tabular}
+
+}
+\caption{Different activation functions and the corresponding Sobolev spaces. Many of these results are described in the following references, 
+\cite{petersenTopologicalPropertiesSet2021a}  and \cite{adegokeHigherDerivativesInverse2016} for details. }
+\label{tab: Sobolev_acti}
+\end{table}
+
+To describe the neural network training mechanism and the learning problem. We first describe the ideal function that must be approximated.
+\begin{definition} \label{defn:NN_learning}
+     Let $\mathscr{X}(t)$  be the data tensor and let $f$ be a function $f \in W^{k,p}$ where $W^{k,p}$
+    is the space of all functions defined on $\mathcal{D}$ such that $f(t) \in W^{k,p}(\mathcal{D})$  with $1<p<\infty$. 
+\end{definition}
+The function $f$ in the context of ML is an ideal forecasting model that can forecast temperature perfectly or an ideal classification model that performs some classification problem. 
+In particular, this function $f(t)$ exists in a Sobolev space $W^{k,p}(\mathcal{D})$ and is approximated by a  
+parametric map $ g(\textbf{w}(t), \psi(t)) \big( . \big)   \in W^{k,p}(\mathcal{D})$ in the same Sobolev space as the function $f$ to be approximated.
+
+%------------Learning Problem Formulation-----------%
+\subsection{NN-Based Learning Problem} 
+In a standard ML setting, we would collect the data tensor $\mathscr{X}(t)$ as 
+training data and design a training regime that will be able to learn this function $f$. 
+This training regime will involve creating a sequence of functions $g(w(t), \psi(t))$ 
+where each subsequent function is obtained by updating the parameter $w(t)$ for a 
+fixed architecture $\psi(t)$ in a way that we achieve 
+$\| f(t)- g(w(t), \psi(t)) \|_{p} \rightarrow 0$ as $t \rightarrow \infty$ 
+with an important distinction that $g(w(t), \psi(t)) \in W^{k,p}, \forall n.$  
+Intuitively, this means that, a neural network $g$ initialized at some weight parameter $w(t)$ and 
+some architecture $ \psi(t)$  can approximate the target function $f(t)$ with a small error. 
+For a typical learning problem, a notion of this error is described by the loss function $\ell$ calculated 
+as an expected value on the data, specifically,
+\begin{equation}
+    \begin{aligned}\label{eqn:CL_cost}
+  J(\t) =  \underset{x \in \mathscr{X} (t) }{E}  \ell( g(w(t), \psi(t)) (x ) ).
+    \end{aligned}
+\end{equation}
+A traditional learning structure seeks to minimize the cost $J(t)$ through an iterative 
+procedure that drives $J(t) \rightarrow 0$ as $t \rightarrow \infty.$ Moreover, this learning 
+structure is also mathematically guaranteed to converge with standard optimizers such as 
+Adam~\cite{kingmaAdamMethodStochastic2017}. A typical learning process for these approaches 
+involve extracting a batch of data and then updating the network 
+based on this batch of data. Subsequently, the learning process continues over steps where a batch 
+of data is utilized to update the model. All of these updates are performed with a fixed architecture. 
+
+The traditional learning process provides two key insights. First, the learning process is always done with a fixed architecture. 
+Second, there is a cumulative impact of batches of data on the learning problem. The convergence of a neural network should be shown 
+by demonstrating that the cumulative effect of these batches of data exhibits a pointwise convergence. Although, in standard proofs
+of gradient-based approaches, the cumulative effect is considered by defining a series of gradients and then summing across gradients,
+the analysis structure is still performed assuming a fixed architecture. In this paper, we will consider a scenario
+when the architecture and the model parameters are jointly learned, which is essentially the paradigm under which many typical
+hyperparameter or architecture search methods perform. Subsequently, we will precisely quantify the effects of the model, the data, 
+the architecture and additional disturbances on the learning problem. 
+
+Towards this end, we begin by writing a cumulative learning problem considering the effects of all batches of data. However, in order to do so, we need to first smooth one of our parameters. As stated earlier, $\psi(t)$ is comprised of the architecture and user-defined parameters which are a combination of integer, categorical, and floating point values. Thus, $\psi(t)$ is not differentiable. This requires us to adjust the problem slightly, as we have to first smooth $\psi(t)$ in some fashion. We can view $\psi(t)\in \mathbb{R}^n$ as
+    \begin{align*}
+        \psi(t) & = \begin{bmatrix}
+            a_1(t)\\
+            a_2(t)\\
+            \vdots\\
+            a_n(t)
+        \end{bmatrix},
+    \end{align*}
+where $a_i:[0,T]\rightarrow U_i$ for $1\leq i\leq n$ and $U_i\subset \mathbb{R}.$ For example, if $a_{i_0}(t)$ takes binary values only, then $U_{i_0} = \{0,1\}.$ The smoothing of such $\psi(t)$ will be completed by constructing an infinitely differentiable function we call $\delta(\psi(t))\in \mathbb{R}^n,$ which we define as follows 
+    \begin{align*}
+        \delta(\psi(t)) & = \begin{bmatrix}
+            \delta(a_1(t))\\
+            \delta(a_2(t))\\
+            \vdots\\
+            \delta(a_n(t))
+        \end{bmatrix}.
+    \end{align*}
+Here, each $\delta(a_i(t))$ is now infinitely differentiable. For sake of clarity, we note that the choice of notation $\delta(\psi(t))$ is not the standard notion of composition of functions. We are in fact defining a new function we denote $\delta(\psi(t)).$ However, we chose the notation as it suggests what we are accomplishing: smoothing $\psi(t)$ by ``pushing it" through a function. We will explain potential construction choices for each $\delta(a_i(t))$ in two examples, but we shall first finish defining the learning problem.
+
+In a continuous sense, the cumulative effect of all batches of data is essentially, the integral of the cost function over all the steps. Let $J(t)$ now be the cost function with our smoothed $\psi(t),$
+\begin{align*}
+    J(t) & = \underset{x \in \mathscr{X} (t) }{E} \ell(g(w(t), \delta(\psi(t)))(x)).
+\end{align*}
+Then, we let the cumulative loss be denoted as $V(t),$ which is the integral over the cost $J(t)$ at each $t$ starting from the current step to $T,$ as below
+\begin{align} \label{eqn:value_cost}
+   V(t) = \int_{\tau = t}^T   J(\tau) \: d\tau.
+\end{align}
+Essentially, $J(\tau)$ provides us with the state of the learning system at the instant $\tau.$ There are two aspects to this state, first is the model which stores the information corresponding to each of the batch that has been 
+observed until now through the smoothed architecture $\delta(\psi(t))$ and the weight $w(t)$. 
+Second, is the present batch of data. A remark must be made regarding the integral in
+\eqref{eqn:value_cost}. As observed the integral starts at $t$ and ends at $T.$ 
+The integral signifies the cumulative
+impact of all the batches that will be observed in the future, which is the accumulated 
+notion of all the paths, the learning system may observe due to different variations in the data batches.
+
+This provides a holistic view of the learning problem 
+throughout the complete learning interval and therefore, $V(t)$ is the cumulative cost. 
+As we seek to minimize this cumulative cost, we will refer to this as the value function, then, the 
+minimization over the value function provides the optimal cost given as
+\begin{align*}
+    V^*(t) & = \minSmoothGW V(t),
+\end{align*}
+thus describing the learning problem. 
+
+%===============HJB Derivation===================%
+\section{HJB Derivation}
+Now, we must derive the HJB equation. 
+\begin{proposition}
+    Let $J(t) = \underset{x \in \mathscr{X} (t) }{E} \ell(g(w(t), \delta(\psi(t)))(x))$ and $V(t) = \int_{\tau = t}^T J(\tau)d\tau.$ Consider the optimization problem as
+    \begin{align*}
+        V^*(t) & = \minSmoothGW V(t).
+    \end{align*}
+    Then, the total variation in $V^*(t)$ is given by
+    \begin{align*}
+        -\frac{\partial V^*}{\partial t} & = \minSmoothGW \biggl[J(t) +\frac{\partial V^*}{\partial x}\frac{dx}{dt}\\
+        & \hspace{3mm}+\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}\biggr].
+    \end{align*}
+\end{proposition}
+
+\begin{proof}
+    Let $J, V,$ and $V^*$ be as defined above. To begin, we split the integral $V(t) = \int_{\tau=t}^TJ(\tau)d\tau$ over the intervals $[t,t+\Delta t]$ and $[t+\Delta t, T].$ Observe,
+    \begin{align}
+        V^*(t) & = \minSmoothGW \int_{t}^T J(\tau)d\tau\nonumber\\
+                & = \minSmoothGW\biggl[ \int_{t}^{t+\Delta t} J(\tau)d\tau\nonumber\\
+                & \hspace{3mm}+ \int_{t+\Delta t}^T J(\tau)d\tau\biggl]\nonumber\\
+                & = \minSmoothGW\biggl[ \int_{t}^{t+\Delta t} J(\tau)d\tau\nonumber\\
+                & \hspace{3mm}+ V^*(t+\Delta t)\biggr].\label{V*term}
+    \end{align}
+    Now, we provide the first-order Taylor series expansion of $V^*(t+\Delta t)$ about $t.$ Then,
+    \begin{align}
+        V^*(t+\Delta t) & = V^*(t) + \frac{\partial V^*}{\partial t}+\frac{\partial V^*}{\partial x}\frac{dx}{dt}\nonumber\\
+        & +\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}.\label{taylorV}
+    \end{align}
+    We can then substitute (\ref{taylorV}) in for $V^*(t+\Delta t)$ in (\ref{V*term}). Notice,
+    \begin{align*}
+        V^*(t) & = \minSmoothGW\left[ \int_{t}^{t+\Delta t} J(\tau)d\tau + V^*(t+\Delta t)\right]\\
+               & = \minSmoothGW\biggl[ \int_{t}^{t+\Delta t} J(\tau)d\tau + V^*(t)\\
+               & \hspace{3mm} + \frac{\partial V^*}{\partial t}+\frac{\partial V^*}{\partial x}\frac{dx}{dt} +\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}\biggr].
+    \end{align*}
+    Simplifying reveals,
+    \begin{align*}
+        V^*(t) & = V^*(t) + \minSmoothGW\biggl[ \int_{t}^{t+\Delta t} J(\tau)d\tau + \frac{\partial V^*}{\partial t}\\
+        & \hspace{3mm}+\frac{\partial V^*}{\partial x}\frac{dx}{dt} +\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}\biggr].\\
+    \end{align*}
+    Cancelling common terms, we have
+    \begin{align*}
+        0 & = \minSmoothGW\biggl[ \int_{t}^{t+\Delta t} J(\tau)d\tau + \frac{\partial V^*}{\partial t}+\frac{\partial V^*}{\partial x}\frac{dx}{dt}\\
+        & \hspace{3mm} +\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}\biggr].\\
+    \end{align*}
+    Rewriting, and letting $\Delta t\rightarrow 0,$ we have
+    \begin{align*}
+        -\frac{\partial V^*}{\partial t} & = \minSmoothGW \biggl[J(t) +\frac{\partial V^*}{\partial x}\frac{dx}{dt}\\
+        & \hspace{3mm} +\frac{\partial V^*}{\partial \delta(\psi)}\frac{d\delta(\psi)}{dt}+\frac{\partial V^*}{\partial w}\frac{dw}{dt}\biggr],
+    \end{align*}
+    as desired.
+\end{proof}
+
+The derivation above brings to light the need for our construction of $\delta(\psi(t)).$ We recall that $\psi(t),$ which is comprised of the architecture and other categorical and integer value data, is not differentiable by itself. However, smoothing $\psi(t)$ by constructing $\delta(\psi(t))$ allows us to to derive the HJB equation using $\delta(\psi(t))$ and proceed with the problem. In the next section we will describe two potential constructions of $\delta(\psi(t))$ for a given $\psi(t).$ Such constructions are then able to be used in general to construct a $\delta(\psi(t))$ for any given $\psi(t).$
+
+%==================Example==================%
+\section{Example}
+In this section we will work an explicit example. In section 4.1, we will discuss two possible constructions of $\delta(\psi(t)).$ Then, for a chosen $J,$ we will determine $\frac{dJ}{dt}$ and $\frac{dV}{dt}$ in sections $4.2$  and $4.3$ respectively.
+
+We begin by describing the example we will work with throughout this section. Set $\psi(t)\in \mathbb{R}^3$ to be
+    \begin{align*}
+        \psi(t) & = \begin{bmatrix}
+            a(t)\\
+            b(t)\\
+            c(t)
+        \end{bmatrix},
+    \end{align*}
+where
+ \begin{align*}
+     a(t) & = \begin{cases}
+         0, &\mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{2}\\
+         1, &\mathrm{if}\hspace{2mm} \frac{T}{2}\leq t\leq T,
+     \end{cases}\\
+     b(t) & = \begin{cases}
+         0, &\mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{4}\\
+         1, &\mathrm{if}\hspace{2mm} \frac{T}{4}\leq t < \frac{T}{2}\\
+         2, &\mathrm{if}\hspace{2mm} \frac{T}{2}\leq t < \frac{3T}{4}\\
+         3, &\mathrm{if}\hspace{2mm} \frac{3T}{4}\leq t\leq T,\\
+     \end{cases}
+ \end{align*}
+ and
+ \begin{align*}
+     c(t) & =\frac{1}{0.4\sqrt{\left(2\pi\right)}}e^{-0.5\left(\frac{\left(t-\frac{T}{2}\right)}{0.4}\right)^{2}}.
+ \end{align*}
+ In other words, $a(t)$ is a binary step function, $b(t)$ is an integer valued staircase function, and $c(t)$ is a Gaussian on $[0,T]$ symmetric about $T/2.$ Clearly $a(t)$ and $b(t)$ are not differentiable, hence the need for smoothing. Further, let $\boldsymbol{1}\in \mathbb{R}^3$
+ denote the vector of all ones and $\boldsymbol{0}\in \mathbb{R}^3$ the vector of all zeros. Set $w(t) = \boldsymbol{1}$  and $x(t) = \boldsymbol{0}$ for all $t\in [0,T].$
+
+%-------------Constructions--------------%
+ \subsection{Constructions}
+ As previously stated, the goal of this section is to discuss two ideal constructions of $\delta(\psi(t))$ for $\psi(t)$ described in our example above. To keep the constructions separate for later calculations, we denote our first construction of $\delta(\psi(t))$ as $\delta_0(\psi(t))$ and our section construction as $\delta_1(\psi(t)).$
+
+The goal of our first construction is to smooth $\psi(t)$ by ``using" the Dirac delta function. The Dirac delta function is a desirable choice as it is an infinitely differentiable test function. To begin, set $\alpha = .0001,$ and define the following two functions,
+ \begin{align*}
+     q\left(t,r,h\right)& =\frac{1}{\sqrt{2\pi \alpha}}e^{-\frac{1}{2\alpha}\left(t-r\right)^{2}}+h,\\
+     z\left(t,\ p,r,h\right) &= \sqrt{\left(q\left(p,r,0\right)-1\right)^{2}}e^{-\pi\left(q\left(p,r,0\right)-1\right)^{2}\left(t-p\right)^{2}}+h.
+ \end{align*}
+ We will be viewing $q$ and $z$ as functions of $t$ and fixing the parameters $p,r,h\in \mathbb{R}.$ From this perspective, $q$ and $z$ are Dirac delta functions where we can control the amplitude with $\alpha,$ the horizontal shift with $r$ and the height, or vertical shift, by $h.$ We now use $q$ and $z$ to construct piecewise functions which smooth $a(t)$ and $b(t).$ Let
+ \begin{align*}
+     \delta_0(a(t)) & = \begin{cases}
+         q\left(t,\frac{T}{2},0\right), &\mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{2}\\
+         z\left(t,\frac{T}{2},\frac{T}{2},1\right), &\mathrm{if}\hspace{2mm} \frac{T}{2}\leq t\leq T
+     \end{cases}
+ \end{align*}
+Figure \ref{fig:delta_0a(t)} represents the function above.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_a.jpg}
+        \caption{ Graph of $\delta_0(a(t))$ for $T=4.$}\label{fig:delta_0a(t)}
+    \end{figure}\\
+We can define $\delta(b(t))$ similarly,
+ \begin{align*}
+     \delta_0(b(t)) & = \begin{cases}
+         q\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{4}\\
+         z\left(t,\frac{T}{4},\frac{T}{4},1\right), & \mathrm{if}\hspace{2mm} \frac{T}{4}\leq t< \frac{T+2}{4}\\
+         q\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T}{2}\\
+         z\left(t,\frac{T}{2},\frac{T}{2},2\right), & \mathrm{if}\hspace{2mm} \frac{T}{2}\leq t<\frac{T+1}{2}\\
+         q\left(t,\frac{3T}{4},2\right), & \mathrm{if}\hspace{2mm} \frac{T+1}{2}\leq t<\frac{3T}{4}\\
+         z\left(t,\frac{3T}{4},\frac{3T}{4},3\right), & \mathrm{if}\hspace{2mm} \frac{3T}{4}\leq t\leq T,\\
+     \end{cases}
+ \end{align*}
+Such construction is graphed in Figure \ref{fig:delta_0_b(t)}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_b.jpg}
+        \caption{ Graph of $\delta_0(b(t))$ for $T=4.$}\label{fig:delta_0_b(t)}
+    \end{figure}\\
+ As $c(t)$ is already continuous, we can easily define
+ \begin{align*}
+     \delta_0(c(t)) & = q\left(c(t),1,0\right),
+ \end{align*}
+ which is the standard notion of composition of the Dirac delta function with $c(t)$ and desirable parameters. Such function is represented in Figure \ref{fig:delta_0c(t)}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_c.jpg}
+        \caption{ Graph of $\delta_0(c(t))$ for $T=4.$} \label{fig:delta_0c(t)}
+    \end{figure}\\
+ Smoothing all of the terms in $\psi$ allows us to now define $\delta_0(\psi(t))$ as follows
+  \begin{align*}
+        \psi_0(t) & = \delta_0(\psi(t)) = \begin{bmatrix}
+            \delta_0(a(t))\\
+            \delta_0(b(t))\\
+            \delta_0(c(t))
+        \end{bmatrix}.
+    \end{align*}
+The term $\psi_0(t)$ is our new smoothed version of $\psi(t),$ completing our first construction.
+
+Before continuing to the second construction, recall that our goal was to smooth $\psi(t)$ by constructing $\delta_0(\psi(t))$ which is infinitely differentiable.  We can check that we have accomplished this with $\delta_0(a(t)), \delta_0(b(t)),$ and $\delta_0(c(t)).$ Each was built using $q$ and $z,$ which are both infinitely differentiable themselves. Further, we constructed each so they are differentiable at the transition points. Let us calculate the first derivative to gain intuition. 
+\begin{align*}
+    \frac{\partial}{\partial t}(q(t,r,h)) & = -\frac{(t-r)}{\alpha\sqrt{2\pi \alpha}}e^{-\frac{1}{2\alpha}(t-r)^2} \\
+    \frac{\partial}{\partial t}(z(t,p,r,h)) & = -2\pi(q(p,r,0)-1)^{\frac{3}{2}}(t-p)\\
+    & \hspace{3mm} * e^{-\pi(q(p,r,0)-1)^2(t-p)}.
+\end{align*}
+Since we will always be fixing $r,h,p\in \mathbb{R}$ and differentiating only with respect to $t,$ we can view $\frac{\partial}{\partial t}q(t,r,h)$ as $q'(t,r,h),$ and likewise $\frac{\partial}{\partial t}z(t,p,r,h)$ as $z'(t,p,r,h).$ Then, differentiating term by term in each piecewise function, we have
+\begin{align*}
+        \frac{d\delta_0(a(t))}{dt} & =  \begin{cases}
+         q'\left(t,\frac{T}{2},0\right), &\mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{2}\\
+         z'\left(t,\frac{T}{2},\frac{T}{2},1\right), &\mathrm{if}\hspace{2mm} \frac{T}{2}\leq t\leq T,
+     \end{cases}\\
+        \frac{d\delta_0(b(t))}{dt} & = \begin{cases}
+         q'\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{4}\\
+         z'\left(t,\frac{T}{4},\frac{T}{4},1\right), & \mathrm{if}\hspace{2mm} \frac{T}{4}\leq t< \frac{T+2}{4}\\
+         q'\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T}{2}\\
+         z'\left(t,\frac{T}{2},\frac{T}{2},2\right), & \mathrm{if}\hspace{2mm} \frac{T}{2}\leq t<\frac{T+1}{2}\\
+         q'\left(t,\frac{3T}{4},2\right),& \mathrm{if}\hspace{2mm} \frac{T+1}{2}\leq t<\frac{3T}{4}\\
+         z'\left(t,\frac{3T}{4},\frac{3T}{4},3\right), & \mathrm{if}\hspace{2mm} \frac{3T}{4}\leq t\leq T,\\
+     \end{cases}\\
+        \frac{d\delta_0(c(t))}{dt} & = q'\left(c(t),1,0\right)*c'(t).
+    \end{align*}
+We represent each of the above functions in Figures \ref{fig:delta_0a_prime(t)},\ref{fig:delta_0b_prime(t)}, and \ref{fig:delta_0c_prime(t)}, respectively.
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_a_prime.jpg}
+        \caption{ Graph of the derivative of $\delta_0(a(t))$ with respect to $t$ for $T=4.$}\label{fig:delta_0a_prime(t)}
+\end{figure}\\
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_b_prime.jpg}
+        \caption{ Graph of the derivative of $\delta_0(b(t))$ with respect to $t$ for $T=4.$}\label{fig:delta_0b_prime(t)}
+    \end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8.5cm]{
+    con1_delta_c_prime.jpg}
+    \caption{ Graph of the derivative of $\delta_0(c(t))$ with respect to $t$ for $T=4.$}\label{fig:delta_0c_prime(t)}
+\end{figure}
+
+%Construction 2
+For our second construction, we will use hyperbolic trigonometric functions to smooth $\psi(t).$ First, define the following function
+\begin{align*}
+    j(t,s,v) & = \frac{1}{2}\coth(50)\tanh(100(x-h+.03))+\frac{1}{2}+v.
+\end{align*}
+Similar to the previous construction, we will view $j$ as a function of $t$ and fix the parameters $s,v\in \mathbb{R}.$ This function nicely smooths step functions, where we can control vertical shift with $v$ and horizontal shift with $s.$ We will use $j$ to smooth both $a(t)$ and $b(t).$ 
+
+Let us first begin by smoothing $a(t).$ Consider the function
+    \begin{align*}
+        \delta_1(a(t)) & = j\left(t,\frac{T}{2},0\right).
+    \end{align*}
+Figure \ref{fig:delta_1a(t)} is the graph of this function.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_a2.jpg}
+        \caption{ Graph of $\delta_1(a(t))$ for $T=4.$}\label{fig:delta_1a(t)}
+    \end{figure}\\
+Similarly, we can smooth $b(t)$ by using $j$ in a piecewise fashion. Observe,   
+ \begin{align*}
+     \delta_1(b(t)) & = \begin{cases}
+         j\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T+2}{4}\\
+         j\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T+1}{2}\\
+         j\left(t,\frac{3T}{4},2\right),& \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t\leq T.
+     \end{cases}
+\end{align*}
+Such function is graphed in Figure \ref{fig:delta_1b(t)}.
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_b2.jpg}
+        \caption{ Graph of $\delta_1(b(t))$ for $T=4.$}\label{fig:delta_1b(t)}
+    \end{figure}\\
+Both $\delta_1(a(t))$ and $\delta_1(b(t))$ smooth their respective functions, are infinitely differentiable, and have the added benefit of their derivative being a Dirac delta function. Since $c(t)$ is already infinitely differentiable, we can simply choose $\delta_1(c(t)) = c(t)$ for all $t\in [0,T].$ For reference, the graph of $\delta_1(c(t))$ can be found in Figure \ref{fig:delta_1c(t)}.
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_c2.jpg}
+        \caption{ Graph of $\delta_1(b(t))$ for $T=4.$}
+        \label{fig:delta_1c(t)}
+    \end{figure}\\
+
+\noindent Thus, we can now completely define $\delta_1(\psi_1(t)),$
+  \begin{align*}
+        \psi_1(t) & = \delta_1(\psi(t)) = \begin{bmatrix}
+            \delta_1(a(t))\\
+            \delta_1(b(t))\\
+            \delta_1(c(t))
+        \end{bmatrix},
+    \end{align*}
+The term $\psi_1(t)$ is another smoothed version of $\psi(t),$ completing our second construction.
+
+We can check that $\delta_1(a(t)), \delta_1(b(t)),$ and $\delta_1(c(t))$ are all infinitely differentiable. Let us calculate and take a look at the first derivative. First, observe,
+\begin{align*}
+    \frac{\partial}{\partial t}j(t,s,v) & = 50\coth(50)\text{sech}^2(100(x-h+.03)).
+\end{align*}
+Again, we will always be fixing parameters $s,v\in \mathbb{R},$ so we can view $\frac{\partial j}{\partial t}$ as $j'(t,s,v).$ Our careful construction allows us to differentiate by the terms of the piecewise functions, so we have
+\begin{align*}
+        \frac{d\delta_1(a(t))}{dt} & = j'\left(t,\frac{T}{2},0\right)\\
+        \frac{d\delta_1(b(t))}{dt} & = \begin{cases}
+         j'\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T+2}{4}\\
+         j'\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T+1}{2}\\
+         j'\left(t,\frac{3T}{4},2\right),& \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t\leq T, 
+        \end{cases}
+\end{align*}
+and
+\begin{align*}
+    \frac{d\delta_1(c(t))}{dt} & = c'(t).
+\end{align*}
+We provide the graphs of such functions in Figures \ref{fig:delta_1a_prime(t)}, \ref{fig:delta_1b_prime(t)}, and \ref{fig:delta_1c_prime(t)}, respectively.
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{con1_delta_a2_prime.jpg}
+        \caption{ Graph of the derivative of $\delta_1(b(t))$ with respect to $t$ for $T=4.$}
+        \label{fig:delta_1a_prime(t)}
+\end{figure}\\
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_b2prime.jpg}
+        \caption{ Graph of the derivative of  $\delta_1(b(t))$ with respect to $t$ for $T=4.$}
+        \label{fig:delta_1b_prime(t)}
+    \end{figure}\\
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=8.5cm]{
+        con1_delta_c2_prime.jpg}
+        \caption{ Graph of the derivative of  $\delta_1(c(t))$ with respect to $t$ for $T=4.$}
+        \label{fig:delta_1c_prime(t)}
+    \end{figure}\\
+
+%---------------------dJ/dt-----------------------%
+\subsection{Calculating $\frac{dJ}{dt}$}
+Now that we constructed two sample $\delta(\psi(t))$ in the previous section, we look to apply them to determine $\frac{dJ}{dt}.$ Set $J(t) = \|w(t)-\psi(t)\|_2^2.$ We begin by using our first smoothing construction of $\psi(t).$ Notice,
+    \begin{align*}
+        J(t) & = \|w(t)-\psi_0(t)\|_2^2\\
+        & = \|\boldsymbol{1}-\psi_0(t)\|_2^2\\
+          & = \begin{bmatrix}
+            1-\delta_0(a(t))\\
+            1-\delta_0(b(t))\\
+            1-\delta_0(c(t))
+        \end{bmatrix}^T\begin{bmatrix}
+            1-\delta_0(a(t))\\
+            1-\delta_0(b(t))\\
+            1-\delta_0(c(t))
+        \end{bmatrix}\\
+        & = (1-\delta_0(a(t)))^2 +(1-\delta_0(b(t)))^2+(1-\delta_0(c(t)))^2.
+    \end{align*}
+Since we constructed $\delta_0(a(t)),\delta_0(b(t)),$ and $\delta_0(c(t))$ to all be differentiable, we are able to find $\partial J/\partial t.$ Observe,
+    \begin{align*}
+        \frac{\partial J}{\partial \delta_0(a(t))} & = -2(1-\delta_0(a(t))),\\
+        \frac{\partial J}{\partial \delta_0(b(t))} & = -2(1-\delta_0(b(t))),\\
+        \frac{\partial J}{\partial \delta_0(c(t))} & = -2(1-\delta_0(c(t))).
+    \end{align*}
+As $q$ and $z$ are both differentiable with respect to $t,$ our construction allows us to to differentiate $\delta_0(a(t))$ and $\delta_0(b(t))$ with respect to $t,$ as shown earlier. Notice,
+    \begin{align*}
+        \frac{d\delta_0(a(t))}{dt} & =  \begin{cases}
+         q'\left(t,\frac{T}{2},0\right), &\mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{2}\\
+         z'\left(t,\frac{T}{2},\frac{T}{2},1\right), &\mathrm{if}\hspace{2mm} \frac{T}{2}\leq t\leq T,
+     \end{cases}\\
+        \frac{d\delta_0(b(t))}{dt} & = \begin{cases}
+         q'\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T}{4}\\
+         z'\left(t,\frac{T}{4},\frac{T}{4},1\right), & \mathrm{if}\hspace{2mm} \frac{T}{4}\leq t< \frac{T+2}{4}\\
+         q'\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T}{2}\\
+         z'\left(t,\frac{T}{2},\frac{T}{2},2\right), & \mathrm{if}\hspace{2mm} \frac{T}{2}\leq t<\frac{T+1}{2}\\
+         q'\left(t,\frac{3T}{4},2\right), & \mathrm{if}\hspace{2mm} \frac{T+1}{2}\leq t<\frac{3T}{4}\\
+         z'\left(t,\frac{3T}{4},\frac{3T}{4},3\right), & \mathrm{if}\hspace{2mm} \frac{3T}{4}\leq t\leq T,\\
+     \end{cases}\\
+        \frac{d\delta_0(c(t))}{dt} & = q'\left(c(t),1,0\right)*c'(t).
+    \end{align*}
+    Thus, we have
+    \begin{align}
+        \frac{dJ}{dt} & = \frac{\partial J}{\partial \delta_0(a(t))}\frac{d\delta_0(a(t))}{dt}+\frac{\partial J}{\partial \delta_0(b(t))}\frac{d\delta_0(b(t))}{dt}\nonumber \\
+         & \hspace{3mm} + \frac{\partial J}{\partial \delta_0(c(t))}\frac{d\delta_0(c(t))}{dt} \label{delta_0J}
+    \end{align}
+    As one final step, we shall use (\ref{delta_0J}) in a first order Taylor expansion to check an approximation. Consider
+    \begin{align*}
+          J\left(\frac{T}{4}\right) + \frac{dJ}{dt}\left(\frac{T}{4}\right)\left(\left(\frac{T}{4}+\Delta t\right)-\frac{T}{4}\right).
+    \end{align*}
+    This should be an approximation for $J\left(\frac{T}{4}+\Delta t\right).$ Set $T = 4$ and $\Delta t = .0001.$ Then, completing calculations, we find that
+    \begin{align*}
+        J(1) + \frac{dJ}{dt}(1)(.01) & \approx 1514.760975,
+    \end{align*}
+    and $J(1.0001) \approx 1514.617194.$ Thus, the first-order approximation appears accurate for small $\Delta t.$
+
+    Next, we complete the same process of determining $\frac{dJ}{dt},$ but for our second construction, $\delta_1(\psi(t)).$ First, we have
+    \begin{align*}
+        J(t) & = \|w(t)-\psi_1(t)\|_2^2\\
+        & = \|\boldsymbol{1}-\psi_1(t)\|_2^2\\
+          & = \begin{bmatrix}
+            1-\delta_1(a(t))\\
+            1-\delta_1(b(t))\\
+            1-\delta_1(c(t))
+        \end{bmatrix}^T\begin{bmatrix}
+            1-\delta_1(a(t))\\
+            1-\delta_1(b(t))\\
+            1-\delta_1(c(t))
+        \end{bmatrix}\\
+        & = (1-\delta_1(a(t)))^2 +(1-\delta_1(b(t)))^2+(1-\delta_1(c(t)))^2.
+    \end{align*}
+Since we constructed $\delta_1(a(t)),\delta_1(b(t)),$ and $\delta_1(c(t))$ to all be differentiable, we are able to find $dJ/dt.$ Observe,
+    \begin{align*}
+        \frac{\partial J}{\partial \delta_1(a(t))} & = -2(1-\delta_1(a(t))),\\
+        \frac{\partial J}{\partial \delta_1(b(t))} & = -2(1-\delta_1(b(t))),\\
+        \frac{\partial J}{\partial \delta_1(c(t))} & = -2(1-\delta_1(c(t))).
+    \end{align*}
+Since $j$ is differentiable with respect to $t,$ our construction allows us to differentiate $\delta_1(a(t))$ and $\delta_1(b(t))$ with respect to $t$ as shown earlier. Observe,
+    \begin{align*}
+        \frac{d\delta_1(a(t))}{dt} & = j'\left(t,\frac{T}{2},0\right),\\
+        \frac{d\delta_1(b(t))}{dt} & = \begin{cases}
+         j'\left(t,\frac{T}{4},0\right), & \mathrm{if}\hspace{2mm} 0\leq t<\frac{T+2}{4}\\
+         j'\left(t,\frac{T}{2},1\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t< \frac{T+1}{2}\\
+         j'\left(t,\frac{3T}{4},2\right), & \mathrm{if}\hspace{2mm} \frac{T+2}{4}\leq t\leq T. 
+        \end{cases}
+    \end{align*}
+Hence,
+    \begin{align*}
+        \frac{dJ}{dt} & = \frac{\partial J}{\partial \delta_1(a(t))}\frac{d\delta_1(a(t))}{dt}+\frac{\partial J}{\partial \delta_1(b(t))}\frac{d\delta_1(b(t))}{dt}+\frac{\partial J}{\partial c}\frac{dc}{dt}.
+    \end{align*}
+Let us check the first-order Taylor series expansion for a point. Consider
+    \begin{align*}
+          J\left(\frac{T}{4}\right) + \frac{dJ}{dt}\left(\frac{T}{4}\right)\left(\left(\frac{T}{4}+\Delta t\right)-\frac{T}{4}\right).
+    \end{align*}
+This should be an approximation for $J\left(\frac{T}{4}+\Delta t\right).$
+
+Set $T = 4$ and $\Delta t = .01.$ Then, completing calculations, we find that
+    \begin{align*}
+        J(1) + \frac{dJ}{dt}(1)(.01) & \approx 1.908998518,
+    \end{align*}
+and $J(1.01) \approx 1.908909947.$ Thus, the first-order approximation appears accurate.
+    
+%--------------------dV/dt-----------------------%
+\subsection{Calculating $\frac{dV}{dt}$}
+For this section, we look to calculate $\frac{dV}{dt}$ for the example we have been working with. Let $J(t) = \|w(t)-\psi(t)\|_2^2,$ and set
+\begin{align*}
+    V(t) & = \int_t^T J(\tau)d\tau\\
+         & = \int_t^T [(1-\delta_0(a(\tau)))^2 +(1-\delta_0(b(\tau)))^2\\
+         & \hspace{3 mm}+(1-\delta_0(c(\tau)))^2]d\tau.
+\end{align*}
+We must determine the following,
+\begin{align}
+    \frac{dV}{dt} & = \innerprod{\frac{\partial V}{\partial w}, \frac{dw}{dt}} + \innerprod{\frac{\partial V}{\partial \delta(\psi)}, \frac{d\delta(\psi)}{dt}}+\innerprod{\frac{\partial V}{\partial x}, \frac{dx}{dt}} + \frac{\partial V}{\partial t},\label{dV}
+\end{align}
+Since $w(t),\delta(\psi(t)),$ and $x(t)$ are all smooth, such partial derivatives exist. For our example, we quickly see that the second term in (\ref{dV}) is the only nonzero term. First we compute $\frac{\partial V}{\partial \delta(\psi)}.$ Observe,
+\begin{align*}
+    \frac{\partial V}{\partial \delta(\psi)} & = \frac{\partial}{\partial \delta(\psi)} \int_t^T J(\tau)d\tau\\
+    & = \int_t^T \frac{\partial}{\partial \delta(\psi)}J(\tau)d\tau.
+\end{align*}
+Thus,
+\begin{align*}
+    \frac{dV}{dt} & = \innerprod{\int_t^T \frac{\partial}{\partial \delta(\psi)}J(\tau)d\tau, \frac{d\delta(\psi)}{dt}}\\
+    & = \int_t^T\innerprod{ \frac{\partial}{\partial \delta(\psi)}J(\tau), \frac{d\delta(\psi)}{dt}}d\tau.
+\end{align*}
+\newpage
+We can then use our first construction $\delta_0(\psi(t))$ to determine the inner product. Notice,
+\begin{align}
+    \innerprod{ \frac{\partial}{\partial \delta_0(\psi)}J(t), \frac{d\delta_0(\psi)}{dt}} & = \begin{bmatrix}
+            \frac{\partial J}{\partial \delta_0(a(t))}\\
+            \frac{\partial J}{\partial \delta_0(b(t))}\\
+           \frac{\partial J}{\partial \delta_0(c(t))}
+        \end{bmatrix}^T\begin{bmatrix}
+            \frac{d\delta_0(a(t))}{dt}\\
+            \frac{d\delta_0(b(t))}{dt}\\
+            \frac{d\delta_0(c(t))}{dt}
+        \end{bmatrix}\nonumber\\
+        & = \frac{\partial J}{\partial \delta_0(a(t))}\frac{d\delta_0(a(t))}{dt}\nonumber\\
+        & \hspace{3 mm}+ \frac{\partial J}{\partial \delta_0(b(t))}\frac{d\delta_0(b(t))}{dt}\nonumber\\
+         & \hspace{3mm} + \frac{\partial J}{\partial \delta_0(c(t))}\frac{d\delta_0(c(t))}{dt}.\label{exapanded dv}
+\end{align}
+We already determined the terms in (\ref{exapanded dv}) in Section 4.2, so we can use those to compute values of the following,
+\begin{align*}
+    \frac{dV}{dt} & = \int_t^T \biggl[\frac{\partial J}{\partial \delta_0(a(\tau))}\frac{d\delta_0(a(\tau))}{dt}+\frac{\partial J}{\partial \delta_0(b(\tau))}\frac{d\delta_0(b(\tau))}{d\tau}\nonumber \\
+         & \hspace{3mm} + \frac{\partial J}{\partial \delta_0(c(\tau))}\frac{d\delta_0(c(\tau))}{dt}\biggr]d\tau.
+\end{align*}
+The same holds for the second construction as well.
+
+
+% To print the credit authorship contribution details
+\printcredits
+
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+\bibliographystyle{cas-model2-names}
+
+% Loading bibliography database
+\bibliography{NNbib}
+
+% Biography
+%\bio{}
+% Here goes the biography details.
+%\endbio
+
+%\bio{pic1}
+% Here goes the biography details.
+%\endbio
+
+\end{document}
+
+\begin{corollary}\label{increaseddelta}
+    Let $(\mathcal{X}, \mathcal{B}(\mathcal{X}), \mu)$ be the measure space previously defined and $\ell$ the loss function. Then, performing an architecture search to acquire an optimal architecture results in a larger solution search space. 
+\end{corollary}
+
+\begin{proof}
+    Suppose we currently have the NN $g(w,\psi_0).$ We know that the loss function is bounded over all tasks by a constant $M>0$ by Remark \ref{boundedremark}. As we are in a Sobolev space, we can choose another NN operator $g(w,\psi_1),$ with a different architecture. Similarly, the loss is bounded over all tasks by a constant $M'>0.$ By Theorem \ref{M_0bound}, changing the architecture impacts overall bound on the loss. So, suppose for sake of argument that $M'<M.$
+    
+    Theorem \ref{contMeasure} holds for any NN with any weights and architecture. However, we can analyze what $\delta$ would be appropriately chosen for a given NN. For small $\varepsilon$ in particular, we desire the largest $\delta$ value possible, as it implies that more tasks will produce similar loss values. 
+    For the expected value of $g(w,\psi_0)$ we would choose $\delta = \varepsilon/M.$ For the expected value of $g(w,\psi_1)$ we would choose $\delta = \varepsilon/M'.$ Since we assume $M'<M,$ then $\varepsilon/M<\varepsilon/M'.$ Thus, changing the architecture led us to increase the value of delta for any given $\varepsilon.$ This in turn increases the size of our solution space as more tasks produce similar loss values.  
+\end{proof}

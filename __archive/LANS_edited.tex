@@ -1,0 +1,1249 @@
+%----------------------------------------------------------------------------------------
+%    PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+\documentclass[aspectratio=169,xcolor=dvipsnames]{beamer}
+%\usetheme{SimpleDarkBlue}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\usepackage{hyperref}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{amssymb,amsthm,amsmath,tikz,pgf,mathtools,subfigure}
+\usepackage[lined,linesnumbered,ruled]{algorithm2e}
+\usepackage{epsfig,amsmath, amsfonts,amstext, amsthm, latexsym, graphicx}
+\usepackage{amssymb,amsthm,amsmath,tikz,pgf,mathtools,subfigure}
+\usepackage[lined,linesnumbered,ruled]{algorithm2e}
+\usepackage{epsfig,amsmath, amsfonts,amstext, amsthm, latexsym, graphicx}
+\usepackage{epstopdf}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage[x11names]{xcolor}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{color,soul}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{comment}
+\usepackage{wasysym}
+%\usepackage{natbib}
+%\usepackage{bibentry}
+\usepackage[backend = biber]{biblatex}
+%\bibliography{NewNNbib}
+\addbibresource{NNbib.bib}
+\AtBeginBibliography{\small}
+
+\definecolor{UBCblue}{rgb}{0.04706, 0.13725, 0.26667} % UBC Blue (primary)
+\definecolor{UBCblue}{rgb}{0.16078, 0.33725, 0.513725} % UBC Blue (primary)
+\definecolor{UBCblue}{rgb}{.10588,.30196,.41176} % UBC Blue (primary)
+\usecolortheme[named=UBCblue]{structure}
+
+\setbeamertemplate{theorems}[numbered]
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\bigabs}[1]{\left \lvert #1 \right \rvert}
+\newcommand{\fhat}{\hat{f}}
+\def\MPlus{\ensuremath{\mathbin{\raisebox{-.1em}{\scalebox{.67}{\Plus}}}}} 
+
+
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+\newtheorem{remark}[theorem]{Remark}
+\usetikzlibrary{graphs}
+
+
+\makeatletter
+\renewcommand\@makefnmark{\hbox{\@textsuperscript{\normalfont[\@thefnmark]}}}
+\renewcommand\@makefntext[1]{{\normalfont[\@thefnmark]}\enspace #1}
+
+\renewrobustcmd{\blx@mkbibfootnote}[2]{%
+  \iftoggle{blx@footnote}
+    {\blx@warning{Nested notes}%
+     \addspace\mkbibparens{#2}}
+    {\unspace
+     \ifnum\blx@notetype=\tw@
+       \expandafter\@firstoftwo
+     \else
+       \expandafter\@secondoftwo
+     \fi
+       {\csuse{blx@theendnote#1}{\protecting{\blxmkbibnote{end}{#2}}}}
+       {\csuse{footnote}[frame]{\protecting{\blxmkbibnote{foot}{#2}}}}}}
+\makeatother
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+
+%----------------------------------------------------------------------------------------
+%    TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[The Effect of Architecture During Continual Learning]{The Effect of Architecture During Continual Learning}
+
+\author[Hahn and Raghavan]{Allyson Hahn and Krishnan Raghavan}
+
+\institute[NIU and ANL]
+{    Northern Illinois University\\
+    Argonne National Laboratory
+   
+     % Your institution for the title page
+}
+\date{September 4, 2025} % Date, can be changed to a custom date
+
+%----------------------------------------------------------------------------------------
+%    PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}
+    % Print the title page as the first slide
+    \titlepage
+\end{frame}
+
+% \begin{frame}{Overview}
+%     % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+%     \tableofcontents
+% \end{frame}
+
+%------------------------------------------------
+%\section{Motivation}
+%------------------------------------------------
+
+
+    \begin{frame}{What is Continual Learning?}
+        \begin{definition}
+            Continual learning is the problem of learning a sequence of tasks where each task is represented by a data set obtained at a task instance.
+        \end{definition}
+        %\pause
+        \begin{itemize}
+            \item Let $t$ be a task instance in the set $\{0,1,\ldots, T\}\subset \mathbb{N}.$%\pause
+            \item Let $\boldsymbol{\mathcal{X}}(t)$ represent the data set provided at each task $t.$%\pause
+            \item The set $\boldsymbol{\mathcal{X}}(t)$ consists of a list of matrices/vectors/graphs. 
+            %sampled according to the distribution $\mathbb{P}$ where $\boldsymbol{\mathcal{X}}(t) \subset \mathcal{D}$ such that $\mathcal{D}$ -- the domain, is a measurable set with a non-empty interior.
+            % \item It is required that $(\mathcal{D}, \mathcal{B}(\mathcal{D}), \mathbb{P})$ forms a probability triplet with $\mathcal{B}(\mathcal{D})$ being the Borel sigma algebra over the domain.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Anomaly Detection on workflows}
+  \centering \includegraphics[width = 0.45\columnwidth]{Figures/Picture1.png}
+  \begin{block}{}
+     \begin{itemize}
+        \item Detect anomalies for workflows generated during scientific experiments
+        \item We consider five workflows : Two unclustered workflows, Three clustered workflows
+        \item Three anomalies are manually injected to collect data: loss, hdd, cpu
+     \end{itemize}  
+  \end{block}
+  \centering {\color{WildStrawberry} The goal is to train a model to detect anomalies.}
+  %\pause
+  \begin{block}{\centering}
+        \centering
+        All this data is represented by graphs, therefore, let us think {\color{WildStrawberry}graph neural networks}.
+    \end{block}
+\end{frame}
+
+% \begin{frame}{Anomaly Detection}
+%     \centering \includegraphics[width =0.7\columnwidth]{Picture1.png}
+%     \begin{block}{\centering}
+%         \centering
+%         All this data is represented by graphs, therefore, let us think {\color{WildStrawberry}graph neural networks}.
+%     \end{block}
+%     \centering {\color{WildStrawberry} The goal is to train a model to detect anomalies.}
+% \end{frame}
+
+
+    \begin{frame}{Neural Networks for Continual Learning}
+    \textbf{Question:} How do we train neural networks in the continual learning setting?%\pause
+    \begin{figure}
+        \centering
+        %\includegraphics[width =0.75\textwidth]{Figures/W2.pdf} 
+        \includegraphics[width =0.75\textwidth]{Figures/Wball1new2png.png} 
+        \caption{Figure: The learning problem for task 1 (i.e. one giant dataset)}
+        \label{fig:placeholder}
+    \end{figure} 
+    \end{frame}
+
+    \begin{frame}{Neural Networks for Continual Learning}
+        \centering
+        \includegraphics[width =0.75\textwidth]{Figures/Wball2new1.png} \\
+        \centering Figure: The learning problem for tasks 1 and 2.
+        %\centering {\color{WildStrawberry} True, because the cost over a large dataset can be written as a sum of cost over $N$ individual batches.}
+    \end{frame}
+
+    \begin{frame}{Neural Networks for Continual Learning}
+        \centering
+        \includegraphics[width =.7\textwidth]{Figures/Wball3new1.png} \\
+        \centering Figure: The learning problem for tasks 1, 2, and 3.
+        %{\color{WildStrawberry} Under the standard IID assumptions, these balls should be conincide, unfortunately, this does not happen in continual learning.}
+    \end{frame}
+    
+
+    \begin{frame}{Capacity of the Intersection Space}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.56\textwidth} % Left column and width
+        \includegraphics[width =1\textwidth]{Figures/Wball3new1.png} \\
+        \centering Figure: The learning problem for tasks 1, 2, and 3.
+        
+        \column{.33\textwidth} % Right column and width
+        \begin{block}{}
+        \begin{itemize}
+
+            \item The size of the intersection space depends on how similar or dissimilar task data is.%\pause
+            
+            \item The more tasks we learn, the \textbf{smaller} the size of the intersection space will become.\footfullcite{chakraborty2025understanding}
+        \end{itemize}
+            
+        \end{block}
+
+    \end{columns}
+    \end{frame}
+
+    
+    \begin{frame}{Our Claim}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.38\textwidth} % Left column and width
+        \begin{alertblock}{Problem}
+            What if task data $\boldsymbol{\mathcal{X}}(t)$ is dissimilar to task data $\boldsymbol{\mathcal{X}}(t+1),$ resulting in an empty weights search spaces?
+        \end{alertblock}
+
+        \begin{exampleblock}{Solution}
+            Propose a method which learns optimal architecture and weights of neural networks simultaneously for each task, allowing for transfer of learning across all tasks, and thus increasing the cardinality of intersection of search spaces.
+        \end{exampleblock}
+        
+        \column{.56\textwidth} % Right column and width
+        \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/Wball3new1.png}
+    \caption{Tasks $1,2,$ and $3$}
+    \label{fig:challenge}
+    \end{figure}
+
+    \end{columns}
+        
+    \end{frame}
+
+    
+    \begin{frame}{Our Claim}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.38\textwidth} % Left column and width
+        \begin{alertblock}{Problem}
+            What if task data $\boldsymbol{\mathcal{X}}(t)$ is dissimilar to task data $\boldsymbol{\mathcal{X}}(t+1),$ resulting in an empty weights search spaces?
+        \end{alertblock}
+
+        \begin{exampleblock}{Solution}
+            Propose a method which learns optimal architecture and weights of neural networks simultaneously for each task, allowing for transfer of learning across all tasks, and thus increasing the cardinality of intersection of search spaces.
+        \end{exampleblock}
+        
+        \column{.56\textwidth} % Right column and width
+        \begin{center}
+            \Large\underline{Overview:}
+        \end{center}
+        \textbf{Theoretical:}
+        \vspace{1.25 in}
+
+        \textbf{Experimental:}
+        \vspace{.3 in}
+
+    \end{columns}
+        
+    \end{frame}
+
+       \begin{frame}{Our Claim}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.38\textwidth} % Left column and width
+        \begin{alertblock}{Problem}
+            What if task data $\boldsymbol{\mathcal{X}}(t)$ is dissimilar to task data $\boldsymbol{\mathcal{X}}(t+1),$ resulting in an empty weights search spaces?
+        \end{alertblock}
+
+        \begin{exampleblock}{Solution}
+            Propose a method which learns optimal architecture and weights of neural networks simultaneously for each task, allowing for transfer of learning across all tasks, and thus increasing the cardinality of intersection of search spaces.
+        \end{exampleblock}
+        
+        \column{.56\textwidth} % Right column and width
+        \begin{center}
+            \Large\underline{Overview:}
+        \end{center}
+        \textbf{Theoretical:}
+        \begin{itemize}
+            \item No current way to measure the effect of task data on loss value%\pause
+            \item Utilize Sobolev spaces and measure theory%\pause
+            \item Prove: similar tasks imply similar loss values%\pause
+            \item Prove: changing the architecture increases the capacity of the intersection space%\pause
+        \end{itemize}
+
+        \textbf{Experimental:}
+        \begin{itemize}
+            \item Develop algorithm which learns optimal architecture and weights%\pause
+            \item Experimental Results
+        \end{itemize}
+
+    \end{columns}
+        
+    \end{frame}
+
+    \begin{frame}{First Theoretical Step}
+    Formulate the class of functions the neural network may represent as a Sobolev space\footfullcite{mahanNonclosednessSetsNeural2021a}.%\pause
+    \vspace{.1 in}
+    \begin{block}{}
+    \centering\large\textbf{Why?}
+    %\vspace{.1 in}
+    \begin{itemize}
+        \item Neural networks can be represented as a function of weights and architecture.%\pause
+        \item Architecture is a discrete parameter. Hence, derivatives cannot be taken with respect to architecture in the classical (Euler) sense.%\pause
+        \item Neural networks as Sobolev operators provide us with tools to determine rates of change of some loss function, dependent on the weights and architecture.
+    \end{itemize}
+    \end{block}
+    \end{frame}
+
+
+%------------------------------------------------
+\section{Neural Networks as Functions in Sobolev Spaces}
+
+\begin{frame}{Sobolev Spaces}
+\begin{definition}[Sobolev Spaces\footfullcite{mahanNonclosednessSetsNeural2021a}]\label{defn:sobo}
+        Let $k \in \mathbb{N},$ $\mathcal{D}$ a measurable set with non-empty interior, and $1< p < \infty.$ Then, the Sobolev space $W^{k,p}(\mathcal{D})$ consists of all functions $h$ on $\mathcal{D}$ such that 
+for all multi-indices $\alpha$ with $|\alpha| \leq k,$ the mixed partial derivative $\partial^{(\alpha)} h$ exists in the \underline{weak sense} and belongs to $L^p(\mathcal{D})$. That is, 
+    \[ W^{k,p}(\mathcal{D})  = \{ h \in L^p(\mathcal{D}) : \partial^{|\alpha|} h \in L^{p}(\mathcal{D}) \forall |\alpha| \leq k \}.\]
+    The number $k$ is the order of the Sobolev space and the Sobolev space norm is defined as 
+    \[ \| h\|_{W^{k,p}(\mathcal{D})} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} h \|_{L^{p}(\mathcal{D})}.\]
+    \end{definition}%\footcitetext{mahanNonclosednessSetsNeural2021a}
+\end{frame}
+
+\begin{frame}{Intuition Behind Weak Derivatives}
+\begin{exampleblock}{}
+    \textbf{Key:} We gain a generalized derivative for functions, which behave poorly on sets of measure zero -- allowing us to ``bypass" or "ignore" reasonably bad behavior.
+\end{exampleblock}
+%\pause
+\begin{itemize}
+    \item Weak derivatives agree with pointwise derivative, where it exists.%\pause
+    \item Weak derivatives are defined using integrals (integration by parts).%\pause
+    \item Lebesgue integrals are insensitive to behavior of a function on a set of measure zero.
+\end{itemize}%\pause
+\begin{figure}
+        \centering
+    \includegraphics[width=.9\linewidth]{Figures/weakderiv.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Intuition Behind Weak Derivatives}
+\begin{exampleblock}{}
+    \textbf{Key:} We gain a generalized derivative for functions, which behave poorly on sets of measure zero -- allowing us to ``bypass" or "ignore" reasonably bad behavior.
+\end{exampleblock}
+\begin{itemize}
+    \item Weak derivatives agree with pointwise derivative, where it exists.
+    \item Weak derivatives are defined using integrals (integration by parts).
+    \item Lebesgue integrals are insensitive to behavior of a function on a set of measure zero.
+    
+\end{itemize}
+\begin{figure}
+        \centering
+    \includegraphics[width=.9\linewidth]{Figures/weakderiv1.png}
+    \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Intuition Behind Weak Derivatives}
+\begin{exampleblock}{}
+    \textbf{Key:} We gain a generalized derivative for functions, which behave poorly on sets of measure zero -- allowing us to ``bypass" or "ignore" reasonably bad behavior.
+\end{exampleblock}
+\begin{itemize}
+    \item Weak derivatives agree with pointwise derivative, where it exists.
+    \item Weak derivatives are defined using integrals (integration by parts).
+    \item Lebesgue integrals are insensitive to behavior of a function on a set of measure zero.
+\end{itemize}
+        \begin{figure}
+        \centering
+    \includegraphics[width=.9\linewidth]{Figures/weakderiv2.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Intuition Behind Weak Derivatives}
+\begin{exampleblock}{}
+    \textbf{Key:} We gain a generalized derivative for functions, which behave poorly on sets of measure zero -- allowing us to ``bypass" or "ignore" reasonably bad behavior.
+\end{exampleblock}
+\begin{itemize}
+    \item Weak derivatives agree with pointwise derivative, where it exists.
+    \item Weak derivatives are defined using integrals (integration by parts). 
+    \item Lebesgue integrals are insensitive to behavior of a function on a set of measure zero.
+\end{itemize}
+\begin{figure}
+        \centering
+    \includegraphics[width=.9\linewidth]{Figures/weakderiv3.png}
+    \end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Neural Network as a Function in Sobolev Space}
+    \begin{definition}[\cite{mahanNonclosednessSetsNeural2021a}] \label{defn:NN}
+    A $d$  layered neural network is given by an operator
+    $\fhat(w(t), \psi(t) )\in W^{k,p}$ where $w(t)$ is comprised of all the weights parameters, $\psi(t)$ is comprised of the architecture, and $W^{k,p}$ is a Sobolev space. Furthermore, 
+    \begin{align*}
+      \fhat(w(t), \psi(t)) \big( . \big) & = \fhat_{d}(w_{d}(t), \psi_{d}(t))\circ \fhat_{d-1}(w_{d-1}(t), \psi_{d-1}(t)) 
+                                    \circ \cdots \circ  \fhat_{1}(w_{1}(t), \psi_{1}(t)) \big( . \big)                 
+    \end{align*}
+    describes the layerwise compositions and $\big( . \big)$ represents the input tensor to which the operator is applied.
+    \end{definition}
+    \vspace{.1 in}
+    %\pause
+    \textbf{Remark.}
+    \begin{itemize}
+        \item This definition of neural networks can be used to define feedforward neural networks, recurrent, convolutional and even graph neural networks or a combination of the three.
+        \item The weight parameter $w(t)$ is inherently dependent on the architecture parameter $\psi(t).$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Target Function}
+    
+    \begin{definition}
+        Let $f(t)\in W^{k,p}(\mathcal{D})$ for all $t\in \{0,\ldots, T\}$ denote the \textit{target function} which is to be approximated. If $\hat{f}(w(t),\psi(t))$ denotes a neural network determined to approximate $f(t)$ at task $t,$ then the \textit{loss function} (or error of approximation) for $x\in \boldsymbol{\mathcal{X}}(t)$ is given by 
+        \begin{align*}
+            \ell(\fhat(w(t),\psi(t)))(x) & = \| \fhat(w(t),\psi(t))(x)-f(t)(x)\|_{W^{k,p}(\mathcal{D})}.
+        \end{align*} 
+    \end{definition}
+\end{frame}
+%------------------------------------------------
+
+
+%------------------------------------------------
+
+
+\begin{frame}{Basic Continual Learning Problem with New Machinery}
+    \begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{Figures/CL1.png}\caption{The basic problem of continual learning shown for tasks $1,2,$ and $3.$}
+    \label{fig:CL}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Basic Continual Learning Problem with New Machinery}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.35\textwidth} % Left column and width
+        \begin{itemize}
+            \item Let $\mathcal{F}_t$ represent the search space for the set of all possible NN solutions in the Sobolev space for learning task $t.$ 
+
+            \item The symbol  \ding{58} describes the optimal NN for each task and $\smiley{}$ describes the optimal NN for all tasks, lying in the intersection.
+            % \item \textbf{Problem:} The intersection of search spaces is not required to be non-empty.
+        \end{itemize}
+        
+        \column{.63\textwidth} % Right column and width
+        \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/problem1new.png}
+    %\caption{The actual problem}
+    \label{fig:challenge}
+    \end{figure}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Revisiting The Problem We Investigate}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.37\textwidth} % Left column and width
+        \begin{itemize}
+            % \item The symbol  \ding{58} describes the optimal NN for each task and $\smiley{}$ describes the optimal NN for all tasks, lying in the intersection.
+            \item \textbf{Problem:} The intersection of search spaces is not required to be non-empty.
+            \vspace{2 in}
+            % \item \textbf{What we need to do? :} Investigate how similar/dissimilar tasks impact the size of the intersection space.
+
+            % \item \textbf{How do we do this? :} Utilize measure theory to gain a relationship between "size" of the intersection spaces average loss value.
+        \end{itemize}
+        
+        \column{.63\textwidth} % Right column and width
+        \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/problem1new.png}
+    %\caption{The actual problem}
+    \label{fig:challenge}
+    \end{figure}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Revisiting The Problem We Investigate}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.37\textwidth} % Left column and width
+        \begin{itemize}
+            % \item The symbol  \ding{58} describes the optimal NN for each task and $\smiley{}$ describes the optimal NN for all tasks, lying in the intersection.
+            \item \textbf{Problem:} The intersection of search spaces is not required to be non-empty.
+
+            \item \textbf{What we need to do:} Investigate how similar/dissimilar tasks impact the size of the intersection space.
+            \vspace{1 in}
+
+            % \item \textbf{How do we do this? :} Utilize measure theory to gain a relationship between "size" of the intersection spaces average loss value.
+        \end{itemize}
+        
+        \column{.63\textwidth} % Right column and width
+        \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/problem1new.png}
+    %\caption{The actual problem}
+    \label{fig:challenge}
+    \end{figure}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Revisiting The Problem We Investigate}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.37\textwidth} % Left column and width
+        \begin{itemize}
+            % \item The symbol  \ding{58} describes the optimal NN for each task and $\smiley{}$ describes the optimal NN for all tasks, lying in the intersection.
+            \item \textbf{Problem:} The intersection of search spaces is not required to be non-empty.
+
+            \item \textbf{What we need to do:} Investigate how similar/dissimilar tasks impact the size of the intersection space.
+
+            \item \textbf{How do we do this?:} Utilize measure theory to gain a relationship between task similarity/dissimilarity and average loss values.
+        \end{itemize}
+        
+        \column{.63\textwidth} % Right column and width
+        \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/problem1new.png}
+    %\caption{The actual problem}
+    \label{fig:challenge}
+    \end{figure}
+
+    \end{columns}
+\end{frame}
+
+\section{Understanding The Impact of Similar and Dissimilar Tasks}
+
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    \textbf{Question: } Do similar tasks perform with a similar average loss value?
+    %Although one may logically deduce that the presence of dissimilar tasks leads to an empty intersection (and hence an empty search space), we must in fact prove this is true. To do so, we employ measure theory.
+    %\pause
+    \vspace{.1 in}
+     \begin{definition}[Continuity with Respect to Measure\footfullcite{weaver2013measure}]
+ \label{defintersect}
+     Let $\overline{\boldsymbol{\mathcal{X}}} = \bigcup_{t=0}^\infty \boldsymbol{\mathcal{X}}(t)$ with the power set $\mathcal{P}(\overline{\boldsymbol{\mathcal{X}}})$ as its topology. Set $\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ to be the Borel $\sigma$-algebra on $\overline{\boldsymbol{\mathcal{X}}}$ equipped with a probability measure denoted $\mu.$ Then, $(\overline{\boldsymbol{\mathcal{X}}},\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu)$ forms a probability measure space. Let $g:\overline{\boldsymbol{\mathcal{X}}}\rightarrow \mathbb{R}$ be a measurable function, and set $F:\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})\rightarrow \mathbb{R}$ to be the function
+     \begin{align*}
+         F(A) & = \int_A g(x)d\mu.
+     \end{align*}
+     Then, we say $F$ is \textit{continuous with respect to the measure} if for every $\varepsilon>0,$ there exists $\delta >0$ such that $\abs{F(A)-F(B)} < \varepsilon$
+     whenever $A,B\in \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ such that $\mu(A\bigtriangleup B)<\delta.$
+ \end{definition}
+\end{frame}
+
+\begin{frame}{Set Symmetric Difference}
+\begin{figure}\scalebox{}{}
+    \centering
+    \begin{tikzpicture}
+        \def\firstcircle{(-.5,0) circle (2.65cm)}
+        \def\secondcircle{(2.5,0) circle (2.65cm)}
+        
+        % Fill the symmetric difference
+        \fill[even odd rule, gray]\firstcircle \secondcircle;
+        
+        % Draw the circle outlines and add labels
+        \draw[draw=black,line width=.75mm] \firstcircle;
+        \draw[draw = black, line width=.75mm] \secondcircle;
+        \node at (-3.3,1.9) {\Large$A$};
+        \node at (5.3,1.9) {\Large$B$};
+    \end{tikzpicture}
+    \caption{The gray shaded region represents set symmetric difference $A\bigtriangleup B.$}
+    \label{fig:enter-label}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Measure of Set Symmetric Differences}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/elementsincommon1.png}
+        \label{fig:placeholder}
+    \end{figure}
+\end{frame}
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    %Although one may logically deduce that the presence of dissimilar tasks leads to an empty intersection (and hence an empty search space), we must in fact prove this is true. To do so, we employ measure theory.
+     \begin{block}{Definition 5 (Continuity with Respect to Measure)}
+ \label{defintersect}
+     Let $\overline{\boldsymbol{\mathcal{X}}} = \bigcup_{t=0}^\infty \boldsymbol{\mathcal{X}}(t)$ with the power set $\mathcal{P}(\overline{\boldsymbol{\mathcal{X}}})$ as its topology. Set $\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ to be the Borel $\sigma$-algebra on $\overline{\boldsymbol{\mathcal{X}}}$ equipped with a probability measure denoted $\mu.$ Then, $(\overline{\boldsymbol{\mathcal{X}}},\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu)$ forms a probability measure space. Let $g:\overline{\boldsymbol{\mathcal{X}}}\rightarrow \mathbb{R}$ be a measurable function, and set $F:\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})\rightarrow \mathbb{R}$ to be the function
+     \begin{align*}
+         F(A) & = \int_A g(x)d\mu.
+     \end{align*}
+     Then, we say $F$ is \textit{continuous with respect to the measure} if for every $\varepsilon>0,$ there exists $\delta >0$ such that $\abs{F(A)-F(B)} < \varepsilon$
+     whenever $A,B\in \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ such that $\mu(A\bigtriangleup B)<\delta.$
+ \end{block}
+%\pause
+ \begin{exampleblock}{}
+ \begin{center}
+    ``Similar Sets" implies ``Similar Values of $F$"
+ \end{center}
+ \end{exampleblock}%\pause
+ \textbf{Question:} How to we connect this to tasks and average loss value?
+\end{frame}
+
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    Recall that the loss function $\ell$ describes how well a NN $\fhat$ approximates the target function.
+
+    We can define the expected value function (average loss function) for a set $A\in \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}})$ to be
+    the expected value function:
+    \begin{align*}
+        E(A) = \int_A \ell((\fhat(w,\psi))(x))d\mu.
+    \end{align*}
+     %\pause
+     \begin{theorem}\label{contMeasure}
+    Let $(\overline{\boldsymbol{\mathcal{X}}},\mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu).$ Then, the expected value function:
+    \begin{align}
+        E(A) = \int_A \ell((\fhat(w,\psi))(x))d\mu
+    \end{align}
+    is continuous with respect to the measure.
+\end{theorem}
+
+% %\pause
+% \begin{exampleblock}{Key Observation}
+% \begin{itemize}
+%     \item Expected value on $A = \mathcal{X}(t)$ gives average loss value on task data.
+%     \item Proving the expected value across all tasks is continuous with respect to measure implies similar task data will result in similar loss values.
+% \end{itemize}
+% \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    \begin{figure}
+            \centering
+    \includegraphics[width=1\linewidth]{Figures/sim1.png}
+        \end{figure}
+\end{frame}
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    \begin{figure}
+            \centering
+    \includegraphics[width=1\linewidth]{Figures/sim2.png}
+        \end{figure}
+\end{frame}
+\begin{frame}{Similar Tasks Imply Similar Loss}
+    \begin{figure}
+            \centering
+    \includegraphics[width=1\linewidth]{Figures/sim3.png}
+        \end{figure}
+\end{frame}
+
+
+% \begin{frame}{Proof of Theorem \ref{contMeasure}}
+%     \textit{Proof.} We can assume that the loss function $\ell$ is continuous and bounded across all tasks. Suppose that the constant $M_0>0$ is the value which bounds $\ell$ on every task.\\
+%     Let $\varepsilon>0$ and  set $\delta = \varepsilon/M_0.$ Further let $A,B\in \mathcal{\mathcal{B}}(\overline{\mathcal{X}})$ such that $\mu(A\bigtriangleup B)< \delta.$
+%     By disjoint additivity\footfullcite{weaver2013measure} and triangle inequality, 
+%     \begin{align*}
+%         \abs{E(A) -E(B)} & = \bigabs{\int_A \ell(\fhat(w,\psi)(x))d\mu-\int_B\ell(\fhat(w,\psi)(x))d\mu}\\
+%         & = \Bigg\vert\int_{A\setminus B} \ell(\fhat(w,\psi)(x))d\mu + \int_{A\cap B} \ell(\fhat(w,\psi)(x))d\mu\\
+%         & \hspace{10mm}-\int_{B\setminus A}\ell(\fhat(w,\psi)(x))d\mu-\int_{A\cap B}\ell(\fhat(w,\psi)(x))d\mu\Bigg\vert\\
+%         & \leq \int_{A\setminus B} \abs{\ell(\fhat(w,\psi)(x))}d\mu+\int_{B\setminus A}\abs{\ell(\fhat(w,\psi)(x))}d\mu.
+%     \end{align*}    
+% \end{frame}
+
+% \begin{frame}{Proof of Theorem \ref{contMeasure}}
+%     Then, by the boundedness\footfullcite{weaver2013measure} of $\ell,$
+%     \begin{align*}
+%         \int_{A\setminus B} \abs{\ell(\fhat(w,\psi)(x))}d\mu+\int_{B\setminus A}\abs{\ell(\fhat(w,\psi)(x))}d\mu &
+%         \leq M_0\mu(A\setminus B) + M_0\mu(B\setminus A).
+%     \end{align*}
+%     Thus, by disjoint additivity\footfullcite{weaver2013measure} of $\mu$ we have
+%     \begin{align*}
+%         M_0\mu(A\setminus B) + M_0\mu(B\setminus A) & = M_0(\mu(A\setminus B) + \mu(B\setminus A))\\
+%         & = M_0\mu(A\bigtriangleup B)\\
+%         & < M_0 \delta\\
+%          & = M_0 \frac{\varepsilon}{M_0}\\
+%          & = \varepsilon,
+%     \end{align*}
+% \hspace{6 in} $\square$
+% \end{frame}
+
+\begin{frame}{What have we shown?}
+    Theorem \ref{contMeasure} shows the following:
+    \begin{block}{}
+    \begin{center}
+        Similar Tasks $\Longrightarrow$ Similar Average Loss Values%\pause\\
+        \textbf{and}\\
+        Dissimilar Average Loss Values $\Longrightarrow$ Dissimilar Tasks
+    \end{center}
+    \end{block}
+    %\pause
+    \vspace{.1 in}
+    \textbf{Question:} Do dissimilar tasks result in dissimilar average loss values?\\
+    \vspace{.1 in}
+    %\pause
+    \textbf{Answer:} This cannot be proven for an arbitrary CL problem. Why?
+\end{frame}
+
+\begin{frame}{What can we say about dissimilar tasks?}
+    \begin{figure}
+        \centering
+        \includegraphics[width= 1\linewidth]{Figures/dissim1.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+\begin{frame}{What can we say about dissimilar tasks?}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1.01\linewidth]{Figures/dissim2.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{What can we say about dissimilar tasks?}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/dissim3.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{What can we say about dissimilar tasks?}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/dissim3a.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{What can we say about dissimilar tasks?}
+
+%Finding a tight lower bound requires us to consider the impact of the weights $w(t)$ and task data have on the average loss.
+    \begin{theorem}\label{M_0bound}
+    Suppose $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\boldsymbol{\mathcal{X}}}, \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Moreover, suppose $\psi(t) = \psi(1)$ for all tasks $t.$ Then, for $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta,$ the following holds
+    \begin{align}
+        \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\boldsymbol{\mathcal{X}}(t)))-E(\boldsymbol{\mathcal{X}}(t+\Delta t))}}{\Delta t} &\geq \textcolor{red}{M_0\delta} - \textcolor{blue}{L_1\abs{\Delta w}}\textcolor{blue}{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_w \hat{f}(w(t),\psi(1))\|_{L^p}d\mu}
+    \end{align}
+\end{theorem}
+%\pause
+\begin{itemize}
+    \item If we are in a situation where $\abs{E(\boldsymbol{\mathcal{X}}(t+\Delta t)))-E(\boldsymbol{\mathcal{X}}(t))} \geq \varepsilon$ for some small $\varepsilon>0$ then it would be ideal if we could train $w(t)$ further allowing:
+    \begin{align*}
+        \textcolor{Green4}{\downarrow \|\nabla E\|}\hspace{5mm} & \Longrightarrow \hspace{5mm}\textcolor{Green4}{\downarrow \abs{E(\boldsymbol{\mathcal{X}}(t+\Delta t))-E(\boldsymbol{\mathcal{X}}(t))}}.
+    \end{align*}
+
+    \item However, we can only train a NN so much before overfitting  (i.e. $\bigtriangleup w(t)$ is bounded.)
+\end{itemize}
+    
+\end{frame}
+
+
+
+\begin{frame}{Improving Intersection Spaces}
+    \textbf{Question:} How can we improve this lower bound, or rather what can we do when tasks are dissimilar?\\
+    %\pause
+    \vspace{.2 in}
+    \textbf{Follow-up Question:} What if we change other network parameters, such as architecture?\\
+    %\pause
+    \vspace{.2 in}
+    \begin{exampleblock}{``Answer:"}
+        Intuitively, a wise choice for the architecture will decrease the loss value. However, we must prove this.
+    \end{exampleblock}
+
+\end{frame}
+
+
+\begin{frame}{Mathematically Proving Improvement via Architecture Optimization}
+Notice, we gain a similar lower bound, but with an additional term for subtraction.
+    \begin{theorem}\label{M_0bound}
+    Suppose $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\boldsymbol{\mathcal{X}}}, \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Then, for $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta,$ the following holds
+    \begin{align*}
+        \|\nabla E(\boldsymbol{\mathcal{X}}(t))\| &\geq \textcolor{red}{M_0\delta} \textcolor{blue}{- L_1\abs{\Delta w}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_w \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu}\\
+        & \hspace{5mm}- \textcolor{Green4}{L_1\abs{\Delta \psi}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_\psi \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu}.
+    \end{align*}
+\end{theorem}
+\end{frame}
+
+% \begin{frame}{Mathematically Proving Improvement via Architecture Optimization}
+%     \begin{corollary}\label{archCor}
+%     Suppose $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\boldsymbol{\mathcal{X}}}, \mathcal{B}(\overline{\boldsymbol{\mathcal{X}}}), \mu).$ Let $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta$ for $0<\delta \leq 1.$ The architecture $\psi$ of a network can be changed to absorb the impact of $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta.$
+% \end{corollary}
+% \end{frame}
+
+\begin{frame}{Adjusting the Lower Bound}
+    As $\abs{\bigtriangleup \psi(t)}\geq 0$ and $L_1>0,$ it follows that
+    \begin{align}
+        \|\nabla E(\boldsymbol{\mathcal{X}}(t))\| &\geq M_0\delta - L_1\abs{\Delta w}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_w \hat{f}(w(t),\psi(t))\|_{L^p}d\mu \\
+        & \geq M_0\delta - L_1\abs{\Delta w}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_w \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu \\
+        & \hspace{.65 in}- L_1\abs{\Delta \psi}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_\psi \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu.
+    \end{align}
+    %\pause
+    Thus, if $\abs{E(\boldsymbol{\mathcal{X}}(t))-E(\boldsymbol{\mathcal{X}}(t+\Delta t))}\geq \varepsilon$ by changing the architecture we can reduce $\|\nabla E(\boldsymbol{\mathcal{X}}(t))\|$ allowing the potential for
+    \begin{align*}
+        \abs{E(\boldsymbol{\mathcal{X}}(t))-E(\boldsymbol{\mathcal{X}}(t+\Delta t))} < \varepsilon.
+    \end{align*}
+    Hence, we have increased the cardinality of the intersection space by changing the architecture\\
+\end{frame}
+
+\begin{frame}{Increasing the Intersection Space}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\linewidth]{Figures/archcompare1.png}
+        %\caption{Understanding the impact architecture has on the cardinality of the intersection search space.}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+\begin{frame}{Increasing the Intersection Space}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\linewidth]{Figures/archcompare2.png}
+        %\caption{Understanding the impact architecture has on the cardinality of the intersection search space.}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+%      \textit{Proof.} Let
+%     \begin{align}
+%         \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))} & = \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\boldsymbol{\mathcal{X}}(t))-E(\boldsymbol{\mathcal{X}}(t+\Delta t))}}{\Delta t}.\label{grad}
+%     \end{align}
+%     We begin with the numerator of (\ref{grad}). The first-order Taylor series expansion of $E(\boldsymbol{\mathcal{X}}(t+\Delta t))$ about  $t,$ is given by
+%     \begin{align*}
+%         E(\boldsymbol{\mathcal{X}}(t+\Delta t)) & = E(\boldsymbol{\mathcal{X}}(t)) + \Delta t\left[ E_{\boldsymbol{\mathcal{X}}} (\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)) + E_w(\boldsymbol{\mathcal{X}}(t)) + E_\psi(\boldsymbol{\mathcal{X}}(t))\right] + o(\Delta t),
+%     \end{align*}
+%     where $E_{\boldsymbol{\mathcal{X}}} , E_w,$ and $E_\psi$ are the partial derivatives of the expected value function with respect to the data, weights, and architecture, respectively. Now, we work on acquiring each partial derivative. Toward that end,
+%     \begin{align}
+%         E_{\boldsymbol{\mathcal{X}}} (\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)) & = \textcolor{blue}{\mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))}\cdot \textcolor{red}{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)} \ell(\hat{f}(w,\psi))d\mu}.\label{E_X}
+%     \end{align}
+% \end{frame}
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+%     To determine the remaining two derivatives, we use the Sobolev function chain rule\footfullcite{evans2022partial}. We can do so as $\ell$ is real-valued and bounded, and $\ell'$ is continuously differentiable. Then,
+%     \begin{align}
+%         E_w (\boldsymbol{\mathcal{X}}(t)) & = \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\textcolor{red}{\hat{f}(w,\psi)})\cdot \textcolor{blue}{\partial_w^1 \hat{f}(w,\psi)\cdot \Delta w} \hspace{1mm}  d\mu.\label{E_w},\\
+%         E_\psi (\boldsymbol{\mathcal{X}}(t)) & = \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\textcolor{red}{\hat{f}(w,\psi)})\cdot \textcolor{blue}{\partial_\psi^1 \hat{f}(w,\psi)\cdot \Delta \psi} \hspace{1mm}  d\mu.\label{E_psi}
+%     \end{align}
+%     Substituting (\ref{E_X}), (\ref{E_w}), and (\ref{E_psi}) into the Taylor series expansion we have
+%     \begin{align*}
+%         E(\boldsymbol{\mathcal{X}}(t+\Delta t)) & = E(\boldsymbol{\mathcal{X}}(t)) + \Delta t\Big[\textcolor{PineGreen}{\mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\cdot \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)} \ell(\hat{f}(w,\psi))d\mu}\\
+%         & + \textcolor{Bittersweet}{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_w^1 \hat{f}(w,\psi)\cdot \Delta w \hspace{1mm}  d\mu}\\
+%         & +\textcolor{RoyalPurple}{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_\psi^1 \hat{f}(w,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu}\Big] + o(\Delta t).
+%     \end{align*}
+% \end{frame}
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+%     Now substituting the Taylor series expansion into our original expression we have
+%     \begin{align*}
+%         |\nabla E(\boldsymbol{\mathcal{X}}(t))| & =  \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\boldsymbol{\mathcal{X}}(t+\Delta t))-E(\boldsymbol{\mathcal{X}}(t))}}{\Delta t}\\
+%         & = \lim_{\Delta t\rightarrow 0} \Big\vert \mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\cdot \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)} \ell(\hat{f}(w,\psi))d\mu\\
+%         & + \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_w^1 \hat{f}(w,\psi)\cdot \Delta w \hspace{1mm}  d\mu\\
+%         & + \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_\psi^1 \hat{f}(w,\psi)\cdot \Delta \psi \hspace{1mm} d\mu\Big\vert.
+%     \end{align*}
+% \end{frame}
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+%     By reverse triangle inequality\footfullcite{pons2014real},
+%     \begin{align*}
+%         |\nabla E(\boldsymbol{\mathcal{X}}(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)} \ell(\hat{f}(w,\psi))d\mu}\\
+%         & - \bigabs{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_w^1 \hat{f}(w,\psi)\cdot \Delta w \hspace{1mm}  d\mu}\\
+%         & - \bigabs{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \ell'(\hat{f}(w,\psi))\cdot \partial_\psi^1 \hat{f}(w,\psi)\cdot \Delta \psi \hspace{1mm} d\mu}.
+%     \end{align*}
+% \end{frame}
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+% By integral properties\footfullcite{weaver2013measure}, notice
+%     \begin{align*}
+%         |\nabla E(\boldsymbol{\mathcal{X}}(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t)} \ell(\hat{f}(w,\psi))d\mu}\\
+%         & - \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \abs{\ell'(\hat{f}(w,\psi))}\cdot \|\partial_w^1 \hat{f}(w,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu\\
+%         & - \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \abs{\ell'(\hat{f}(w,\psi))}\cdot \|\partial_\psi^1 \hat{f}(w,\psi)\|_{L^p}\cdot \abs{\Delta \psi} \hspace{1mm} d\mu.
+%     \end{align*}
+% \end{frame}
+
+
+% \begin{frame}{Proof of Theorem \ref{M_0bound}}
+%     We can assume that the loss function $\ell$ and it's derivative $\ell'$ are bounded above by constants $M_0$ and $L_1$ respectively. Thus, by integral properties\footfullcite{weaver2013measure}
+%     \begin{align*}
+%         |\nabla E(\boldsymbol{\mathcal{X}}(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\cdot M_0 - L_1 \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)}\|\partial_w^1 \hat{f}(w,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu\\
+%         & - L_1\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)}\|\partial_\psi^1 \hat{f}(w,\psi)\|_{L^p}\cdot \abs{\Delta \psi} \hspace{1mm} d\mu.
+%     \end{align*}
+%     Finally, as we assumed $\mu( \boldsymbol{\mathcal{X}}(t)\Delta \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta$ and $\Delta w$ and $\Delta \psi$ are independent of the data, we have
+%     \begin{align*}
+%         |\nabla E(\boldsymbol{\mathcal{X}}(t))| & \geq M_0\delta - L_1 \abs{\Delta w} \displaystyle\int_{\boldsymbol{\mathcal{X}}(t)}\|\partial_w^1 \hat{f}(w,\psi)\|_{L^p}\hspace{1mm}  d\mu- L_1\abs{\Delta \psi}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)}\|\partial_\psi^1 \hat{f}(w,\psi)\|_{L^p} d\mu,
+%     \end{align*}
+%     as desired.\hspace{5.1 in} $\square$
+% \end{frame}
+
+% \begin{frame}{Proof of Corollary \ref{archCor}}
+%     \textit{Proof.} Let $\varepsilon >0$ small. Since the expected value function is continuous with respect to measure by Theorem \ref{contMeasure}, we can find a corresponding $\delta>0.$ Suppose we have two tasks $\boldsymbol{\mathcal{X}}(t)$ and $\boldsymbol{\mathcal{X}}(t+\Delta t))$ for which $\mu(\boldsymbol{\mathcal{X}}(t)\bigtriangleup \boldsymbol{\mathcal{X}}(t+\Delta t))\geq \delta.$ Moreover, suppose $\abs{E(\boldsymbol{\mathcal{X}}(t+\Delta t))-E(\boldsymbol{\mathcal{X}}(t))}\geq \varepsilon.$ Then, by Theorem \ref{M_0bound}, we see that changing the architecture and training on a new optimal architecture that we can have
+% \begin{align}
+        
+% \abs{\nabla E(\boldsymbol{\mathcal{X}}(t))}\geq M_0\delta - L_1\abs{\Delta w}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_w \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu - L_1\abs{\Delta \psi}\displaystyle\int_{\boldsymbol{\mathcal{X}}(t)} \|\partial^1_\psi \hat{f}(w(t,\psi),\psi(t))\|_{L^p}d\mu.\label{final}
+% \end{align}
+% Thus, changing the architecture of the network can offset the impact of consecutive tasks whose data differ substantially. \hspace{3.8 in} $\square$
+% \end{frame}
+
+\section{Implementing The Theory: An Overview}
+
+\begin{frame}{Implementing The Theory: an Overview}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+        \column{.33\textwidth} % Left column and width
+        \begin{itemize}
+            \item \textbf{Idea:} Rather than fixing the architecture at $\psi^*$ for all tasks, allowing an architecture search at each step affords us the opportunity for a larger intersection space.
+            \item \textbf{Low Rank Transfer:} A method which allows us to change the size of the weights matrix according to the new architecture while transferring learning.
+        \end{itemize}
+        
+        \column{.65\textwidth} % Right column and width
+        \begin{figure}
+            \centering
+            \includegraphics[width=1.17\linewidth]{Figures/method.png}
+            %\caption{How we do this?}
+            \label{fig:method}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------
+
+%------------------------------------------------
+\section{Formulating the Neural Network Learning Problem \& Solution}
+
+\begin{frame}{CL NN Learning Problem: Upper}
+    We must complete a \textbf{bilevel optimization}. We begin with the upper optimization where we determine the optimal architecture, denoted $\psi^*(t)$ for the $t^{\text{th}}$ task.
+    \begin{align}
+        \psi^*(t) & = \arg\min_{\psi\in \Psi} J(w(t),\psi,\boldsymbol{\mathcal{X}}(t)),\label{opt1}
+    \end{align}
+    where $\Psi$ is our architecture search space and 
+    \begin{align*}
+        J(w(t),\psi,\boldsymbol{\mathcal{X}}(t)) & = \int_0^t \ell(\hat{f}(w(t),\psi(t))(X(\tau)))d\tau.
+    \end{align*}
+\end{frame}
+
+\begin{frame}{CL NN Learning Problem: Lower}
+    We can then utilize dynamic programming\footfullcite{raghavan2021formalizing} to complete the lower optimization, which is on the weights.
+        \begin{align*}
+            V^*(t,w(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} V(t,w(t)),
+        \end{align*}
+        where $\mathcal{W}(\psi^*(t))$ is the weights search space for the optimal architecture determined in the lower optimization (\ref{opt1}), and
+        \begin{align*}
+            V(t,w(t)) & = \int_{t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))d\tau = \int_t^T \int_{0}^\tau \ell(\hat{f}(w(\tau),\psi^*(t))(X(q)))dqd\tau.
+        \end{align*}
+\end{frame}
+
+\begin{frame}{Implementation of Upper Optimization: Architecture Search}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/archsearch1.png}
+        \label{fig:enter-label}
+    \end{figure}\footfullcite{larson2019derivative}
+\end{frame}
+
+\begin{frame}{Implementation of Upper Optimization: Architecture Search}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/archsearch2.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Implementation of Upper Optimization: Architecture Search}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/archsearch3.png}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Implementation of Lower Optimization: HJB}
+    Recall that for $V(t,w(t)) = \int_{t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))d\tau$ where $\psi^*(t)$ is the solution to our upper (architecture) optimization, we had the lower optimization problem as
+        \begin{align*}
+            V^*(t,w(t)) & = \min_{w\in \mathcal{W}(\psi^*(t))} V(t,w(t)).
+        \end{align*}%\pause
+        \begin{exampleblock}{}
+            \textbf{Key Tool:} Since we are using the framework of dynamic programming and working in a continuous time setting, we can derive the Hamilton-Jacobi-Bellman equation (HJB).
+        \end{exampleblock}%\pause
+\begin{proposition}[Hamilton-Jacobi-Bellman Equation]
+    The total variation in $V^*(t)$ is given by
+    \begin{align*}
+        -\frac{\partial V^*}{\partial t} & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t)) +\textcolor{Green4}{\frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}}+ \textcolor{blue}{\frac{\partial V^*}{\partial w}\frac{\partial w}{\partial t}} + \textcolor{red}{\frac{\partial V^*}{\partial \psi}\frac{\partial \psi}{\partial t}}.
+    \end{align*}
+\end{proposition}
+\textbf{Goal:} Solving (or approximating) the HJB provides the optimal cost function (or value).
+\end{frame}
+
+\begin{frame}{Transfer of Learning to New Architecture: Low Rank Transfer}
+    
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+        \column{.3\textwidth} % Left column and width
+        \begin{itemize}
+            \item \textbf{Question:} How do we transfer learning to a new architecture in practice?%\pause
+            \item Here we consider \underline{only} the case where we change \textit{the number of neurons per layer}.
+            \item We use a method we call \textbf{Low Rank Transfer}.
+        \end{itemize}
+                 
+        
+        \column{.65\textwidth} % Right column and width
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\linewidth]{Figures/CLsolution1.png}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Revisiting the HJB}
+\begin{proposition}
+    The total variation in $V^*(t)$ is given by
+    \begin{align*}
+        -\frac{\partial V^*}{\partial t}& = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\\ 
+        & \hspace{13mm} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt} + \textcolor{Green4}{\frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)]},
+    \end{align*}
+    where $A^*(t),B^*(t)$ are optimal $A(t)$ and $B(t)$ for task $t$ and $u(t)$ represents the updates made to the each weights matrix of the new dimensions. 
+\end{proposition}
+\end{frame}
+
+% \begin{frame}{HJB Derivation}
+%     \textit{Proof.} Let $J, V,$ and $V^*$ be as defined above. To begin, we split the sum in $V(t)$ over the discrete intervals $[t,t+\Delta t]$ and $[t+\Delta t, T].$ Observe,
+%     \begin{align}
+%         V^*(t) & = \min_{w\in \mathcal{W}(\psi^*(t))} \int_{t}^T J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))d\tau\nonumber\\
+%                 & = \min_{w\in \mathcal{W}(\psi^*(t))} \biggr[\int_{t}^{t+\Delta t} J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))d\tau + \int_{t+\Delta t}^{T} J(w(\tau),\psi^*(t), \boldsymbol{\mathcal{X}}(\tau))d\tau\biggr]\nonumber\\
+%                 & = \min_{w\in \mathcal{W}(\psi^*(t))} \int_{t}^{t+\Delta t} J(w(\tau),\psi^*(t),\boldsymbol{\mathcal{X}}(\tau))d\tau+ V^*(t+\Delta t)\\
+%                 & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\Delta t + V^*(t+\Delta t).\label{b}
+%     \end{align}
+% \end{frame}
+
+% \begin{frame}{HJB Derivation}
+%      Now, we provide the Taylor series expansion of $V^*(t+\Delta t)$ about $t.$ Notice,
+%     \begin{align}
+%         V^*(t+\Delta t) & = V^*(t) + \Delta t \left[\frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt} + \frac{\partial V^*}{\partial w}\frac{\partial w}{dt}\right] + o(\Delta t)\nonumber\\
+%                 & = V^*(t) + \Delta t\left[\frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}+ \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)]\right] + o(\Delta t),\label{a}
+%     \end{align}
+%     where $u(t)$ represents the updates made to the each weights matrix of the new dimensions.
+% \end{frame}
+
+% \begin{frame}{HJB Derivation (cont.)}
+%     Substituting \ref{a} into \ref{b}, we have
+%     \begin{align*}
+%         V^*(t) & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\Delta t+ V^*(t)\\
+%         & + \Delta t\left[\frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}+ \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)]\right] + o(\Delta t).
+%     \end{align*}
+%     Canceling $V^*(t)$ gives
+%     \begin{align*}
+%         0 & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))\Delta t\\
+%         & + \Delta t\left[\frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}+ \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)]\right] + o(\Delta t).
+%     \end{align*}
+%     Dividing both sides by $\Delta t$ produces
+%     \begin{align*}
+%         0 & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t)) +
+%         \frac{\partial V^*}{\partial t} + \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}+ \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)].
+%     \end{align*}
+% \end{frame}
+
+% \begin{frame}{HJB Derivation (cont.)}
+%     Finally, reordering gives
+%     \begin{align*}
+%         -\frac{\partial V^*}{\partial t} & = \min_{w\in \mathcal{W}(\psi^*(t))} J(w(t),\psi^*(t),\boldsymbol{\mathcal{X}}(t))+ \frac{\partial V^*}{\partial \boldsymbol{\mathcal{X}}}\frac{d\boldsymbol{\mathcal{X}}}{dt}+ \frac{\partial V^*}{\partial w}[A^*(t)w(t)(B^*(t))^T + u(t)],
+%     \end{align*}
+%     as desired. \hspace{5 in} $\square$
+% \end{frame}
+
+\section{Putting the Pieces Together: The Algorithm}
+
+\begin{frame}{Algorithm: Optimal Architecture with Transfer of Learning}
+    \begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+        \column{.37\textwidth} % Left column and width
+        For task $t$ complete the following:
+        \begin{enumerate}
+            \item Train on task $t$ data and current architecture for minimal steps
+            \item Find optimal architecture for task $t$ via architecture search
+            \item Initialize Learning Transfer Tensors $A$ and $B$ and train $A$ and $B$ only on task data.
+            \item Set new weights tensor $V = AWB^T$ for new architecture
+            \item Train on new weights $V$ and task $t$ data
+        \end{enumerate}
+        
+        \column{.65\textwidth} % Right column and width
+        \begin{figure}
+            %\centering
+        \includegraphics[width=1\linewidth,left]{Figures/alg10.png}
+            \label{fig:enter-label}
+        \end{figure}
+        
+    \end{columns}
+\end{frame}
+
+
+\section{Experimental Results}
+\begin{frame}{Experiments Overview}
+We applied our algorithm to the following:
+    \begin{itemize}
+        \item Feedforward Neural Network (Regression)
+        \item Convolutional Neural Network (Classification)
+        \item Graph Neural Network (Graph Classification)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Regression Experiment 1: Set-Up}
+    \begin{itemize}
+        \item \textbf{Model:} MLP
+        \item \textbf{Data set utilized:} Sine
+        \item \textbf{Number of tasks learned:} $5$
+        \item \textbf{Number of epochs per task:} $500$%\pause
+        \item \textbf{Results:} displays recorded loss value with respect to epoch%\pause
+        \begin{itemize}
+            \item \textcolor{red}{Red:} Standard continual learning training on tasks $0$ through $4$ \footfullcite{raghavan2021formalizing}%\pause
+            \item \textcolor{blue}{Blue:} Changing architecture at tasks $1$ through $4,$ but randomly re-initializing the weights (no Low Rank Transfer)%\pause
+            \item  \textcolor{Green4}{Green:} Change the architecture at tasks $1$ through $4$ and utilize our $AWB^T$ method (with Low Rank Transfer)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Regression Experiment 1: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/regtask2.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Regression Experiment 1: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.93\linewidth]{Figures/origregtest.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Regression Experiment 2: Set-Up}
+    \begin{itemize}
+        \item \textbf{Model:} MLP
+        \item \textbf{Data set utilized:} Sine - with increased noise
+        \item \textbf{Number of tasks learned:} $5$
+        \item \textbf{Number of epochs per task:} $500$
+        \item \textbf{Results:} the following graph displays recorded loss value with respect to epoch
+        \begin{itemize}
+            \item \textcolor{red}{Red:} Standard continual learning training on tasks $0$ through $4$ \footfullcite{raghavan2021formalizing}
+            \item  \textcolor{blue}{Blue:} Change the architecture at tasks $1$ through $4$ and utilize our $AWB^T$ method (with Low Rank Transfer)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Regression Experiment 2: Changing Architecture with Noisy Data}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.93\linewidth]{Figures/noisydata1.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Regression Experiment 3: Set-Up}
+    \begin{itemize}
+    \item \textbf{Model:} MLP
+        \item \textbf{Data set utilized:} Sine
+        \item \textbf{Number of tasks learned:} $10$
+        \item \textbf{Number of epochs per task:} $500$%\pause
+        \item \textbf{Results:} the following graph displays recorded loss value with respect to epoch%\pause
+        \begin{itemize}
+            \item \textcolor{red}{Red:} Standard continual learning training on tasks $0$ through $9$ \footfullcite{raghavan2021formalizing}%\pause
+
+            \item  \textcolor{blue}{Blue:} Change the architecture at tasks $1$ through $9$ and utilize our $AWB^T$ method (with Low Rank Transfer)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Regression Experiment 3: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.93\linewidth]{Figures/reg10tasks.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Regression Experiment 3: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.93\linewidth]{Figures/reg10Test.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Classification Experiment 1: Set-Up}
+    \begin{itemize}
+    \item \textbf{Model:} CNN
+        \item \textbf{Data set utilized:} Omniglot
+        \item \textbf{Number of tasks learned:} $5$
+        \item \textbf{Number of epochs per task:} $500$%\pause
+        \item \textbf{Results:} the following graph displays recorded loss value with respect to epoch%\pause
+        \begin{itemize}
+            \item \textcolor{red}{Red:} Standard continual learning training on tasks $0$ through $4$ \footfullcite{raghavan2021formalizing}%\pause
+
+            \item  \textcolor{blue}{Blue:} Change the architecture at tasks $1$ through $4$ and utilize our $AWB^T$ method (with Low Rank Transfer)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Classification Experiment: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Figures/cnn5tasks1.png}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Graph Classification Experiment 1: Set-Up}
+    \begin{itemize}
+        \item \textbf{Model:} GCN
+        \item \textbf{Data set utilized:} Synthetic
+        \item \textbf{Number of tasks learned:} $5$
+        \item \textbf{Number of epochs per task:} $125$%\pause
+        \item \textbf{Results:} the following graph displays recorded loss value with respect to epoch%\pause
+        \begin{itemize}
+            \item \textcolor{red}{Red:} Standard continual learning training on tasks $0$ through $4$ \footfullcite{raghavan2021formalizing}%\pause
+            \item \textcolor{blue}{Blue:} Changing architecture at tasks $1$ through $4,$ but randomly re-initializing the weights (no Low Rank Transfer)%\pause
+            \item  \textcolor{Green4}{Green:} Change the architecture at tasks $1$ through $4$ and utilize our $AWB^T$ method (with Low Rank Transfer)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Graph Classification Experiment: Changing Architecture on Every Task}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.9\linewidth]{Figures/gnnfix.png}
+    \end{figure}
+\end{frame}
+
+
+%------------------------------------------------
+\begin{frame}{References}
+    \printbibliography
+\end{frame}
+
+
+
+\end{document}

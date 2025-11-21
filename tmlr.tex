@@ -2,7 +2,7 @@
 \usepackage{wasysym}  % you need this, fine
 \let\iint\relax
 \let\iiint\relax
-\usepackage{tmlr}
+\usepackage[accepted]{tmlr}
 \usepackage[toc,page]{appendix} 
 \usepackage{xcolor}
 \usepackage{algorithmic}
@@ -40,7 +40,7 @@
 % % \usepackage{dirtytalk}
 % % \usepackage{multirow}
 % % \usepackage[outdir=./]{epstopdf}
-% % \usepackage[export]{adjustbox}
+\usepackage[export]{adjustbox}
 % % \usepackage{subfig}
 % % \usepackage{array}
 % % \usepackage{color, colortbl}
@@ -53,24 +53,24 @@
 % \usepackage{tikz}
 % \usepackage{pifont}
 % % For Math
-% \usepackage{fancyhdr}	% For fancy header/footer
-% \usepackage{graphicx}	% For including figure/image
-% \usepackage{cancel}		% To use the slash to cancel 
-% \usepackage[mathscr]{eucal}
-% \usepackage{mathtools}
-% \usepackage{amsthm}1
-% \usepackage{amsfonts}
-% \usepackage{latexsym}
-% %\usepackage{bigints}
-% % \usepackage{eucal}
-% % \usepackage{algorithm2e}\RestyleAlgo{ruled}
+\usepackage{fancyhdr}	% For fancy header/footer
+\usepackage{graphicx}	% For including figure/image
+\usepackage{cancel}		% To use the slash to cancel 
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{booktabs}
+%\usepackage{bigints}
+% \usepackage{eucal}
+\usepackage{algorithm2e}\RestyleAlgo{ruled}
 % %------------------------Bibliography things--
 % % \usepackage[backend=biber, style=authoryear]{biblatex}
 % % \addbibresource{NNbib.bib}
 % % \bibliography{NNbib.bib}
 % % \usepackage[authoryear,longnamesfirst]{natbib}
 % %------------------------
-\input{math_commands.tex}
+% \input{math_commands.tex}
+\input{new_commands.tex}
 \usepackage{hyperref}
 \usepackage{url}
 
@@ -86,6 +86,7 @@
       \name Krishnan Raghavan \email kraghavan@anl.gov \\
       \addr Mathematics and Computer Science \\
       Argonne National Laboratory }
+
       
 %----------------New Commands---------------%
 % Uncomment and use as if needed
@@ -97,6 +98,8 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proof}{Proof}
 \newtheorem{pot}{Proof of Theorem \ref{thm}}
+
+
 %----------------New Commands---------------%
 \newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
 \newcommand{\abs}[1]{\lvert #1 \rvert}
@@ -108,6 +111,8 @@
 \newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
 \newcommand{\D}{\textbf{D}}
 \newcommand{\fhat}{\hat{f}}
+
+
 %minGW
 \newcommand{\argminpsi}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
 %minSmoothGW
@@ -128,6 +133,7 @@ We consider the effects of Neural Network architecture in the setting of continu
 \end{abstract}
 \input{texts/main_text}
 % \input{texts/supp}
+\newpage
 \bibliography{NNbib.bib}
 \bibliographystyle{tmlr}
 \appendix

@@ -1,0 +1,108 @@
+%--------------Former statement and proof of Theorem 7 just to not lose it-------------------%
+
+%theorem for lowerbound with just weights
+% \begin{theorem}\label{lowerw}
+%     Suppose $\tx(t)$ and $\tx(t+1)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Moreover, suppose $\psi(t) = \psi(1)$ for all tasks $t.$ Then, for $\mu(\tx(t)\bigtriangleup \tx(t+1))\geq \delta,$ the following holds
+%     \begin{align}
+%         \|\nabla E\| &\geq M_0\delta - L_1\abs{\Delta w}\displaystyle\int_{\tx(t)} \|\partial^1_{\weight} \hat{f}(\weight(t),\psi(1))\|_{L^p}d\mu. % 
+%     \end{align}
+% \end{theorem}
+
+% \begin{proof}  
+%     The first-order Taylor series expansion of $E(\tx(t+\Delta t))$ about  $t,$ is given by
+%     \begin{align}
+%         E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[ E_{\tx} (\tx(t)\Delta \tx(t+\Delta t))+ E_{\weight}(\tx(t))\Big] + o(\Delta t),\label{taylorexp1}
+%     \end{align}
+%     where $E_{\tx}$ and $E_{\weight},$ are the partial derivatives of the expected value function with respect to the data and  weights, respectively. Since we assumed $\psi(t) = \psi(1)$ for all $t$ (i.e., the architecture is fixed), note that we did not take the partial derivative of the expected value function with respect to the architecture. 
+    
+%     Now, we work on acquiring each partial derivative. Toward that end, 
+%     \begin{align}
+%         E_{\tx} (\tx(t)\Delta \tx(t+\Delta t)) & =\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu.\label{E_X1 :thmweight}
+%     \end{align}
+%     To determine the remaining two derivatives, we use the Sobolev function chain rule found in \cite{evans2022partial}. We can do so as $\ell$ is real-valued and bounded, and $\ell'$ is continuously differentiable. Then,
+%     \begin{align}
+%         E_{\weight} (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu.\label{E_{\weight}: thmweight}.
+%     \end{align}
+%     Substituting (\ref{E_X1 :thmweight}) and (\ref{E_{\weight}: thmweight})  into the Taylor series expansion (\ref{taylorexp}), we have
+%     \begin{align*}
+%         E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+%         & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu\Big]+ o(\Delta t).
+%     \end{align*}
+%     Now substituting the Taylor series expansion into our original expression we have
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & =  \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\tx(t+\Delta t))-E(\tx(t))}}{\Delta t}\\
+%         & = \lim_{\Delta t\rightarrow 0} \Big\vert \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+%         & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu \Big\vert.
+%     \end{align*}
+%     By reverse triangle inequality in \cite{pons2014real},
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu}\\
+%         & -\bigabs{\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu}
+%     \end{align*}
+%     By integral properties in \cite{weaver2013measure}, notice
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu}\\
+%         & - \displaystyle\int_{\tx(t)} \abs{\ell'(\hat{f}(\weight,\psi))}\cdot \|\partial_{\weight}^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu.
+%     \end{align*}
+%      We can assume that the loss function $\ell$ and its derivative $\ell'$ are bounded above by constants $M_0$ and $L_1$ respectively. Thus, by integral properties in \cite{weaver2013measure}
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot M_0 - L_1 \displaystyle\int_{\tx(t)}\|\partial_{\weight}^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu.
+%     \end{align*}
+%     Finally, as we assumed $\mu( \tx(t)\Delta \tx(t+\Delta t))\geq \delta$ and $\Delta w$ are independent of the data, we have
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq M_0\delta- L_1 \abs{\Delta w} \displaystyle\int_{\tx(t)}\|\partial_{\weight}^1 \hat{f}(\weight(t),\psi(1))\|_{L^p}\hspace{1mm}  d\mu,
+%     \end{align*}
+%     as desired.
+% \end{proof}
+
+
+
+% \begin{proof}
+% Recall that
+%     \begin{align}
+%         \abs{\nabla E(\tx(t))} & = \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\tx(t))-E(\tx(t+\Delta t))}}{\Delta t}.\label{grad}
+%     \end{align}
+%     We begin with the numerator of (\ref{grad}). The first-order Taylor series expansion of $E(\tx(t+\Delta t))$ about  $t,$ is given by
+%     \begin{align}
+%         E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[ E_{\tx} (\tx(t)\Delta \tx(t+\Delta t))+ E_{\weight}(\tx(t)) + E_\psi(\tx(t))\Big] + o(\Delta t),\label{taylorexp}
+%     \end{align}
+%     where $E_{\tx} , E_{\weight},$ and $E_\psi$ are the partial derivatives of the expected value function with respect to the data, weights, and architecture, respectively. Now, we work on acquiring each partial derivative. Toward that end, 
+%     \begin{align}
+%         E_{\tx} (\tx(t)\Delta \tx(t+\Delta t)) & =\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu.\label{E_X1}
+%     \end{align}
+%     To determine the remaining two derivatives, we use the Sobolev function chain rule found in \cite{evans2022partial}. We can do so as $\ell$ is real-valued and bounded, and $\ell'$ is continuously differentiable. Then,
+%     \begin{align}
+%         E_{\weight} (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu.\label{E_w},\\
+%         E_\psi (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu.\label{E_psi}
+%     \end{align}
+%     Substituting (\ref{E_X1}), (\ref{E_w}), and (\ref{E_psi}) into the Taylor series expansion (\ref{taylorexp}), we have
+%     \begin{align*}
+%         E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+%         & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu+\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu\Big]+ o(\Delta t).
+%     \end{align*}
+%     Now substituting the Taylor series expansion into our original expression we have
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & =  \lim_{\Delta t\rightarrow 0} \frac{\abs{E(\tx(t+\Delta t))-E(\tx(t))}}{\Delta t}\\
+%         & = \lim_{\Delta t\rightarrow 0} \Big\vert \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+%         & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu+ \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm} d\mu\Big\vert.
+%     \end{align*}
+%     By reverse triangle inequality in \cite{pons2014real},
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu}\\
+%         & -\bigabs{\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu} - \bigabs{\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm} d\mu}.
+%     \end{align*}
+%     By integral properties in \cite{weaver2013measure}, notice
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \bigabs{\displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu}\\
+%         & - \displaystyle\int_{\tx(t)} \abs{\ell'(\hat{f}(\weight,\psi))}\cdot \|\partial_{\weight}^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu - \displaystyle\int_{\tx(t)} \abs{\ell'(\hat{f}(\weight,\psi))}\cdot \|\partial_\psi^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta \psi} \hspace{1mm} d\mu.
+%     \end{align*}
+%      We can assume that the loss function $\ell$ and its derivative $\ell'$ are bounded above by constants $M_0$ and $L_1$ respectively. Thus, by integral properties in \cite{weaver2013measure}
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq \lim_{\Delta t\rightarrow 0} \mu( \tx(t)\Delta \tx(t+\Delta t))\cdot M_0 - L_1 \displaystyle\int_{\tx(t)}\|\partial_{\weight}^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta w} \hspace{1mm}  d\mu- L_1\displaystyle\int_{\tx(t)}\|\partial_\psi^1 \hat{f}(\weight,\psi)\|_{L^p}\cdot \abs{\Delta \psi} \hspace{1mm} d\mu.
+%     \end{align*}
+%     Finally, as we assumed $\mu( \tx(t)\Delta \tx(t+\Delta t))\geq \delta$ and $\Delta w$ and $\Delta \psi$ are independent of the data, we have
+%     \begin{align*}
+%         |\nabla E(\tx(t))| & \geq M_0\delta- L_1 \abs{\Delta w} \displaystyle\int_{\tx(t)}\|\partial_{\weight}^1 \hat{f}(\weight,\psi)\|_{L^p}\hspace{1mm}  d\mu - L_1\abs{\Delta \psi}\displaystyle\int_{\tx(t)}\|\partial_\psi^1 \hat{f}(\weight,\psi)\|_{L^p} d\mu,
+%     \end{align*}
+%     as desired.
+% \end{proof}

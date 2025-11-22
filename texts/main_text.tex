@@ -296,18 +296,76 @@ This provides a holistic view of a learning problem for all tasks which incorpor
 As discussed in the introduction, naively solving this problem will involve repeatedly retraining the model from scratch for each new task. This is both computationally and mathematically unattractive. Therefore, we seek to find an elegant solution to this problem and to do this, we must understand the effect of subsequent tasks on the CL learning problem and by extension the effect of architecture on the CL problem.
 
 
-\section{Understanding the dynamics of tasks and architecture}
-For illustration, we reconsider the example from section~\ref{sec:motivation} and draw Figure ~\ref{fig:challenge} where three tasks are shown to the model in order, with a fixed architecture, denoted by $\psi(1).$ \Ally{Small note. Do we want to use "Fig." or "Figure" for referencing figures? I don't have a preference, just wanted to note for consistency.} The goal is to find the optimal weights for the NN at each task thus solving~\eqref{eq:CL_for}. However, determining the optimal weights is highly dependent on each task's data. Intuitively, if the data in task $\tx(t) = \tx(t+1), \forall \; t \in [0,T],$ we can find a NN $\hat{f}$ which learns the new task and transfers learning from the previous tasks perfectly. But, if the$\tx(t) \ne \tx(t+1), \forall \; t \in [0,T],$ we may or may not be able to find a NN solution. 
+\section{Understanding the existence of the CL solution}
+For illustration, let us reconsider the example from 
+section~\ref{sec:motivation}. In this regard,
+we draw Figure ~\ref{fig:challenge}
+where three tasks are shown to the model in order and the 
+architecture of the network is fixed as $\psi(1).$ The goal of the 
+CL is to solve the problem in 
+\eqref{eq:clcum} at each task $t$ such that optimal weights 
+can be determined. However, determining the optimal weights 
+is highly dependent on each task's data. Intuitively, 
+if the data in task $\tx(t) = \tx(t+1), \forall \; t \in [0,T],$ 
+we can find a NN $\hat{f}$ which learns the new task $\tx(t+1)$
+and transfers learning 
+from $\tx(t)$ perfectly. But, if  
+$\tx(t) \ne \tx(t+1), \forall \; t \in [0,T],$ 
+we may or may not be able to find a common solution.
+
 \begin{figure}[!thb]
     \centering
     \includegraphics[width=0.8\linewidth]{paperFigures/problem1.png}
     \caption{The actual problem}
     \label{fig:challenge}
 \end{figure}
-To illustrate this further, consider Figure  \ref{fig:challenge} and let $\mathcal{F}_t = \{\fhat(\weight,\psi)\in \sobolev\}$ to represent the search space for the set of all possible NN solutions for learning task $t$~(refer to  \ref{sec:motivation} for a similar construction). For illustration,  $\mathcal{F}_t$ is a subset of $\sobolev$ and can be thought of as a representative of a level set where the loss is less than a threshold. Pictorially, we represent this level set with a ball. At $t=1$, there is one ball, at task $t=2$ there are two balls, and at task $t=3$ there are three balls. The number of balls here correspond to the number of tasks being involved in the learning process at each step of learning. 
+To illustrate this further, consider 
+Figure  \ref{fig:challenge} and 
+let $\mathcal{F}_t = \{\fhat(\weight,\psi)\in \sobolev\}$ 
+to represent the search space for the set of 
+all possible NN solutions for learning task 
+$t$~(refer to  \ref{sec:motivation} for a similar construction). 
+As $\mathcal{F}_t$ is a subset of $\sobolev,$ the balls in Figure  \ref{fig:challenge} 
+can be thought  of as a representative of a level set such that the boundary of the size
+of the ball represents the set of all solutions that provide the 
+loss value less than a threshold. 
+At $t=1$, there is one ball, at task $t=2$ there are two balls, 
+and at task $t=3$ there are three balls. 
+The number of balls here correspond to the number of tasks being 
+involved in the learning process at each step of learning. 
  
-In each of the balls, \ding{58} represents the NN solution for only that particular task $t$ and the smileys face represents the solution that transfers learning among all tasks less than $t.$ Notably,  $\smiley{}$ must lie in the intersection of all the balls, as only in this intersection region do we have a solution that is optimal for all tasks. Curiously, unless the tasks as equivalent, the $\smiley{}$ and the \ding{58} will not coincide because no solution that is perfect for one task ends up being perfect for another. Furthermore, the more different the subsequent tasks are, it is intuitive that the intersection space is unlikely to be non-empty. To formalize this intuition, we first define the notion of the intersection space in $\sobolev$ in terms of its impact on the loss functions. To define this notion, we must first identify the notion of continuity in the space of continual learning loss function as a consequence of the difference in the data space. The definition of continuous functions w.r.t a measure is given as
-     \begin{definition}
+In each of the balls, \ding{58} represents the NN solution for 
+only that particular task $t$ and the smileys face 
+represents the solution that transfers learning amongst tasks 
+between $0$ to $t.$  Notably,  $\smiley{}$ must lie in 
+the intersection of all the balls, as 
+solution common to tasks $0$ to $t$ are only available in this 
+intersection. Curiously, unless the tasks as equivalent, the $\smiley{}$ 
+and the \ding{58} will not coincide because no solution 
+that is perfect for one task ends up being perfect for another. 
+Furthermore, the more different the subsequent tasks are, it is 
+intuitive that the intersection space is unlikely to be non-empty. 
+Therefore, as long as the model can ensure that the intersection space
+is non-empty, the existence of a common CL solution will be 
+guaranteed. Therefore, the necessary conditions for the 
+existence of the CL solution is tied to the size of this intersection 
+space. Furthermore, the quality of the solution is tied to the value of 
+the continual learning cost at the introduction of each new task.
+In particular, if the existence of the common solution at the 
+introduction of any new task implies that the value of 
+$\nabla_{t} J(\weight(\tau),\psi^*(t), \tx(\tau))$ is small.
+Mathematically, this intuition is implied by the continuity
+of $J(\weight(\tau),\psi^*(t), \tx(\tau))$ in the 
+closed interval $[t, t+1].$
+
+
+
+To formalize this intuition and demonstrate the impact of architecture 
+on the continuity of $J,$ we first define the notion of the 
+intersection space in $\sobolev$ in terms of its impact on $J.$ 
+Towards this end, we elucidate an $\epsilon, \delta$ defintion of 
+continuity of a function w.r.t measure as
+\begin{definition}
  \label{defintersect}
      Let $\overline{\tx} = \bigcup_{t=0}^\infty \tx(t)$ with the power set $\mathcal{P(\overline{\tx})}$ as its topology. Set $\mathcal{B(\overline{\tx})}$ to be the Borel sigma algebra on $\overline{\tx}$ equipped with a probability measure denoted $\mu.$ Then, $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ forms a probability measure space. Let $\hat{f}: \overline{\tx}\rightarrow \mathbb{R}$ be a measurable function, and set $F:\mathcal{B}(\overline{\tx})\rightarrow \mathbb{R}$ to be the function
      \begin{align*}
@@ -317,7 +375,20 @@ In each of the balls, \ding{58} represents the NN solution for only that particu
      Then, we say $F$ is \textit{continuous with respect to the measure} if for every $\varepsilon>0,$ there exists $\delta >0$ such that $\abs{F(A)-F(B)} < \varepsilon$
      whenever $A,B\in \mathcal{B(\overline{\tx})}$ such that $\mu(A\bigtriangleup B)<\delta.$
  \end{definition}
-Definition \ref{defintersect} can be deduced from basic measure theory results found in \cite{weaver2013measure}. The intuition behind this definition is that sets which are similar~(with respect to the probability measure $\mu$) will result in integrals of $\fhat$ over the respective sets which are close in value. In the set theory context, the notation $A\bigtriangleup B$ represents set symmetric difference, which describes the elements two sets do not share~(see Figure  \ref{fig:setsim} for an illustration). Thus, as $\mu(A\bigtriangleup B)$ gets larger, the size of the intersection space (i.e. $\mu(A\cap B)$) shrinks. Hence, the measure of the set symmetric difference provides a notion of how ``similar" or how ``different" two sets are. In other words, we can acquire a notion of how similar or different two tasks are.
+Definition \ref{defintersect} can be deduced from basic measure 
+theory results found in \cite{weaver2013measure}. 
+The intuition behind this definition is 
+that sets which are similar~(with respect to the probability measure $\mu$) 
+result in integrals of $\fhat$ over the respective sets 
+which are close in value. In the set theory context, 
+the notation $A\bigtriangleup B$ represents set 
+symmetric difference, which describes the elements 
+two sets do not share~(see Figure  \ref{fig:setsim} 
+for an illustration). Thus, as $\mu(A\bigtriangleup B)$ 
+gets larger, the size of the intersection space (i.e. $\mu(A\cap B)$) 
+shrinks. Hence, the measure of the set symmetric difference provides 
+a notion of how ``similar" or how ``different" two sets are. In other words, 
+we can acquire a notion of how similar or different two tasks are.
 \begin{figure}
     \centering
     \scalebox{.4}{\begin{tikzpicture}
@@ -337,50 +408,113 @@ Definition \ref{defintersect} can be deduced from basic measure theory results f
     \label{fig:setsim}
 \end{figure}
 
- In particular, the expected value of the loss function $\ell$ is continuous with respect to measure if for a small $\varepsilon >0$  we can find a $\delta >0$ such that $\abs{E(\tx(t))-E(\tx(t+1))}<\varepsilon$ for all $\tx(t+1)$ such that $\mu(\tx(t)\bigtriangleup \tx(t+1))<\delta.$ Thus, if two tasks $\tx(t)$ and $\tx(t+\Delta t)$ are similar (i.e. $\mu(\tx(t)\bigtriangleup \tx(t+\Delta t))<\delta)$, then the loss values are similar (i.e. $\abs{E(\tx(t))-E(\tx(t+\Delta t))}<\varepsilon$). This intuition is formalized in the following theorem, where we prove the expected value function is continuous with respect to measure.
 
-%theorem proving EV is cont. w.r.t. meausre
+
+We now describe the continual learning cost $J(\weight(t),\psi(t),\tx(t))$ in the context of definition~\ref{defintersect}.
+In particular, the expected value of $J(\weight(t),\psi(t),\tx(t))$ 
+is continuous with respect to measure $\mu$ 
+if for a small $\varepsilon >0$  we can find a $\delta >0$ such that 
+$\abs{J(\weight(t),\psi(t),\tx(t))-J(\weight(t+1),\psi(t+1),\tx(t+1))}<\varepsilon$ for 
+all $\tx(t+1)$ such that $\mu(\tx(t)\bigtriangleup \tx(t+1))<\delta.$ 
+Thus, if two tasks $\tx(t)$ and $\tx(t+\Delta t)$ are similar 
+(i.e. $\mu(\tx(t)\bigtriangleup \tx(t+\Delta t))<\delta)$, 
+then the forgetting cost $J$ are similar (i.e. 
+$\abs{J(\weight(t),\psi(t),\tx(t))-J(\weight(t+1),\psi(t+1),\tx(t+1))}<\varepsilon$). 
+This intuition is formalized in the following theorem, 
+where we prove that $J$ is continuous with respect to measure $\mu.$
+
+
 \begin{theorem}\label{contMeasure}
-    Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as defined as in definition~\ref{defintersect}. Assume that the loss function $\ell$ is continuous and bounded across all tasks, that is $\forall t \in [0,T].$ Define an expected value of the loss function as 
+    Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as 
+    defined as in definition~\ref{defintersect}. 
+    Assume that the loss function $\ell$ is continuous 
+    and bounded across all tasks, that is $\forall t \in [0,T].$ 
+    Define $J$ over a task $\tx(\tau)$ as
     \begin{align}
-        E(\tx(\tau)) = \int_{\vx \in \tx(\tau)} \ell(\fhat(\weight(t),\psi(t))( \vx ) )
+   J(\weight(t),\psi(t),\tx(t)) & = \int_0^t \left( \int_{\vx \in \tx(\tau)} 
+       \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau
     \end{align}
-    Then, $ E(\tx(\tau))$ is continuous with respect to the measure for any $ \tx(\tau) \in \mathcal{B}(\overline{\tx}).$
+    Then, $ J(\weight(t),\psi(t),\tx(t))$ is continuous with respect to the measure 
+    for any $ \tx(t), \tx(t+1) \in \mathcal{B}(\overline{\tx})$ such that 
+    $\mu(\tx(t)\bigtriangleup \tx(t+1))<\delta$ $\implies$ 
+    $\abs{J(\weight(t+1),\psi(t+1),\tx(t+1))- J(\weight(t),\psi(t),\tx(t))} \leq \epsilon$
 \end{theorem}
 \begin{proof}
-    Suppose that the constant $M_0>0$ is the value which bounds $\ell$ on every task. Let $\varepsilon>0$ and  set $\delta = \varepsilon/M_0.$ Further let $A,B \in \mathcal{\mathcal{B}}(\overline{\tx})$ such that $\mu(A\bigtriangleup B)< \delta.$ By disjoint additivity of $\mu$ and triangle inequality, 
+    Suppose that the constant $M_0>0$ bounds $\ell$ on every task. 
+    Let $\varepsilon>0$ and  set $\delta = \varepsilon/M_0.$ 
+    Further let $A,B \in \mathcal{\mathcal{B}}(\overline{\tx})$ 
+    such that $\mu(A\bigtriangleup B)< \delta.$ 
+    By disjoint additivity of $\mu$ and triangle inequality assuming that the subinterval $[t, t+\Delta t]$ 
+    is divided into exactly one unit such that $\Delta t = 1$ we have
     \begin{align*}
-        \abs{E(A) -E(B)} & = \Big\vert\int_{A} \ell(\fhat(\vx))d\mu- \int_B\ell(\fhat(\vx))d\mu\Big\vert\\
-        & = \Big\vert\int_{A\setminus B} \ell(\fhat(\vx))d\mu+ \int_{A\cap B} \ell(\fhat(\vx))d\mu\\
-        & \hspace{10mm}-\int_{B\setminus A}\ell(\fhat(\vx))d\mu-\int_{A\cap B}\ell(\fhat(\vx))d\mu\Big\vert\\
-        & \leq \int_{A\setminus B} \abs{\ell(\fhat(\vx))}d\mu+\int_{B\setminus A}\abs{\ell(\fhat(\vx))}d\mu.
+       & \left\vert \int_0^{t+\Delta~t} \left( \int_{\vx \in \tx(\tau)} 
+       \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau - 
+       \int_0^t \left( \int_{\vx \in \tx(\tau)} \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau\right\vert \\
+        & = \Big\vert \int_{t}^{t+\Delta t} \left( \int_{\vx \in \tx(\tau)} 
+       \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau \Big\vert\\
+        & = \left\vert \int_{\vx \in \tx(t+1)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) )  d\mu 
+        - \int_{\vx \in \tx(t)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) ) d\mu \right\vert\\
+        & = \Bigg\vert\int_{\tx(t)\setminus \tx(t+1)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) )  d\mu \\
+        &+ \int_{\tx(t) \cap \tx(t+1)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) ) d\mu \\
+        &- \int_{ \tx(t+1) \setminus  \tx(t)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) ) d\mu \\
+        &-\int_{ \tx(t+1) \cap  \tx(t)} \ell(\fhat(\weight(t),\psi(t))( \ vx ) ) d\mu
+        \Bigg\vert\\
+        & \leq \int_{\tx(t+1) \setminus \tx(t)} \abs{\ell(\fhat(\weight(t),\psi(t))( \ vx ) )} d\mu \\
+        &+\int_{\tx(t) \setminus \tx(t+1)}\abs{\ell(\fhat(\weight(t),\psi(t))( \ vx ) )}d\mu.
     \end{align*}
     Then, by the boundedness of $\ell,$
     \begin{align*}
-        \int_{A\setminus B} \abs{\ell(\fhat(\vx))}d\mu+\int_{B\setminus A}\abs{\ell(\fhat(\vx))}d\mu & 
-        \leq M_0\mu(A\setminus B) + M_0\mu(B\setminus A).
+        \int_{\tx(t+1) \setminus \tx(t)} \abs{\ell(\fhat(\weight(t),\psi(t))( \ vx ) )} d\mu
+        &+ \int_{\tx(t) \setminus \tx(t+1)} \abs{\ell(\fhat(\weight(t),\psi(t))( \ vx ) )} d\mu \\  
+        & \leq M_0\mu(\tx(t) \setminus \tx(t+1)) + M_0\mu(\tx(t+1) \setminus \tx(t)).
     \end{align*}
     Hence,
     \begin{align*}
-        M_0\mu(A\setminus B) + M_0\mu(B\setminus A) & = M_0(\mu(A\setminus B) + \mu(B\setminus A))\\
-        & = M_0\mu(A\bigtriangleup B)\\
+        M_0\mu(\tx(t) \setminus \tx(t+1)) + M_0\mu(\tx(t+1) \setminus \tx(t)) & = M_0(\mu(\tx(t) \setminus \tx(t+1)) + \mu(\tx(t+1) \setminus \tx(t)))\\
+        & = M_0\mu(\tx(t) \bigtriangleup \tx(t+1))\\
         & < M_0 \delta\\
          & = M_0 \frac{\varepsilon}{M_0}\\
          & = \varepsilon.
     \end{align*}
-    Then, choosing $A = \tx(t)$ and $B = \tx(t+1)$ provides the result.
+    which gives the result.
 \end{proof}
 
 %remark justifying loss bounded on all tasks
 \begin{remark}\label{boundedremark}
-    It is clear that $\ell$ is bounded on each individual task with bound $M_i$ for tasks $i\in \mathbb{N}.$ However, it is reasonable to also assume that there is some constant $M_0<\infty$ for which $M_i\leq M_0$ for all $i\in \mathbb{N}$ because if one did not exist then the problem would be unsolvable. 
+    It is reasonable to assume this hat there is some c
+    onstant $M_0<\infty$ for which $M_i\leq M_0$ 
+    for all $i\in \mathbb{N}$ because 
+    if one did not exist then the problem would be unsolvable as
+    an unbounded loss function would imply that 
+    the neural network is not learning anything useful from the data. 
 \end{remark}
 
-Theorem \ref{contMeasure} solidifies the notion that similar tasks produce similar loss values. In return, this implies that the intersection search space in Figure ~\ref{fig:setsim} and \ref{fig:CL}, where the solution for the CL problem is to be found, is non-empty as long as the tasks are similar. This observation is an intuitive result in CL and has never been proven formally. Moreover, the contrapositive reveals that dissimilar loss values implies dissimilar tasks. However, for an arbitrary CL problem, dissimilar tasks may or may not result in dissimilar loss values as this depends on the weight training mechanism. This intuition implies that if we have two tasks $\tx(t)$ and $\tx(t+\Delta t)$ such that $\mu \left( \tx(t)\bigtriangleup \tx(t+\Delta t) \right) \geq \delta$ then, we do not know whether $\abs{E(\tx(t))-E(\tx(t+\Delta t)}<\varepsilon$ (i.e, similar loss values) or $\abs{E(\tx(t))-E(\tx(t+\Delta t)}\geq\varepsilon$ (i.e. dissimilar loss values). Nonetheless, it is intuitively clear that, if dissimilar tasks do produce dissimilar loss values, eventually, the intersection space becomes empty. We can formalize the idea by looking at the lower bound on the change between two subsequent tasks and observing the behavior of that change when the number of task increase. To develop this intuition formally, we fix the architecture for each task.  Then, we can find the following lower bound on the first difference of the expected value of the loss function. For sake of notation, set
-\begin{align*}
-   \Delta E = \abs{E(\tx(t)))-E(\tx(t+\Delta t))}.
-\end{align*}
-to represent the norm of the gradient of the expected value.
+Theorem \ref{contMeasure} solidifies the notion that similar 
+tasks produce similar loss values and the idea that, continuity of 
+$J$ is upheld when the tasks are similar. 
+In return, this implies that the intersection search space in Figure ~\ref{fig:setsim} and \ref{fig:CL} 
+is non-empty. The formal connection of this idea to the intersection space 
+and continuity of fogetting cost is proven for the first time in this work. 
+Moreover, the contrapositive reveals that dissimilar loss 
+values implies dissimilar tasks. However, for an arbitrary CL problem, 
+dissimilar tasks may or may not result in dissimilar loss values as this 
+depends on the weight training mechanism. This intuition implies that 
+if we have two tasks $\tx(t)$ and $\tx(t+\Delta t)$ 
+such that $\mu \left( \tx(t)\bigtriangleup \tx(t+\Delta t) \right) \geq \delta$ 
+then, we do not know whether $\abs{J(\tx(t))-J(\tx(t+\Delta t))}<\varepsilon$ 
+(i.e, similar loss values) or $\abs{J(\tx(t))-J(\tx(t+\Delta t))}\geq\varepsilon$ 
+(i.e. dissimilar loss values). 
+Nonetheless, it is intuitively clear that, if dissimilar tasks do produce dissimilar loss values, eventually, the intersection space becomes empty
+and the continuity of $J$ is violated.
+In practice, however, a sudden violation of Theorem \ref{contMeasure} is unlikely to occur. 
+Instead, as the number of tasks increase, the value of 
+$\abs{J(\tx(t))-J(\tx(t+\Delta t))}$ will tend to increase 
+and eventually exceed $\varepsilon.$ Therefore, the model 
+will gradually forget prior tasks and eventually CL will fail.  
+Where we show that this gradual forgetting
+is observed when the architecture is fixed across all tasks.
+\KR{reached here with the revision towards making the existence argument more rigorous through 
+continuity argument.}
 
 \begin{lemma}\label{lem: taylor}
     Suppose $\tx(t)$ and $\tx(t+1)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$  Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks and suppose $\psi(t) = \psi(1)$ for all tasks $t.$ Then, for $\mu(\tx(t)\bigtriangleup \tx(t+1))\geq \delta,$ the following holds

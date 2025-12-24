@@ -1,0 +1,73 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: tmlr.aux
+The style file: tmlr.bst
+Database file #1: NNbib.bib
+Warning--entry type for "pyg" isn't style-file defined
+--line 66 of file NNbib.bib
+Warning--entry type for "adegokeHigherDerivativesInverse2016" isn't style-file defined
+--line 126 of file NNbib.bib
+Warning--entry type for "kingmaAdamMethodStochastic2017" isn't style-file defined
+--line 229 of file NNbib.bib
+Warning--I didn't find a database entry for "pontryagin2018mathematical"
+Warning--I didn't find a database entry for "kingma2014adam"
+Warning--I didn't find a database entry for "kirkpatrick2017overcoming"
+Warning--I didn't find a database entry for "zenke2017continual"
+Warning--I didn't find a database entry for "pascanu2013difficulty"
+Warning--I didn't find a database entry for "loshchilov2016sgdr"
+Warning--I didn't find a database entry for "rolnick2019experience"
+Warning--I didn't find a database entry for "li2017learning"
+Warning--I didn't find a database entry for "kolda2003optimization"
+Warning--I didn't find a database entry for "glorot2010understanding"
+Warning--I didn't find a database entry for "bishop1995training"
+Warning--I didn't find a database entry for "goyal2017accurate"
+Warning--empty year in adegokeHigherDerivativesInverse2016
+Warning--empty year in kingmaAdamMethodStochastic2017
+Warning--empty journal in mahanNonclosednessSetsNeural2021a
+Warning--empty year in mahanNonclosednessSetsNeural2021a
+Warning--empty year in mahanNonclosednessSetsNeural2021a
+Warning--empty journal in petersenTopologicalPropertiesSet2021a
+Warning--empty year in petersenTopologicalPropertiesSet2021a
+Warning--empty year in petersenTopologicalPropertiesSet2021a
+You've used 39 entries,
+            2773 wiz_defined-function locations,
+            831 strings with 13256 characters,
+and the built_in function-call counts, 20485 in all, are:
+= -- 1725
+> -- 1590
+< -- 21
++ -- 534
+- -- 495
+* -- 1769
+:= -- 3246
+add.period$ -- 131
+call.type$ -- 39
+change.case$ -- 275
+chr.to.int$ -- 39
+cite$ -- 86
+duplicate$ -- 816
+empty$ -- 1412
+format.name$ -- 554
+if$ -- 4199
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 38
+newline$ -- 213
+num.names$ -- 156
+pop$ -- 567
+preamble$ -- 1
+purify$ -- 239
+quote$ -- 0
+skip$ -- 697
+stack$ -- 0
+substring$ -- 475
+swap$ -- 80
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 409
+warning$ -- 8
+while$ -- 149
+width$ -- 0
+write$ -- 513
+(There were 23 warnings)

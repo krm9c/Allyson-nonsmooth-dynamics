@@ -1,0 +1,274 @@
+\begin{thebibliography}{39}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Adegoke \& Layeni()Adegoke and
+  Layeni]{adegokeHigherDerivativesInverse2016}
+Kunle Adegoke and Olawanle Layeni.
+\newblock The higher derivatives of the inverse tangent function and rapidly
+  convergent {{BBP-type}} formulas.
+\newblock URL \url{http://arxiv.org/abs/1603.08540}.
+
+\bibitem[Balaprakash et~al.(2018)Balaprakash, Salim, Uram, Vishwanath, and
+  Wild]{Balaprakash2018DeepHyper}
+Prasanna Balaprakash, Misha Salim, Taylor Uram, Venkatram Vishwanath, and
+  Stefan Wild.
+\newblock {DeepHyper}: Asynchronous hyperparameter search for deep neural
+  networks.
+\newblock In \emph{2018 IEEE 25th International Conference on High Performance
+  Computing (HiPC)}, pp.\  42--51, Bengaluru, India, 2018. IEEE.
+\newblock \doi{10.1109/HiPC.2018.00013}.
+
+\bibitem[Bertsekas(2012)]{bertsekas2012dynamic}
+Dimitri Bertsekas.
+\newblock \emph{Dynamic programming and optimal control: {Volume I}}, volume~4.
+\newblock Athena scientific, 2012.
+
+\bibitem[Biderman et~al.(2024)Biderman, Portes, Ortiz, Paul, Greengard,
+  Jennings, King, Havens, Chiley, Frankle, et~al.]{biderman2024lora}
+Dan Biderman, Jacob Portes, Jose Javier~Gonzalez Ortiz, Mansheej Paul, Philip
+  Greengard, Connor Jennings, Daniel King, Sam Havens, Vitaliy Chiley, Jonathan
+  Frankle, et~al.
+\newblock {LoRA}learns less and forgets less.
+\newblock \emph{arXiv preprint arXiv:2405.09673}, 2024.
+
+\bibitem[Chakraborty \& Raghavan(2025)Chakraborty and
+  Raghavan]{chakraborty2025understanding}
+Supriyo Chakraborty and Krishnan Raghavan.
+\newblock On understanding of the dynamics of model capacity in continual
+  learning.
+\newblock \emph{arXiv preprint arXiv:2508.08052}, 2025.
+
+\bibitem[Evans(2022)]{evans2022partial}
+Lawrence~C Evans.
+\newblock \emph{Partial differential equations}, volume~19.
+\newblock American Mathematical Society, 2022.
+
+\bibitem[Fey et~al.(2025)Fey, Lenssen, and contributors]{pyg}
+Matthias Fey, Jan~Eric Lenssen, and contributors.
+\newblock Pytorch geomteric library.
+\newblock PyTorch Geometric, 2025.
+\newblock URL \url{https://pytorch-geometric.readthedocs.io/}.
+
+\bibitem[frostig et~al.(2018)frostig, sohl dickstein, stephens, adigun, bahri,
+  bard, holliday, doucet, levenberg, mayne, oord, pfau, simonyan, slancman,
+  sussex, vadgama, vanhoucke, wehnert, and zoph]{jax}
+jacob frostig, jascha sohl dickstein, sharad stephens, akintunde adigun,
+  yasaman bahri, noam bard, ben holliday, arnaud doucet, matthew levenberg,
+  alex mayne, aaron van~den oord, david pfau, karen simonyan, paul slancman,
+  andy sussex, ashish vadgama, vincent vanhoucke, rory wehnert, and barret
+  zoph.
+\newblock {JAX}: Composable transformations of {Python} + {NumPy} programs,
+  2018.
+\newblock URL \url{github.com}.
+
+\bibitem[Gambella et~al.(2025)Gambella, Solar, and
+  Roveri]{SEALgambella2025SEAL}
+Matteo Gambella, Vicente Javier~Castro Solar, and Manuel Roveri.
+\newblock {SEAL: Searching} expandable architectures for incremental learning.
+\newblock \emph{arXiv preprint arXiv:2505.10457}, 2025.
+
+\bibitem[Gao et~al.(2022)Gao, Luo, Klabjan, and Zhang]{CLEASgao2022CLEAS}
+Qiang Gao, Zhipeng Luo, Diego Klabjan, and Fengli Zhang.
+\newblock Efficient architecture search for continual learning.
+\newblock \emph{IEEE Transactions on Neural Networks and Learning Systems},
+  34\penalty0 (11):\penalty0 8555--8565, 2022.
+
+\bibitem[Glorot \& Bengio(2010)Glorot and Bengio]{GlorotB10}
+Xavier Glorot and Yoshua Bengio.
+\newblock Understanding the difficulty of training deep feedforward neural
+  networks.
+\newblock In \emph{Proceedings of the Thirteenth International Conference on
+  Artificial Intelligence and Statistics (AISTATS)}, pp.\  249--256. JMLR
+  Workshop and Conference Proceedings, 2010.
+\newblock URL \url{proceedings.mlr.press}.
+
+\bibitem[Han et~al.(2024)Han, Gao, Liu, Zhang, and Zhang]{han2024parameter}
+Zeyu Han, Chao Gao, Jinyang Liu, Jeff Zhang, and Sai~Qian Zhang.
+\newblock Parameter-efficient fine-tuning for large models: A comprehensive
+  survey.
+\newblock \emph{arXiv preprint arXiv:2403.14608}, 2024.
+
+\bibitem[Hu et~al.(2022)Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, Chen,
+  et~al.]{LORAhu2022lora}
+Edward~J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean
+  Wang, Lu~Wang, Weizhu Chen, et~al.
+\newblock Lora: Low-rank adaptation of large language models.
+\newblock \emph{ICLR}, 1\penalty0 (2):\penalty0 3, 2022.
+
+\bibitem[Huang et~al.(2023)Huang, Qin, Zhou, Zhu, Liu, and
+  Shao]{huang2023normalization}
+Lei Huang, Jie Qin, Yi~Zhou, Fan Zhu, Li~Liu, and Ling Shao.
+\newblock Normalization techniques in training dnns: Methodology, analysis and
+  application.
+\newblock \emph{IEEE transactions on Pattern Analysis and Machine
+  Intelligence}, 45\penalty0 (8):\penalty0 10173--10196, 2023.
+
+\bibitem[Kidger \& Garcia(2021)Kidger and Garcia]{kidger2021equinox}
+Patrick Kidger and Cristian Garcia.
+\newblock {E}quinox: neural networks in {JAX} via callable {P}y{T}rees and
+  filtered transformations.
+\newblock \emph{Differentiable Programming workshop at Neural Information
+  Processing Systems 2021}, 2021.
+
+\bibitem[Kingma \& Ba()Kingma and Ba]{kingmaAdamMethodStochastic2017}
+Diederik~P. Kingma and Jimmy Ba.
+\newblock Adam: {A} method for stochastic optimization.
+\newblock URL \url{http://arxiv.org/abs/1412.6980}.
+
+\bibitem[Kolda \& Bader(2009)Kolda and Bader]{kolda2009tensor}
+Tamara~G Kolda and Brett~W Bader.
+\newblock Tensor decompositions and applications.
+\newblock \emph{SIAM Review}, 51\penalty0 (3):\penalty0 455--500, 2009.
+
+\bibitem[Lai et~al.(2025)Lai, Zhao, Feng, Ma, Liu, Zhao, Lin, Yi, Xie, Zhang,
+  et~al.]{lai2025reinforcement}
+Song Lai, Haohan Zhao, Rong Feng, Changyi Ma, Wenzhuo Liu, Hongbo Zhao, Xi~Lin,
+  Dong Yi, Min Xie, Qingfu Zhang, et~al.
+\newblock Reinforcement fine-tuning naturally mitigates forgetting in continual
+  post-training.
+\newblock \emph{arXiv preprint arXiv:2507.05386}, 2025.
+
+\bibitem[Lake et~al.(2015)Lake, Salakhutdinov, and Tenenbaum]{Lake_2015}
+Brenden~M Lake, Ruslan Salakhutdinov, and Joshua~B Tenenbaum.
+\newblock Human-level concept learning through probabilistic program induction.
+\newblock \emph{Science}, 350\penalty0 (6266):\penalty0 1332--1338, 2015.
+\newblock \doi{10.1126/science.aab3050}.
+
+\bibitem[Larson et~al.(2019)Larson, Menickelly, and Wild]{larson2019derivative}
+Jeffrey Larson, Matt Menickelly, and Stefan~M Wild.
+\newblock Derivative-free optimization methods.
+\newblock \emph{Acta Numerica}, 28:\penalty0 287--404, 2019.
+
+\bibitem[Lin et~al.(2025)Lin, Zettlemoyer, Ghosh, Yih, Markosyan, Berges, and
+  O{\u{g}}uz]{lin2025continual}
+Jessy Lin, Luke Zettlemoyer, Gargi Ghosh, Wen-Tau Yih, Aram Markosyan,
+  Vincent-Pierre Berges, and Barlas O{\u{g}}uz.
+\newblock Continual learning via sparse memory finetuning.
+\newblock \emph{arXiv preprint arXiv:2510.15103}, 2025.
+
+\bibitem[Lin et~al.(2023)Lin, Ju, Liang, and Shroff]{lin2023theory}
+Sen Lin, Peizhong Ju, Yingbin Liang, and Ness Shroff.
+\newblock Theory on forgetting and generalization of continual learning.
+\newblock In \emph{International Conference on Machine Learning}, pp.\
+  21078--21100. PMLR, 2023.
+
+\bibitem[Liu et~al.(2021)Liu, Sun, Xue, Zhang, Yen, and Tan]{liu2021survey}
+Yuqiao Liu, Yanan Sun, Bing Xue, Mengjie Zhang, Gary~G Yen, and Kay~Chen Tan.
+\newblock A survey on evolutionary neural architecture search.
+\newblock \emph{IEEE Transactions on Neural Networks and Learning Systems},
+  34\penalty0 (2):\penalty0 550--570, 2021.
+
+\bibitem[Loshchilov et~al.(2017)Loshchilov, Hutter,
+  et~al.]{loshchilov2017fixing}
+Ilya Loshchilov, Frank Hutter, et~al.
+\newblock Fixing weight decay regularization in {Adam}.
+\newblock \emph{arXiv preprint arXiv:1711.05101}, 5\penalty0 (5):\penalty0 5,
+  2017.
+
+\bibitem[Lu et~al.(2025)Lu, Yuan, Feng, and Sun]{lu2025rethinking}
+Aojun Lu, Hangjie Yuan, Tao Feng, and Yanan Sun.
+\newblock Rethinking the stability-plasticity trade-off in continual learning
+  from an architectural perspective.
+\newblock \emph{arXiv preprint arXiv:2506.03951}, 2025.
+
+\bibitem[Luo et~al.(2025)Luo, Yang, Meng, Li, Zhou, and
+  Zhang]{luo2025empirical}
+Yun Luo, Zhen Yang, Fandong Meng, Yafu Li, Jie Zhou, and Yue Zhang.
+\newblock An empirical study of catastrophic forgetting in large language
+  models during continual fine-tuning.
+\newblock \emph{IEEE Transactions on Audio, Speech and Language Processing},
+  2025.
+
+\bibitem[Mahan et~al.()Mahan, King, and
+  Cloninger]{mahanNonclosednessSetsNeural2021a}
+Scott Mahan, Emily~J. King, and Alex Cloninger.
+\newblock Nonclosedness of sets of neural networks in {Sobolev} spaces.
+\newblock 137:\penalty0 85--96.
+\newblock ISSN 0893-6080.
+\newblock \doi{10.1016/j.neunet.2021.01.007}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S0893608021000150}.
+
+\bibitem[McCloskey \& Cohen(1989)McCloskey and
+  Cohen]{mccloskey1989catastrophic}
+Michael McCloskey and Neal~J Cohen.
+\newblock Catastrophic interference in connectionist networks: The sequential
+  learning problem.
+\newblock In \emph{Psychology of learning and motivation}, volume~24, pp.\
+  109--165. Elsevier, 1989.
+
+\bibitem[Muralidhara et~al.(2025)Muralidhara, Stricker, and
+  Schuster]{CLORAmuralidhara2025}
+Shishir Muralidhara, Didier Stricker, and Ren{\'e} Schuster.
+\newblock {CLoRA: Parameter}-efficient continual learning with low-rank
+  adaptation.
+\newblock \emph{arXiv preprint arXiv:2507.19887}, 2025.
+
+\bibitem[Pasunuru \& Bansal(2019)Pasunuru and Bansal]{CASpasunuru2019continual}
+Ramakanth Pasunuru and Mohit Bansal.
+\newblock Continual and multi-task architecture search.
+\newblock \emph{arXiv preprint arXiv:1906.05226}, 2019.
+
+\bibitem[Petersen et~al.()Petersen, Raslan, and
+  Voigtlaender]{petersenTopologicalPropertiesSet2021a}
+Philipp Petersen, Mones Raslan, and Felix Voigtlaender.
+\newblock Topological properties of the set of functions generated by neural
+  networks of fixed size.
+\newblock 21\penalty0 (2):\penalty0 375--444.
+\newblock ISSN 1615-3383.
+\newblock \doi{10.1007/s10208-020-09461-0}.
+\newblock URL \url{https://doi.org/10.1007/s10208-020-09461-0}.
+
+\bibitem[Raghavan \& Balaprakash(2021)Raghavan and
+  Balaprakash]{raghavan2021formalizing}
+Krishnan Raghavan and Prasanna Balaprakash.
+\newblock Formalizing the generalization-forgetting trade-off in continual
+  learning.
+\newblock \emph{Advances in Neural Information Processing Systems},
+  34:\penalty0 17284--17297, 2021.
+
+\bibitem[Raghavan \& Balaprakash(2023)Raghavan and
+  Balaprakash]{raghavan2023learningcontinuallysequencegraphs}
+Krishnan Raghavan and Prasanna Balaprakash.
+\newblock Learning continually on a sequence of graphs -- the dynamical system
+  way, 2023.
+\newblock URL \url{https://arxiv.org/abs/2305.12030}.
+
+\bibitem[Rudin(1976)]{rudin1976principles}
+Walter Rudin.
+\newblock \emph{Principles of mathematical analysis}.
+\newblock McGraw-Hill, 3rd ed. edition, 1976.
+
+\bibitem[Rusu et~al.(2016)Rusu, Rabinowitz, Desjardins, Soyer, Kirkpatrick,
+  Kavukcuoglu, Pascanu, and Hadsell]{rusu2016progressive}
+Andrei~A Rusu, Neil~C Rabinowitz, Guillaume Desjardins, Hubert Soyer, James
+  Kirkpatrick, Koray Kavukcuoglu, Razvan Pascanu, and Raia Hadsell.
+\newblock Progressive neural networks.
+\newblock \emph{arXiv preprint arXiv:1606.04671}, 2016.
+
+\bibitem[Son et~al.(2021)Son, Jang, Han, and Hwang]{son2021sobolev}
+Hwijae Son, Jin~Woo Jang, Woo~Jin Han, and Hyung~Ju Hwang.
+\newblock Sobolev training for physics informed neural networks.
+\newblock \emph{arXiv preprint arXiv:2101.08932}, 2021.
+
+\bibitem[Weaver(2013)]{weaver2013measure}
+Nik Weaver.
+\newblock \emph{Measure theory and functional analysis}.
+\newblock World Scientific Publishing Company, 2013.
+
+\bibitem[Wistuba et~al.(2023)Wistuba, Sivaprasad, Balles, and
+  Zapper]{wistuba2023continual}
+Martin Wistuba, Prabhu~Teja Sivaprasad, Lukas Balles, and Giovanni Zapper.
+\newblock Continual learning with low rank adaptation.
+\newblock \emph{arXiv preprint arXiv:2311.17601}, 2023.
+
+\bibitem[Yoon et~al.(2017)Yoon, Yang, Lee, and Hwang]{yoon2017lifelong}
+Jaehong Yoon, Eunho Yang, Jeongtae Lee, and Sung~Ju Hwang.
+\newblock Lifelong learning with dynamically expandable networks.
+\newblock \emph{arXiv preprint arXiv:1708.01547}, 2017.
+
+\end{thebibliography}

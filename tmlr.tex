@@ -2,7 +2,7 @@
 \usepackage{wasysym}  % you need this, fine
 \let\iint\relax
 \let\iiint\relax
-\usepackage[accepted]{tmlr}
+\usepackage[preprint]{tmlr}
 \usepackage[toc,page]{appendix} 
 \usepackage{xcolor}
 \usepackage{algorithmic}
@@ -16,6 +16,16 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{amsfonts,bm, amssymb}
+
+
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,patterns}
+
+% Define colors
+\definecolor{matrixA}{RGB}{144,238,144}  % Light green
+\definecolor{matrixW}{RGB}{255,160,122}  % Light orange
+\definecolor{matrixB}{RGB}{173,216,230}  % Light blue
+\definecolor{matrixV}{RGB}{221,160,221}  % Light purple
+
 
 % % ===> Fix the conflict AFTER tmlr loaded ===
 % \makeatletter
@@ -79,11 +89,11 @@
 % Authors must not appear in the submitted version. They should be hidden
 % as long as the tmlr package is used without the [accepted] or [preprint] options.
 % Non-anonymous submissions will be rejected without review.
-\author{\name Allyson Hahn \email ADD EMAIL!!\\
+\author{\name Allyson Hahn \email ahahn2813@gmail.com\\
       \addr Mathematics and Computer Science \\
       Argonne National Laboratory
       \AND
-      \name Krishnan Raghavan \email kraghavan@anl.gov \\
+      \name Krishnan Raghavan\footnote{Corresponding Author} \email kraghavan@anl.gov \\
       \addr Mathematics and Computer Science \\
       Argonne National Laboratory }
 
@@ -129,15 +139,32 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-We consider the effects of Neural Network architecture in the setting of continual learning. Using dynamic programming we complete a bilevel optimization to determine the optimal architecture for the current and previous task data followed by the optimal weights for the network. 
+We investigate the role of neural network architecture in continual learning and identify that absolute continuity of the forgetting cost function is necessary to find a solution to the continual learning problem. To obtain the necessary condition, we introduce a mathematical framework that jointly models architecture and weights in a Sobolev function space. We then utilize this framework to characterize the coupling between model parameters and architectural choices and to analyze how changes in architecture affect the continuity of the forgetting loss. Using this insight, we demonstrate that training only the model weights is insufficient to mitigate catastrophic forgetting when data distributions evolve across tasks and architecture must be modified on the fly. To modify architecture while learning the weights, we formulate the continual learning as a bilevel optimization problem: the upper level selects an optimal architecture for a given task, while the lower level computes optimal weights through dynamic programming over all tasks.  
+
+To solve the upper-level problem, we introduce a derivative-free direct search algorithm that seeks to generate the best architecture by searching for the best architecture in the vicinity of the previous architecture. Once the architecture is found, we seek to transfer knowledge from the previous architecture to the new one. However, finding an optimal architecture on the fly would result in two parameter spaces with different and mismatched weight spaces. Therefore, we develop a low-rank transfer mechanism to map knowledge across architectures of mismatched dimensions. Empirical studies across regression and classification problems, including feedforward convolutional neural networks  and graph neural networks, demonstrate that architectures optimized on the fly yield substantially improved performance~(up to two orders of magnitude), reduced forgetting, and enhanced robustness in the presence of noise compared with static architecture approaches. 
 \end{abstract}
 \input{texts/main_text}
-% \input{texts/supp}
+
 \newpage
 \bibliography{NNbib.bib}
 \bibliographystyle{tmlr}
 \appendix
 \section{Appendix}
-You may include other additional sections here.
+\input{texts/supp}
+
+
+\begin{flushright}
+  \scriptsize
+
+  \framebox{\parbox{0.9\textwidth}{
+  The submitted manuscript has been created by UChicago Argonne, LLC, Operator of Argonne National Laboratory (“Argonne”).
+  Argonne, a U.S. Department of Energy Office of Science laboratory, is operated under Contract No. DE-AC02-06CH11357.
+  The U.S. Government retains for itself, and others acting on its behalf, a paid-up nonexclusive, irrevocable worldwide
+  license in said article to reproduce, prepare derivative works, distribute copies to the public, and perform publicly
+  and display publicly, by or on behalf of the Government.  The Department of Energy will provide public access to these
+  results of federally sponsored research in accordance with the DOE Public Access Plan.
+  \url{http://energy.gov/downloads/doe-public-access-plan}
+  }}
+  \end{flushright}
 \end{document}
 % -----------------------------------------------------------

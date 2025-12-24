@@ -1,0 +1,215 @@
+\documentclass{article}
+\title{A Simple Article Template}
+\author{Your Name \\ Your University}
+\date{\today}
+
+\usepackage{hyperref}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{amssymb,amsthm,amsmath,tikz,pgf,mathtools,subfigure}
+
+\usepackage{epsfig,amsmath, amsfonts,amstext, amsthm, latexsym, graphicx}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[x11names]{xcolor}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{color,soul}
+\usepackage[dvipsnames]{xcolor}
+
+
+
+\begin{document}
+
+Theorem \ref{contMeasure} solidifies the notion that similar tasks produce similar loss values. In return, this implies that the intersection search space in Figure ~\ref{fig:setsim} and \ref{fig:CL}, where the solution for the CL problem is to be found, is non-empty as long as the tasks are similar. This observation is an intuitive result in CL and has never been proven formally. Moreover, the contrapositive reveals that dissimilar loss values implies dissimilar tasks. However, for an arbitrary CL problem, dissimilar tasks may or may not result in dissimilar loss values as this depends on the weight training mechanism. This intuition implies that if we have two tasks $\tx(t)$ and $\tx(t+\Delta t)$ such that $\mu \left( \tx(t)\bigtriangleup \tx(t+\Delta t) \right) \geq \delta$ then, we do not know whether $\abs{E(\tx(t))-E(\tx(t+\Delta t)}<\varepsilon$ (i.e, similar loss values) or $\abs{E(\tx(t))-E(\tx(t+\Delta t)}\geq\varepsilon$ (i.e. dissimilar loss values). Nonetheless, it is intuitively clear that, if dissimilar tasks do produce dissimilar loss values, eventually, the intersection space becomes empty. We can formalize the idea by looking at the lower bound on the change between two subsequent tasks and observing the behavior of that change when the number of task increase. To develop this intuition formally, we fix the architecture for each task.  Then, we can find the following lower bound on the first difference of the expected value of the loss function. For sake of notation, set
+\begin{align*}
+   \Delta E = \abs{E(\tx(t)))-E(\tx(t+\Delta t))}.
+\end{align*}
+to represent the norm of the gradient of the expected value.
+
+\begin{lemma}\label{lem: taylor}
+    Suppose $\tx(t)$ and $\tx(t+1)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$  Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks and suppose $\psi(t) = \psi(1)$ for all tasks $t.$ Then, for $\mu(\tx(t)\bigtriangleup \tx(t+1))\geq \delta,$ the following holds
+    \begin{align*}
+        E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta \weight \hspace{1mm}  d\mu\Big]+ o(\Delta t).
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    The first-order Taylor series expansion of $E(\tx(t+\Delta t))$ about $t,$ is given by
+    \begin{align}
+        E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[ E_{\tx} (\tx(t)\Delta \tx(t+\Delta t))+ E_{\weight}(\tx(t))\Big] + o(\Delta t),\label{taylorexp1}
+    \end{align}
+    where $E_{\tx}$ and $E_{\weight},$ are the partial derivatives of the expected value function with respect to the data and  weights, respectively. Since we assumed $\psi(t) = \psi(1)$ for all $t$ (i.e., the architecture is fixed), note that we did not take the partial derivative of the expected value function with respect to the architecture. 
+    
+    Now, we work on acquiring each partial derivative. Toward that end, 
+    \begin{align}
+        E_{\tx} (\tx(t)\Delta \tx(t+\Delta t)) & =\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu.\label{E_X1 :thmweight}
+    \end{align}
+    To determine the remaining two derivatives, we use the Sobolev function chain rule found in \cite{evans2022partial}. We can do so as $\ell$ is real-valued and bounded, and $\ell'$ is continuously differentiable. Then,
+    \begin{align}
+        E_{\weight} (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu.\label{E_w: thmweight}
+    \end{align}
+    Substituting (\ref{E_X1 :thmweight}) and (\ref{E_w: thmweight})  into the Taylor series expansion (\ref{taylorexp}), we have
+    \begin{align*}
+        E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu\Big]+ o(\Delta t),
+    \end{align*}
+    as desired.
+\end{proof}
+The following theorem is immediate to identify the lower bound on the first difference in the CL cost.
+\KR{reached here}
+
+\begin{theorem}
+    Suppose $\tx(t)$ and $\tx(t+1)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Moreover, suppose $\psi(t) = \psi(1)$ for all tasks $t.$ Then, for $\mu(\tx(t)\bigtriangleup \tx(t+1))\geq \delta,$ the following holds
+    \begin{align*}
+        \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big)
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    To begin, recall that
+    \begin{align*}
+        J(\weight(t),\psi(t),\tx(t)) & = \int_0^t \left( \int_{\vx \in \tx(\tau)} \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau\\
+        & = \int_0^t E(\tx(\tau))d\tau.
+    \end{align*}
+    As the expected value function is a continuous, real-valued function on the closed interval $[0,t],$ it follows that
+    \begin{align*}
+        \nabla J & = \nabla \left( \int_0^t E(\tx(\tau))d\tau\right) = \int_0^t \nabla E(\tx(\tau))d\tau = E(\tx(t)).
+    \end{align*}
+    By Lemma \ref{lem: taylor} and the previous equation
+    \begin{align*}
+       E(\tx(t)) &=  \nabla J \\        & = E(\tx(t+\Delta t)) - \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & +\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu\Big]- o(\Delta t)\\
+        & = E(\tx(t+\Delta t)) + \Delta t(-\mu( \tx(t)\Delta \tx(t+\Delta t)))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- o(\Delta t)\\
+        & \leq E(\tx(t+\Delta t)) + \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- o(\Delta t)\\
+    \end{align*}
+    Subtracting $E(\tx(t+\Delta t))$ from both sides and combining like terms,
+    \begin{align*}
+         E(\tx(t)) - E(\tx(t+\Delta t))
+        & \leq E(\tx(t+\Delta t)) + \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- o(\Delta t) - E(\tx(t+\Delta t)) \\
+        & \leq \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- o(\Delta t).
+    \end{align*}
+    Additionally, we can assume that the loss function $\ell$ is bounded above by a constant $M_0,$ so
+    \begin{align*}
+        E(\tx(t)) - E(\tx(t+\Delta t))
+        & \leq \Delta t \cdot \delta M_0
+        - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- o(\Delta t).
+    \end{align*}
+    To consider this difference in expected values across future tasks, set $\Delta t =1 $ and let us sum across such future tasks, 
+    \begin{align*}
+         \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu \Big).
+    \end{align*}
+    Now, we can choose the following for each $\tau$
+    \begin{align*}
+        \Delta \weight & = \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi).
+    \end{align*}
+    Thus,
+    \begin{align*}
+         \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big),
+    \end{align*}
+    as desired. Note that the the term $\left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2$ above is positive, and so the integral will be positive. Thus, we can view the subtraction of this integral as the impact of changing the weights to the overall difference in loss values.
+\end{proof}
+
+The lower bound in ( Theorem \ref{lowerw}) confirms that the norm of the gradient is dependent upon the bound on the loss function and the change in the weights. In particular, we see that the more we change the weights $\weight(t),$ the smaller our lower bound gets. As a smaller norm of the gradient implies a smaller change in the expected value between two tasks (i.e. smaller $\abs{E(\tx(t)))-E(\tx(t+\Delta t))}$), it is clear that we could reduce the lower bound in (\ref{lowerw}) by changing the weights. However, we can only change the weights so far before overfitting occurs. In other words, there is a bound on the change in weights, and hence a bound on much we can reduce the lower bound (Theorem \ref{lowerw}). It would be ideal if the lower bound could be reduced further. 
+
+It is important to note that in Theorem \ref{lowerw}, we fix the architecture.  What if we allow for changing the architecture as well? Intuitively, we know changing the architecture via some architecture search will result in a better performing NN (i.e. smaller expected value). However, let us provide a concrete proof to support this intuition. The following theorem provides us with a lower bound on $\|\nabla E\|$ that is smaller than that presented in (\ref{lowerw}). Thus, we have the potential to reduce $\|\nabla E\|$ and hence reduce the change in the expected value $\abs{E(\tx(t)))-E(\tx(t+\Delta t))}.$ 
+
+%theorem for lower bound on weights and architecture
+\begin{theorem}\label{lowerpsi}
+    Suppose $\tx(t)$ and $\tx(t+1)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$ all be constants. Set $M_0$ to be the upperbound on the loss function $\ell$ across all tasks. Then, for $\mu(\tx(t)\bigtriangleup \tx(t+1))\geq \delta,$ the following holds
+    \begin{align*}
+        \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu - \\
+        & -\displaystyle\int_{\tx(t)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\right)^2\hspace{1mm}  d\mu\Big).
+    \end{align*}
+    
+\end{theorem}
+
+
+\begin{proof}
+    To begin, note that the first-order Taylor series expansion of $E(\tx(t+\Delta t))$ about  $t,$ is given by
+    \begin{align}
+        E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[ E_{\tx} (\tx(t)\Delta \tx(t+\Delta t))+ E_{\weight}(\tx(t)) + E_\psi(\tx(t))\Big] + o(\Delta t),\label{taylorexparch}
+    \end{align}
+    where $E_{\tx} , E_{\weight},$ and $E_\psi$ are the partial derivatives of the expected value function with respect to the data, weights, and architecture, respectively. Now, we work on acquiring each partial derivative. Toward that end, 
+    \begin{align}
+        E_{\tx} (\tx(t)\Delta \tx(t+\Delta t)) & =\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu.\label{E_X1}
+    \end{align}
+    To determine the remaining two derivatives, we use the Sobolev function chain rule found in \cite{evans2022partial}. We can do so as $\ell$ is real-valued and bounded, and $\ell'$ is continuously differentiable. Then,
+    \begin{align}
+        E_{\weight} (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu.\label{E_w},\\
+        E_\psi (\tx(t)) & = \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu.\label{E_psi}
+    \end{align}
+    Substituting (\ref{E_X1}), (\ref{E_w}), and (\ref{E_psi}) into the Taylor series expansion (\ref{taylorexparch}), we have
+    \begin{align}
+        E(\tx(t+\Delta t)) & = E(\tx(t)) + \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm} d\mu+\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu\Big]+ o(\Delta t).\label{archfinaltaylor}
+    \end{align}
+    recall that
+    \begin{align*}
+        J(\weight(t),\psi(t),\tx(t)) & = \int_0^t \left( \int_{\vx \in \tx(\tau)} \ell(\fhat(\weight(t),\psi(t))( \vx ) ) \right) \;  d~\tau\\
+        & = \int_0^t E(\tx(\tau))d\tau.
+    \end{align*}
+    As the expected value function is a continuous, real-valued function on the closed interval $[0,t],$ it follows that
+    \begin{align*}
+        \nabla J & = \nabla \left( \int_0^t E(\tx(\tau))d\tau\right) = \int_0^t \nabla E(\tx(\tau))d\tau = E(\tx(t)).
+    \end{align*}
+    By (\ref{archfinaltaylor}) and the previous equation
+    \begin{align*}
+       E(\tx(t)) &=  \nabla J \\        & = E(\tx(t+\Delta t)) - \Delta t\Big[\mu( \tx(t)\Delta \tx(t+\Delta t))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & +\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu + \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu \Big]- o(\Delta t)\\
+        & = E(\tx(t+\Delta t)) + \Delta t(-\mu( \tx(t)\Delta \tx(t+\Delta t)))\cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu -\Delta t \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu- o(\Delta t)\\
+        & \leq E(\tx(t+\Delta t)) + \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- \Delta t \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu- o(\Delta t).\\
+    \end{align*}
+    Subtracting $E(\tx(t+\Delta t))$ from both sides and combining like terms,
+    \begin{align*}
+         E(\tx(t))- E(\tx(t+\Delta t)) &\leq E(\tx(t+\Delta t)) + \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu\\
+        & -\Delta t \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu- o(\Delta t) -E(\tx(t+\Delta t)\\
+         & \leq \Delta t \cdot \delta \cdot \displaystyle\int_{\tx(t)\Delta \tx(t+\Delta t)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu- \Delta t \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu- o(\Delta t).\\
+    \end{align*}
+
+    Additionally, we can assume that the loss function $\ell$ is bounded above by a constant $M_0,$ so
+    \begin{align*}
+        E(\tx(t)) - E(\tx(t+\Delta t))
+        & \leq \Delta t \cdot \delta M_0
+        - \Delta t\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu\\
+        & -\Delta t \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu - o(\Delta t).
+    \end{align*}
+    To consider this difference in expected values across future tasks, set $\Delta t =1 $ and let us sum across such future tasks, 
+    \begin{align*}
+         \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu \\
+        & - \displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu\Big).
+    \end{align*}
+    Now, we can choose the following for each $\tau$
+    \begin{align*}
+        \Delta \weight & = \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi),
+    \end{align*}
+    and
+    \begin{align*}
+        \Delta \psi & = \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi).
+    \end{align*}
+    Thus,
+    \begin{align*}
+         \sum_{\tau = t}^{T} (E(\tx(\tau)) - E(\tx(\tau+1)))
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\tx(\tau)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu\\
+        & - \displaystyle\int_{\tx(t)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\right)^2\hspace{1mm}  d\mu\Big),
+    \end{align*}
+    as desired. Note that the the terms $\left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2$ and $\left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\right)^2$ above areis positive, and so each respectivethe integral will be positive. Thus, we can view the subtraction of theis integral of $\left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2$ as the impact of changing the weights to the overall difference in loss values, and the subtraction of the integral of $\left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\right)^2$ as the impact of changing the architecture to the overall difference in loss values..
+\end{proof}
+
+
+\end{document}

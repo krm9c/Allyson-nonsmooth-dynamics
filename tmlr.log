@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  24 DEC 2025 10:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  24 DEC 2025 11:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -941,19 +941,89 @@ Package: relsize 2013/03/29 ver 4.1
 \algocf@algoframe=\box94
 \algocf@algobox=\box95
 )
+(/usr/local/texlive/2025/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2024/09/14 v1.9i multicolumn formatting (FMi)
+\c@tracingmulticols=\count338
+\mult@box=\box96
+\multicol@leftmargin=\dimen309
+\c@unbalance=\count339
+\c@collectmore=\count340
+\doublecol@number=\count341
+\multicoltolerance=\count342
+\multicolpretolerance=\count343
+\full@width=\dimen310
+\page@free=\dimen311
+\premulticols=\dimen312
+\postmulticols=\dimen313
+\multicolsep=\skip95
+\multicolbaselineskip=\skip96
+\partial@page=\box97
+\last@line=\box98
+\mc@boxedresult=\box99
+\maxbalancingoverflow=\dimen314
+\mult@rightbox=\box100
+\mult@grightbox=\box101
+\mult@firstbox=\box102
+\mult@gfirstbox=\box103
+\@tempa=\box104
+\@tempa=\box105
+\@tempa=\box106
+\@tempa=\box107
+\@tempa=\box108
+\@tempa=\box109
+\@tempa=\box110
+\@tempa=\box111
+\@tempa=\box112
+\@tempa=\box113
+\@tempa=\box114
+\@tempa=\box115
+\@tempa=\box116
+\@tempa=\box117
+\@tempa=\box118
+\@tempa=\box119
+\@tempa=\box120
+\@tempa=\box121
+\@tempa=\box122
+\@tempa=\box123
+\@tempa=\box124
+\@tempa=\box125
+\@tempa=\box126
+\@tempa=\box127
+\@tempa=\box128
+\@tempa=\box129
+\@tempa=\box130
+\@tempa=\box131
+\@tempa=\box132
+\@tempa=\box133
+\@tempa=\box134
+\@tempa=\box135
+\@tempa=\box136
+\@tempa=\box137
+\@tempa=\box138
+\@tempa=\box139
+\c@minrows=\count344
+\c@columnbadness=\count345
+\c@finalcolumnbadness=\count346
+\last@try=\dimen315
+\multicolovershoot=\dimen316
+\multicolundershoot=\dimen317
+\mult@nat@firstbox=\box140
+\colbreak@box=\box141
+\mc@col@check@num=\count347
+)
 (./new_commands.tex)
-\c@theorem=\count338
-\c@remark=\count339
-\c@proof=\count340
-\c@pot=\count341
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 13
-9.
+\c@theorem=\count348
+\c@remark=\count349
+\c@proof=\count350
+\c@pot=\count351
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 14
+0.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count342
-\l__pdf_internal_box=\box96
+\l__color_backend_stack_int=\count352
+\l__pdf_internal_box=\box142
 )
 (./tmlr.aux
 
@@ -962,36 +1032,36 @@ LaTeX Warning: Label `boundedremark' multiply defined.
 )
 \openout1 = `tmlr.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 139.
-LaTeX Font Info:    ... okay on input line 139.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 140.
+LaTeX Font Info:    ... okay on input line 140.
  (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count343
-\scratchdimen=\dimen309
-\scratchbox=\box97
-\nofMPsegments=\count344
-\nofMParguments=\count345
+\scratchcounter=\count353
+\scratchdimen=\dimen318
+\scratchbox=\box143
+\nofMPsegments=\count354
+\nofMParguments=\count355
 \everyMPshowfont=\toks37
-\MPscratchCnt=\count346
-\MPscratchDim=\dimen310
-\MPnumerator=\count347
-\makeMPintoPDFobject=\count348
+\MPscratchCnt=\count356
+\MPscratchDim=\dimen319
+\MPnumerator=\count357
+\makeMPintoPDFobject=\count358
 \everyMPtoPDFconversion=\toks38
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1002,61 +1072,61 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 139.
+Package hyperref Info: Link coloring OFF on input line 140.
 
 (./tmlr.out) (./tmlr.out)
 \@outlinefile=\write4
 \openout4 = `tmlr.out'.
 
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1
-41.
+42.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-41.
+42.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-41.
+42.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-141.
+142.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-141.
+142.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 141.
+(Font)              <10> on input line 142.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 141.
+(Font)              <7> on input line 142.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 141.
+(Font)              <5> on input line 142.
 LaTeX Font Info:    Trying to load font information for U+wasy on input line 14
-1.
+2.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 141
+LaTeX Font Info:    Trying to load font information for U+msa on input line 142
 .
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 141
+LaTeX Font Info:    Trying to load font information for U+msb on input line 142
 .
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -1064,29 +1134,29 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <7> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 141.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 142.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <5> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 141.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 142.
 
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 14
-1.
+2.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 141.
+(Font)              <8> on input line 142.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 141.
+(Font)              <6> on input line 142.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <8> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 141.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 142.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <6> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 141.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 142.
 
 (./texts/main_text.tex
 
@@ -1101,7 +1171,7 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 155.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 155.
-<paperFigures/CL1.png, id=375, 2657.93pt x 723.70375pt>
+<paperFigures/CL1.png, id=408, 2657.93pt x 723.70375pt>
 File: paperFigures/CL1.png Graphic file (type png)
 <use paperFigures/CL1.png>
 Package pdftex.def Info: paperFigures/CL1.png  used on input line 163.
@@ -1111,7 +1181,7 @@ Package pdftex.def Info: paperFigures/CL1.png  used on input line 163.
 [3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
 cal/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <./paperFigures/CL1.p
 ng>]
-<Figures/par_space.png, id=398, 2011.515pt x 1032.85875pt>
+<Figures/par_space.png, id=430, 2011.515pt x 1032.85875pt>
 File: Figures/par_space.png Graphic file (type png)
 <use Figures/par_space.png>
 Package pdftex.def Info: Figures/par_space.png  used on input line 187.
@@ -1126,7 +1196,7 @@ res/par_space.png>]
 [6]
 
 [7]
-<paperFigures/problem1.png, id=500, 2655.9225pt x 1938.24126pt>
+<paperFigures/problem1.png, id=532, 2655.9225pt x 1938.24126pt>
 File: paperFigures/problem1.png Graphic file (type png)
 <use paperFigures/problem1.png>
 Package pdftex.def Info: paperFigures/problem1.png  used on input line 321.
@@ -1158,7 +1228,7 @@ Underfull \vbox (badness 1924) has occurred while \output is active []
 
 
 [14]
-<paperFigures/intersect22.png, id=599, 3059.43pt x 1768.6075pt>
+<paperFigures/intersect22.png, id=631, 3059.43pt x 1768.6075pt>
 File: paperFigures/intersect22.png Graphic file (type png)
 <use paperFigures/intersect22.png>
 Package pdftex.def Info: paperFigures/intersect22.png  used on input line 686.
@@ -1186,7 +1256,7 @@ Underfull \hbox (badness 2245) in paragraph at lines 715--716
 
 
 [16 <./paperFigures/intersect22.png>]
-<paperFigures/method.png, id=633, 2657.93pt x 1346.02875pt>
+<paperFigures/method.png, id=666, 2657.93pt x 1346.02875pt>
 File: paperFigures/method.png Graphic file (type png)
 <use paperFigures/method.png>
 Package pdftex.def Info: paperFigures/method.png  used on input line 730.
@@ -1256,7 +1326,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 
 [18]
-<paperFigures/CLsolution1.png, id=656, 927.465pt x 652.4375pt>
+<paperFigures/CLsolution1.png, id=688, 927.465pt x 652.4375pt>
 File: paperFigures/CLsolution1.png Graphic file (type png)
 <use paperFigures/CLsolution1.png>
 Package pdftex.def Info: paperFigures/CLsolution1.png  used on input line 812.
@@ -1278,12 +1348,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [22]
 
 [23]
-<paperFigures/regtask2.png, id=743, 782.32275pt x 381.3447pt>
+<paperFigures/regtask2.png, id=776, 782.32275pt x 381.3447pt>
 File: paperFigures/regtask2.png Graphic file (type png)
 <use paperFigures/regtask2.png>
 Package pdftex.def Info: paperFigures/regtask2.png  used on input line 908.
 (pdftex.def)             Requested size: 469.75499pt x 228.98314pt.
-<paperFigures/origregtest.png, id=744, 738.71985pt x 381.3447pt>
+<paperFigures/origregtest.png, id=777, 738.71985pt x 381.3447pt>
 File: paperFigures/origregtest.png Graphic file (type png)
 <use paperFigures/origregtest.png>
 Package pdftex.def Info: paperFigures/origregtest.png  used on input line 913.
@@ -1299,17 +1369,17 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [25 <./paperFigures/origregtest.png>]
-<paperFigures/reg10tasks.png, id=777, 738.71985pt x 381.3447pt>
+<paperFigures/reg10tasks.png, id=809, 738.71985pt x 381.3447pt>
 File: paperFigures/reg10tasks.png Graphic file (type png)
 <use paperFigures/reg10tasks.png>
 Package pdftex.def Info: paperFigures/reg10tasks.png  used on input line 930.
 (pdftex.def)             Requested size: 446.2658pt x 230.37965pt.
-<paperFigures/reg10Test.png, id=778, 738.71985pt x 381.3447pt>
+<paperFigures/reg10Test.png, id=810, 738.71985pt x 381.3447pt>
 File: paperFigures/reg10Test.png Graphic file (type png)
 <use paperFigures/reg10Test.png>
 Package pdftex.def Info: paperFigures/reg10Test.png  used on input line 935.
 (pdftex.def)             Requested size: 446.2658pt x 230.37965pt.
-<paperFigures/noisydata1.png, id=779, 737.51535pt x 376.88805pt>
+<paperFigures/noisydata1.png, id=811, 737.51535pt x 376.88805pt>
 File: paperFigures/noisydata1.png Graphic file (type png)
 <use paperFigures/noisydata1.png>
 Package pdftex.def Info: paperFigures/noisydata1.png  used on input line 940.
@@ -1319,7 +1389,7 @@ Package pdftex.def Info: paperFigures/noisydata1.png  used on input line 940.
 [26 <./paperFigures/reg10tasks.png>]
 
 [27 <./paperFigures/reg10Test.png> <./paperFigures/noisydata1.png>]
-<paperFigures/cnn5tasks1.png, id=818, 738.8403pt x 363.5181pt>
+<paperFigures/cnn5tasks1.png, id=850, 738.8403pt x 363.5181pt>
 File: paperFigures/cnn5tasks1.png Graphic file (type png)
 <use paperFigures/cnn5tasks1.png>
 Package pdftex.def Info: paperFigures/cnn5tasks1.png  used on input line 966.
@@ -1330,7 +1400,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [28]
-<paperFigures/gnnfix.png, id=832, 738.71985pt x 392.4261pt>
+<paperFigures/gnnfix.png, id=864, 738.71985pt x 392.4261pt>
 File: paperFigures/gnnfix.png Graphic file (type png)
 <use paperFigures/gnnfix.png>
 Package pdftex.def Info: paperFigures/gnnfix.png  used on input line 984.
@@ -1408,49 +1478,17 @@ Overfull \hbox (30.51494pt too wide) in paragraph at lines 742--743
 [48]) (./texts/appendix_standard_cl.tex
 
 [49]
-
-Package natbib Warning: Citation `pontryagin2018mathematical' on page 50 undefi
-ned on input line 26.
-
-
-Package natbib Warning: Citation `kingma2014adam' on page 50 undefined on input
- line 27.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 24.
 
 
-Package natbib Warning: Citation `kirkpatrick2017overcoming' on page 50 undefin
-ed on input line 151.
+LaTeX Font Warning: Font shape `U/wasy/b/n' in size <9> not available
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 24.
 
-
-Package natbib Warning: Citation `zenke2017continual' on page 50 undefined on i
-nput line 151.
-
-
-Package natbib Warning: Citation `pascanu2013difficulty' on page 50 undefined o
-n input line 151.
-
-
-Package natbib Warning: Citation `loshchilov2016sgdr' on page 50 undefined on i
-nput line 151.
-
-
-Package natbib Warning: Citation `rolnick2019experience' on page 50 undefined o
-n input line 151.
-
-
-Package natbib Warning: Citation `li2017learning' on page 50 undefined on input
- line 151.
-
-
-Package natbib Warning: Citation `kolda2003optimization' on page 50 undefined o
-n input line 151.
-
-
-Package natbib Warning: Citation `glorot2010understanding' on page 50 undefined
- on input line 151.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 24.
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 24.
 
 
 [50]
@@ -1459,69 +1497,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 [51]
-Overfull \vbox (745.9293pt too high) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
 [52]
-
-Package natbib Warning: Citation `bishop1995training' on page 53 undefined on i
-nput line 170.
-
-
-Package natbib Warning: Citation `pontryagin2018mathematical' on page 53 undefi
-ned on input line 191.
-
-
-Package natbib Warning: Citation `goyal2017accurate' on page 53 undefined on in
-put line 204.
-
-
-Package natbib Warning: Citation `kirkpatrick2017overcoming' on page 53 undefin
-ed on input line 226.
-
-
-Package natbib Warning: Citation `zenke2017continual' on page 53 undefined on i
-nput line 236.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
 [53]
-
-Package natbib Warning: Citation `rolnick2019experience' on page 54 undefined o
-n input line 272.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
 [54]
 
-Package natbib Warning: Citation `kolda2003optimization' on page 55 undefined o
-n input line 316.
-
-
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-Package natbib Warning: Citation `loshchilov2016sgdr' on page 55 undefined on i
-nput line 390.
-
-
+)
 
 [55]
 
-[56])
-
-Package natbib Warning: There were undefined citations.
-
-
-
-[57] (./tmlr.aux)
+[56] (./tmlr.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -1530,47 +1528,62 @@ L3 programming layer <2025-01-18>
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `tmlr.out' has not changed.
-(rerunfilecheck)             Checksum: B7CF798CE5731807F0E73B77E0874700;13348.
+
+Package rerunfilecheck Warning: File `tmlr.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `tmlr.out':
+(rerunfilecheck)             Before: 5EB28D41D1B38F8613AFF5B2B07B3DAF;14845
+(rerunfilecheck)             After:  108983E4CE22C037B9A1FC48BBEC28A3;14237.
  ) 
 Here is how much of TeX's memory you used:
- 28380 strings out of 473190
- 542221 string characters out of 5715801
- 974613 words of memory out of 5000000
- 50685 multiletter control sequences out of 15000+600000
- 694948 words of font info for 150 fonts, out of 8000000 for 9000
+ 28583 strings out of 473190
+ 545380 string characters out of 5715801
+ 966414 words of memory out of 5000000
+ 50855 multiletter control sequences out of 15000+600000
+ 713263 words of font info for 164 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,26n,107p,1934b,645s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,20n,107p,1934b,645s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/l
 ocal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texli
 ve/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/te
 xmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/f
 onts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
-public/lm/lmbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/l
-mbxi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb
-></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/loc
-al/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive
-/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2025/texmf
--dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts
-/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/publ
-ic/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.
-pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/lo
-cal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texliv
-e/2025/texmf-dist/fonts/type1/public/lm/lmri7.pfb></usr/local/texlive/2025/texm
-f-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2025/texmf-dist/font
-s/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
-public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/
-lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><
-/usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local
-/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/20
-25/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texliv
-e/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/te
-xlive/2025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/202
-5/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb>
-Output written on tmlr.pdf (57 pages, 9462429 bytes).
+public/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/l
+mbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></
+usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local
+/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/
+2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf
+-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/font
+s/type1/public/lm/lmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
+blic/lm/lmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmm
+i6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></us
+r/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/tex
+live/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/t
+exmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/f
+onts/type1/public/lm/lmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/p
+ublic/lm/lmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr
+7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/
+local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texl
+ive/2025/texmf-dist/fonts/type1/public/lm/lmri7.pfb></usr/local/texlive/2025/te
+xmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2025/texmf-dist/fo
+nts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type
+1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/l
+m/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy6.pfb
+></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/loca
+l/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2
+025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2025/texmf-
+dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2025/texmf-dist/fonts/
+type1/public/lm/lmtt9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/publi
+c/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/p
+ublic/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/typ
+e1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public
+/wasy-type1/wasy10.pfb>
+Output written on tmlr.pdf (56 pages, 9641266 bytes).
 PDF statistics:
- 1321 PDF objects out of 1440 (max. 8388607)
- 1159 compressed objects within 12 object streams
- 353 named destinations out of 1000 (max. 500000)
- 694 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1422 PDF objects out of 1440 (max. 8388607)
+ 1237 compressed objects within 13 object streams
+ 374 named destinations out of 1000 (max. 500000)
+ 758 words of extra memory for PDF output out of 10000 (max. 10000000)
 

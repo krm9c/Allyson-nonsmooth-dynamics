@@ -239,55 +239,59 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {H.2}Matrix Dimension Formulas}{49}{subsection.H.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {H.3}Special Cases}{49}{subsection.H.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {I}Conclusion}{49}{appendix.I}\protected@file@percent }
-\citation{pontryagin2018mathematical}
-\citation{kingma2014adam}
-\citation{kirkpatrick2017overcoming}
-\citation{zenke2017continual}
-\citation{pascanu2013difficulty}
-\citation{loshchilov2016sgdr}
-\citation{rolnick2019experience}
-\citation{li2017learning}
-\citation{kolda2003optimization}
-\citation{glorot2010understanding}
 \@writefile{toc}{\contentsline {section}{\numberline {J}Standard CL Implementation}{50}{appendix.J}\protected@file@percent }
 \newlabel{app:standard_cl}{{J}{50}{Standard CL Implementation}{appendix.J}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {J.1}Overview}{50}{subsection.J.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {J.2}Main Algorithm}{52}{subsection.J.2}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Complete Hamiltonian Continual Learning Pipeline}}{52}{algocf.3}\protected@file@percent }
-\newlabel{alg:complete_hcl}{{3}{52}{Main Algorithm}{algocf.3}{}}
-\citation{bishop1995training}
-\citation{pontryagin2018mathematical}
-\citation{goyal2017accurate}
-\citation{kirkpatrick2017overcoming}
-\citation{zenke2017continual}
+\@writefile{toc}{\contentsline {subsection}{\numberline {J.2}Main Algorithms}{50}{subsection.J.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.1}High-Level Pipeline}{50}{subsubsection.J.2.1}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Complete HCL Pipeline}}{50}{algocf.3}\protected@file@percent }
+\newlabel{alg:complete_hcl}{{3}{50}{High-Level Pipeline}{algocf.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.2}Task 0 Training}{50}{subsubsection.J.2.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Task 0: Standard Hamiltonian Training}}{50}{algocf.4}\protected@file@percent }
+\newlabel{alg:task0}{{4}{50}{Task 0 Training}{algocf.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.3}Continual Learning with AWB}{51}{subsubsection.J.2.3}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces CL with Adaptive Weight Basis}}{51}{algocf.5}\protected@file@percent }
+\newlabel{alg:cl_awb}{{5}{51}{Continual Learning with AWB}{algocf.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.4}Preliminary Training}{51}{subsubsection.J.2.4}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {6}{\ignorespaces Preliminary Training}}{51}{algocf.6}\protected@file@percent }
+\newlabel{alg:prelim}{{6}{51}{Preliminary Training}{algocf.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.5}Continue Training}{52}{subsubsection.J.2.5}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {7}{\ignorespaces Continue Training (No Architecture Change)}}{52}{algocf.7}\protected@file@percent }
+\newlabel{alg:continue_train}{{7}{52}{Continue Training}{algocf.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.6}AWB Pipeline}{52}{subsubsection.J.2.6}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {8}{\ignorespaces Adaptive Weight Basis Pipeline}}{52}{algocf.8}\protected@file@percent }
+\newlabel{alg:awb_pipeline}{{8}{52}{AWB Pipeline}{algocf.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.7}Train A/B Matrices}{52}{subsubsection.J.2.7}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {9}{\ignorespaces Train A/B with W Frozen}}{52}{algocf.9}\protected@file@percent }
+\newlabel{alg:train_ab}{{9}{52}{Train A/B Matrices}{algocf.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.2.8}Train V}{53}{subsubsection.J.2.8}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {10}{\ignorespaces Train V with A/B Frozen}}{53}{algocf.10}\protected@file@percent }
+\newlabel{alg:train_v}{{10}{53}{Train V}{algocf.10}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {J.3}Supporting Algorithms}{53}{subsection.J.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.1}Hamiltonian Gradient Computation}{53}{subsubsection.J.3.1}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Hamiltonian Gradient Computation}}{53}{algocf.4}\protected@file@percent }
-\newlabel{alg:hamiltonian}{{4}{53}{Hamiltonian Gradient Computation}{algocf.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.2}Task Transition with Warmup}{53}{subsubsection.J.3.2}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {5}{\ignorespaces Task Transition with Warmup}}{53}{algocf.5}\protected@file@percent }
-\newlabel{alg:warmup}{{5}{53}{Task Transition with Warmup}{algocf.5}{}}
-\citation{rolnick2019experience}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.3}Adaptive Hyperparameter Computation}{54}{subsubsection.J.3.3}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {6}{\ignorespaces Adaptive Learning Rate and Gradient Weights}}{54}{algocf.6}\protected@file@percent }
-\newlabel{alg:adaptive}{{6}{54}{Adaptive Hyperparameter Computation}{algocf.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.4}Balanced Experience Replay}{54}{subsubsection.J.3.4}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {7}{\ignorespaces Balanced Experience Replay Buffer Sampling}}{54}{algocf.7}\protected@file@percent }
-\newlabel{alg:replay}{{7}{54}{Balanced Experience Replay}{algocf.7}{}}
-\citation{kolda2003optimization}
-\citation{loshchilov2016sgdr}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.5}AWB Architecture Change Decision}{55}{subsubsection.J.3.5}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {8}{\ignorespaces AWB Architecture Change Decision}}{55}{algocf.8}\protected@file@percent }
-\newlabel{alg:awb_decision}{{8}{55}{AWB Architecture Change Decision}{algocf.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.1}Hamiltonian Gradient}{53}{subsubsection.J.3.1}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {11}{\ignorespaces Hamiltonian Gradient Computation}}{53}{algocf.11}\protected@file@percent }
+\newlabel{alg:hamiltonian}{{11}{53}{Hamiltonian Gradient}{algocf.11}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.2}Task Warmup}{54}{subsubsection.J.3.2}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {12}{\ignorespaces Task Transition with Warmup}}{54}{algocf.12}\protected@file@percent }
+\newlabel{alg:warmup}{{12}{54}{Task Warmup}{algocf.12}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.3}Adaptive Hyperparameters}{54}{subsubsection.J.3.3}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {13}{\ignorespaces Adaptive LR and Gradient Weights}}{54}{algocf.13}\protected@file@percent }
+\newlabel{alg:adaptive}{{13}{54}{Adaptive Hyperparameters}{algocf.13}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.4}Balanced Replay}{54}{subsubsection.J.3.4}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {14}{\ignorespaces Balanced Experience Replay}}{54}{algocf.14}\protected@file@percent }
+\newlabel{alg:replay}{{14}{54}{Balanced Replay}{algocf.14}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.5}AWB Decision}{55}{subsubsection.J.3.5}\protected@file@percent }
+\@writefile{loa}{\contentsline {algocf}{\numberline {15}{\ignorespaces Architecture Change Decision}}{55}{algocf.15}\protected@file@percent }
+\newlabel{alg:awb_decision}{{15}{55}{AWB Decision}{algocf.15}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {J.3.6}Architecture Search}{55}{subsubsection.J.3.6}\protected@file@percent }
-\@writefile{loa}{\contentsline {algocf}{\numberline {9}{\ignorespaces NDDS Architecture Search}}{55}{algocf.9}\protected@file@percent }
-\newlabel{alg:arch_search}{{9}{55}{Architecture Search}{algocf.9}{}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {16}{\ignorespaces NDDS Architecture Search}}{55}{algocf.16}\protected@file@percent }
+\newlabel{alg:arch_search}{{16}{55}{Architecture Search}{algocf.16}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {J.4}Hyperparameter Reference}{55}{subsection.J.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {J.5}Implementation Notes}{55}{subsection.J.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.1}Gradient Normalization}{55}{subsubsection.J.5.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Default Hyperparameters for Standard CL Implementation}}{56}{table.4}\protected@file@percent }
-\newlabel{tab:hyperparameters}{{4}{56}{Default Hyperparameters for Standard CL Implementation}{table.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.2}Learning Rate Schedules}{56}{subsubsection.J.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.3}JAX Implementation}{56}{subsubsection.J.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.4}Model Partitioning}{57}{subsubsection.J.5.4}\protected@file@percent }
-\gdef \@abspage@last{57}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.2}Learning Rate Schedules}{55}{subsubsection.J.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.3}JAX Implementation}{55}{subsubsection.J.5.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Default Hyperparameters}}{56}{table.4}\protected@file@percent }
+\newlabel{tab:hyperparameters}{{4}{56}{Default Hyperparameters}{table.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {J.5.4}Model Partitioning}{56}{subsubsection.J.5.4}\protected@file@percent }
+\gdef \@abspage@last{56}

@@ -1068,12 +1068,38 @@ Figure~\ref{fig:sine_10task_comprehensive} shows detailed training dynamics with
 \includegraphics[width=1\linewidth]{paperFigures/noisydata1.png}
         \caption{Regression Experiment 3: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture when noise in the data is increased}\label{reg5noise}
     \end{figure}
+<<<<<<< Updated upstream
 \subsubsection{Experiment 3}
 For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model 
 %when the architecture is changed loss value 
 when we change the architecture at each step and we complete the low-rank transfer to retain learning. Since the blue graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning, we conclude that changing the architecture while also transferring learning at each task increases performance even when subsequent tasks  introduce large jumps in the loss function, thus violating Theorem~\ref{thm:contMeasure}.
 
 \subsection{MNIST Classification Experiments}
+=======
+\textbf{Experiment 3:} For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model
+%when the architecture is changed loss value
+when we change the architecture at each step and we complete the low-rank transfer to retain learning. Since the blue graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning, we conclude that changing the architecture while also transferring learning at each task increases performance even when subsequent tasks  introduce large jumps in the loss function, thus violating Theorem~\ref{thm:contMeasure}.
+
+Figure~\ref{fig:sine_noise_comprehensive} provides a comprehensive comparison across all four experimental conditions (C1--C4) on the noisy sine regression benchmark with 3 random seeds. Panel (a) shows test MSE on experience replay data, with C4 (AWB Full) achieving consistently lower error throughout training. Panel (b) displays Hamiltonian loss convergence on a logarithmic scale, demonstrating faster and more stable convergence for C4. Panel (c) shows gradient norm evolution, indicating training stability across conditions. Panels (d)--(f) summarize the continual learning metrics: C4 achieves the lowest average MSE ($0.0249 \pm 0.0001$) compared with the baseline C1 ($0.0259 \pm 0.0000$), representing a 4\% improvement. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/sine_noise_5task_3seed_results.pdf}
+    \caption{Noisy sine regression (5 tasks, 3 seeds): Comparison of conditions C1--C4 with noise introduced at each task. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting. C4 (AWB Full) achieves 4\% lower MSE than the baseline while maintaining positive backward transfer.}
+    \label{fig:sine_noise_comprehensive}
+\end{figure}
+
+\textbf{Architecture Evolution:} Figure~\ref{fig:arch_evolution} visualizes the Hamiltonian loss trajectory alongside architecture changes at task boundaries for C3 (architecture search only) and C4 (AWB full). Each label indicates the network architecture at that task (e.g., $[64,64]$ denotes two hidden layers with 64 neurons each). In C3, architecture changes occur without knowledge transfer, resulting in loss spikes at each transition. In C4, the AWB transfer mechanism preserves learned representations, leading to smoother transitions and consistently lower Hamiltonian loss. This visualization provides direct evidence that architecture adaptation combined with low-rank transfer (C4) outperforms architecture adaptation alone (C3).
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/hamiltonian_arch_evolution_c3c4.pdf}
+    \caption{Hamiltonian loss evolution with architecture changes marked at task boundaries. Top: C3 (architecture search without transfer). Bottom: C4 (AWB full with transfer). Labels show network architecture at each task transition. C4 demonstrates smoother transitions and lower overall loss due to the AWB transfer mechanism.}
+    \label{fig:arch_evolution}
+\end{figure}
+
+\subsection{MNIST Classification}
+>>>>>>> Stashed changes
 
 To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We split MNIST into 2 tasks by grouping digit pairs (digits 0--4 for Task 0, digits 5--9 for Task 1).
 

@@ -864,26 +864,24 @@ The previous methods all sought to expand the network in some fashion to increas
 In this paper we attempt to combine the most profitable aspects of methods such as CLEAS and CLoRA. In other words, our goal is to learn the optimal architecture for each task and utilize a low-rank transfer method to optimally transfer learning to the new architecture. The use of a LoRA-like method to easily guarantee transfer of learning from one architecture to another in standard CL has not been accomplished. Moreover, no previous algorithm has provided a theoretical mathematics framework to support the empirical data. 
 
 % \KR{start this}
-\section{Experimental Results}
+\section{Experimental Results}\label{sec: experiments}
 In this section we evaluate the algorithm in \ref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in Section~\ref{sec:motivation}? Does changing the architecture actually helps with learning over consecutive tasks~(Section~\ref{sec:upper_weight})? Does changing the architecture help improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? 
 
-
+%========datasets and Metrics============%
 \subsection{Datasets and Metrics}
 We examine these questions for three continual learning problems: regression, image classification, and graph classification.
 
-\textbf{Datasets:} We use four datasets in our experiments:
+\textbf{Datasets:} We utilize three data sets, one for each experiment.
 
 \begin{itemize}
-    \item \textbf{Sine Regression:} Each task is defined by a sine function $y = A \sin(\omega x + \phi) + \epsilon$, where $A$ is the amplitude, $\omega$ is the frequency, $\phi$ is the phase shift, and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase, creating functionally distinct mappings.
+    \item \textbf{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
 
-    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs. Each task contains two digit classes (e.g., digits 0-1 for Task 0, digits 2-3 for Task 1). Images are $28 \times 28$ grayscale.
-
-    \item \textbf{Omniglot:}~\cite{Lake_2015} This dataset contains 1,623 handwritten characters from 50 alphabets. We split tasks by randomly selecting character classes and applying rotational transformations.
+    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs. Each task contains two digit classes. For example, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale.
 
     \item \textbf{Synthetic Graphs:} We generate random heterogeneous graphs using PyTorch Geometric~\cite{pyg}. Tasks differ in node count, edge count, and connectivity patterns.
 \end{itemize}
 
-\textbf{Metrics:} We evaluate continual learning performance using standard metrics from the literature~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy.
+\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy, and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
 
 \begin{itemize}
     \item \textbf{Average Performance:} The mean performance across all tasks after training:
@@ -891,83 +889,126 @@ We examine these questions for three continual learning problems: regression, im
     \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i}
     \]
 
-    \item \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient}. For MSE (lower is better), positive BWT indicates improvement:
+    \item \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient}.
     \[
     \text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right)
     \]
+    Note that for MSE, positive BWT indicates improvement.
 
     \item \textbf{Forgetting:} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}:
     \[
     \text{Forgetting} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right)
     \]
+    \item \Ally{In some of the tables there is a "FWT" (forward transfer) metric. Should this be included here? }
 \end{itemize}
 
 For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
 
 \subsection{Experimental Conditions}
-To systematically evaluate our theoretical contributions, we define four experimental conditions. Each condition tests a specific aspect of our framework, allowing us to isolate the effects of architecture changes and knowledge transfer.
+To explore and thoroughly evaluate the theoretical work we have developed, we consider four experimental conditions. Each condition allows us to test a particular aspect of our theory by isolating the effects of learning architecture and transferring knowledge. Specific implementation details about each condition is included in Section ~\ref{sec:implementdetails}, but we provide an overview of each condition below for quick reference.
 
+
+%All the algorithms metioned below are in Appedix J
 \begin{itemize}
-    \item \textbf{C1 (Baseline):} Standard continual learning with fixed architecture. The network architecture $\psi$ remains constant across all tasks. Training uses a constant learning rate with no task warmup. This condition tests the baseline behavior discussed in Section~\ref{sec:motivation}. See Figure~\ref{fig:alg_conditions}(a).
+    \item \textbf{C1 (Baseline):} Standard continual learning with fixed architecture. The network architecture $\psi$ remains constant across all tasks as well as the learning rate. For this baseline comparison, we use a replay-driven continual learning approach which seeks to balance forgetting and generalization \cite{raghavan2021formalizing}, ~\cite{raghavan2023learningcontinuallysequencegraphs}. See Figure~\ref{fig:alg_conditions}(a) for a description of the algorithm.
 
-    \item \textbf{C2 (Heuristics):} Fixed architecture with training heuristics. The architecture $\psi$ remains fixed, but we add cosine learning rate decay, task warmup epochs (Algorithm~\ref{alg:warmup}), and adaptive gradient weights $[\alpha, \beta, \gamma]$ (Algorithm~\ref{alg:adaptive}). This condition tests whether empirical smoothing techniques alone can improve performance. See Figure~\ref{fig:alg_conditions}(b).
 
-    \item \textbf{C3 (Architecture Search Only):} Architecture search without knowledge transfer. At each task boundary, we search for a new architecture $\psi(t+1)$ using the NDDS method (Algorithm~\ref{alg:arch_search}). However, weights are randomly reinitialized after architecture changes---no $A$ and $B$ transfer matrices are used. This condition isolates the effect of architecture adaptation from knowledge transfer. See Figure~\ref{fig:alg_conditions}(c).
+    \item \textbf{C2 (Heuristics):} Fixed architecture with training heuristics. The architecture $\psi$ remains fixed, but we add cosine learning rate decay, task warm-up epochs (Algorithm~\ref{alg:warmup}), and adaptive gradient weights $[\alpha, \beta, \gamma]$ (Algorithm~\ref{alg:adaptive}). This condition tests whether empirical smoothing techniques alone can improve performance. See Figure~\ref{fig:alg_conditions}(b) for a full description of the algorithm.
 
-    \item \textbf{C4 (AWB Full):} Complete Adaptive Weight Basis pipeline. This is our full approach combining architecture search with low-rank knowledge transfer via $V = A \weight B^T$. When the architecture changes, we train $A$ and $B$ matrices (Algorithm~\ref{alg:train_ab}) to transfer knowledge from the old parameter space to the new one, as described in Theorem~\ref{thm:lower_HJB}. See Figure~\ref{fig:alg_conditions}(d).
+    \item \textbf{C3 (Architecture Search Only):} Architecture search without knowledge transfer. At each task, we search for a new architecture $\psi(t+1)$ using the NDDS method (Algorithm~\ref{DDSalg}). However, once the new architecture is determined, the weights are randomly re-initialized to the corresponding sizes rather than introducing transfer matrices $A$ and $B.$ The purpose of this method is to isolate the impact of architecture change from that of knowledge transfer. See Figure~\ref{fig:alg_conditions}(c) for an algorithm description.
+
+    \item \textbf{C4 (Knowledge Transfer via $AWB$):} This is our full approach, which combines architecture search with low-rank knowledge transfer via the  $V = A \weight B^T$. When the architecture changes, we train $A$ and $B$ matrices (Algorithm~\ref{alg:train_ab}) to transfer knowledge from the old parameter space to the new one, as described in Theorem~\ref{thm:lower_HJB}. See Figure~\ref{fig:alg_conditions}(d) for an algorithm description.
 \end{itemize}
 
-The comparison between C3 and C4 is critical: both conditions change the architecture, but only C4 transfers knowledge. This isolates the contribution of the low-rank transfer mechanism from architecture adaptation alone.
-
-\subsection{Implementation Details}
-
-\textbf{Experimental Infrastructure:}  All experiments were conducted on a 14-inch MacBook Pro (2024) with Apple M4 Pro chip (14-core CPU, 20-core GPU, 24 GB unified memory). The codebase uses JAX~\cite{jax} and Equinox~\cite{kidger2021equinox}. All runs used fixed random seeds for reproducibility. Code is available at \url{https://github.com/krm9c/ContLearn.git}.
-
-\subsubsection{Condition C1 and C2: Baseline Training}
-All conditions use a replay-driven continual learning approach~\cite{raghavan2021formalizing} with experience replay buffer size of 1,000. For graph experiments, we use the approach from~\cite{raghavan2023learningcontinuallysequencegraphs}.
-
-For C1, training uses constant learning rate $\eta = 10^{-4}$ with AdamW optimizer. No warmup or adaptive mechanisms are applied.
-
-For C2, we add three heuristics: (i) cosine learning rate decay from $10^{-4}$ to $10^{-6}$, (ii) task warmup for 50 epochs at the start of each new task, and (iii) adaptive gradient weights $[\alpha, \beta, \gamma]$ that adjust based on task transition difficulty.
-
-\subsubsection{Condition C3: Architecture Search}
-We use a neighborhood direct-directional search (NDDS) method to find optimal architectures. The search explores candidate architectures by incrementally adding neurons to hidden layers.
-
-\textbf{Feedforward Networks:} Starting from architecture $[10, 40, 40, 10]$ with step size 5, candidates $[10, 45, 40, 10]$, $[10, 40, 45, 10]$, and $[10, 45, 45, 10]$ are evaluated. Each candidate trains for 100 epochs. The best-performing architecture proceeds to the next round.
-
-\textbf{CNNs and GCNs:} The search jointly optimizes filter sizes (e.g., 2, 3, or 4) and neuron widths using a nested loop. For each filter size, multiple rounds of width optimization are performed.
-
-In C3, after finding a new architecture, weights are randomly reinitialized using Glorot uniform~\cite{GlorotB10}. No knowledge transfer occurs.
-
-\subsubsection{Condition C4: Knowledge Transfer via AWB}
-A key component of C4 is transferring learned knowledge from $\weight(t)$ to $\weight(t+1)$ through the $A$ and $B$ matrices. The transformation $V = A \weight B^T$ maps parameters between architectures of different sizes.
-
-At each architecture change: (i) freeze $\weight$ and initialize $A$, $B$ as trainable; (ii) train $A$ and $B$ using Adam for a fixed number of iterations; (iii) compute $\weight_{\text{new}} = A \weight B^T$ and continue training.
-
-For CNNs, separate $A$ and $B$ matrices handle convolutional filters and feedforward weights. For GCNs, matrices exist for each graph convolutional layer and feedforward layer.
-
-This transfer mechanism ensures continuity of the loss function across architecture changes, as established in Theorem~\ref{thm:lower_HJB}.
-
-% -----------------------------
-\subsection{Regression}~\label{sec:reg}
-
-\textbf{Dataset and Task Splits:}
-The sine dataset is a standard benchmark for continual learning in regression settings. Each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ This controlled variation across tasks provides a simple yet nontrivial setting to evaluate a model’s ability to learn sequentially and resist catastrophic forgetting. Task division is achieved by systematically varying the amplitude and/or phase for each task, creating functionally distinct mappings that require continual adaptation.
-
-\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers and 64 neurons in each hidden layer. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2--C4, we use cosine learning rate scheduling with 25 warmup epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. Full hyperparameter details are in Appendix~\ref{app:standard_cl}. We conduct three sets of experiments.
+The comparison of conditions C3 and C4 are crucial. Although both of the conditions change (learn) an optimal architecture, only C4 transfers knowledge. This isolates the contribution of the knowledge transfer from architecture search alone. 
 
 
-\begin{figure}
-        \centering
-        \includegraphics[width=1\linewidth]{paperFigures/regtask2.png}
-        \caption{Experiment 1: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstrain}
-\end{figure}
-\begin{figure}
+%========Implemnting details on device & conditions===%
+%references appendices
+
+\subsection{Implementation Details}\label{sec:implementdetails}
+
+\subsubsection{Experimental Infrastructure}  
+All experiments were conducted on a 14-inch MacBook Pro (2024) with Apple M4 Pro chip (14-core CPU, 20-core GPU, 24 GB unified memory) and the system ran macOS (Sequoia 15.6.1). The codebase uses JAX~\cite{jax} and Equinox~\cite{kidger2021equinox}. Experimental outputs were logged and visualized using TensorBoard. All runs used fixed random seeds for reproducibility. Code is available at \url{https://github.com/krm9c/ContLearn.git}.
+
+\subsubsection{Experimental Conditions Implementation Details}
+All conditions use a replay-driven continual learning approach, which seeks to balance forgetting and generalization demonstrated in ~\cite{raghavan2021formalizing} for regression and image classification experiments. For graph experiments, we use the similar approach outlined in ~\cite{raghavan2023learningcontinuallysequencegraphs} Note that we use an experience replay buffer size for all experiments and conditions.
+
+\paragraph{Conditions C1 and C2: Baseline Training }
+
+For C1, training uses constant learning rate $\eta = 10^{-4}$ with AdamW optimizer. No warm-up or adaptive mechanisms are applied.
+
+For C2, we add three heuristics to the baseline training conditions:
+\begin{itemize}
+    \item \textit{Heuristic 1:} Cosine learning rate decay from $10^{-4}$ to $10^{-6}.$
+    
+    \item \textit{Heuristic 2:} Task warm-up for $25$ epochs at the start of each new task. The purpose of the task warm-up is train on the next task for a select number of epochs prior to adjustments in other conditions. See Algorithm~\ref{alg:warmup} for implementation.
+
+    \item \textit{Heuristic 3:} Adaptive gradient weights $[\alpha, \beta, \gamma].$ Such weights adjust based on task transition difficulty, and are for current task, experience replay, and regularization, respectively. See Algorithm~\ref{alg:adaptive} for implementation.
+\end{itemize}
+
+\paragraph{Condition C3: Architecture Search }
+At each task, we use a neighborhood direct-directional search (NDDS) method to find an optimal architecture. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Below, we provide implementation examples of NDDS in the feedforward, CNN, and GCN settings, but see Section~\ref{archsearch} and Algorithm~\ref{DDSalg} for specific details.
+\begin{itemize}
+    \item \textit{Feedforward Networks:} Suppose we begin with an architecture of $[10,40,40,10]$ and our step size of our search is $4.$ Our candidates to be evaluated would be:  $[10, 45, 40, 10]$, $[10, 40, 45, 10]$, and $[10, 45, 45, 10].$ After training each candidate for $100$ epochs, the best-performing architecture (smallest loss value) will be chosen for the next round.
+
+    \item \textit{CNNs and GCNs:} To jointly search for optimal filter size and hidden layers, a nested loop is used. For each filter size, multiple rounds of step-wise candidate evaluations are completed, akin to the feedforward network setting.
+\end{itemize}
+
+
+After determining the new (optimal) architecture for the given task, we must adjust the weights matrices, as the current weights will not longer match the new architecture. In C3, we choose to randomly reinitialized using Glorot uniform~\cite{GlorotB10}. The random reinitialization allows us to evaluate the effect of architecture optimization alone, without transferring previously learned information.
+
+\paragraph{Condition C4: Knowledge Transfer via AWB }
+We again use NDDS method to find optimal architecture for our given task. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Once an optimal architecture is chosen, we must again adjust the weights matrices. In C4, we choose to transfer learned knowledge from $\weight(t)$ to $\weight(t+1)$ through the $A$ and $B$ matrices. The transformation $V = A \weight B^T$ maps parameters between architectures of different sizes, see Section~\ref{LRTsec}. 
+
+A key component of C4 is that we allowing training of the matrices $A$ and $B,$ while freezing the matrix $\weight,$ prior to set the new weights matrix to $V = A \weight B^T.$ This is crucial as it provides tuning of the matrices $A$ and $B$ before transferring the learning in $\weight.$
+To complete this process in practice, we perform the following steps:
+\begin{itemize}
+    \item[(1)] \textit{Freeze the weights matrix $\weight$ and initialize $A$ and $B$ matrices}: The appropriate sizes for the $A$ and $B$ matrices are chosen based on the new (optimal) architecture and the previous architecture. The goal is for $V = A \weight B^T$ to be the correct size for the new architecture. In Appendix~\ref{app: MLP AB}, we walk through an example of determining the correct sizes of $A$ and $B$ for each layer of a feedforward neural network, which is transitioning from an architecture of  $[64,128,128,10]$ to an architecture of $[64,256,256,10].$ In Appendix~\ref{app: CNN AB}, we complete an example similar example but for the CNN setting (i.e. accounting for filter and FFN transfer). Finally in Appendix~\ref{app: GCN}, we an example for the GCN setting.\\
+    
+    \item[(2)]\textit{Train $A$ and $B$ Matrices:} Training is completed for a fixed number of iterations using Adam. See Algorithm~\ref{alg:train_ab} for implementation details.\\
+
+    \item[(3)] \textit{Set $V = A\weight B^T$ and Train: } The weights are set to $V = A\weight B^T,$ which now corresponds to the new architecture of the network. We then the train the new weights and record necessary information. 
+\end{itemize}
+
+The transfer and training process ensures continuity of the loss function across architecture changes, as established in Theorem~\ref{thm:lower_HJB}. For a succinct description of C4, see Algorithm~\ref{alg:c4}.
+
+%=======Reg Experiments==============%
+\subsection{Regression Experiments}~\label{sec:reg}
+In this section, we complete and analyze  three regression experiments: learning two tasks, learning ten tasks, and learning five tasks with the introduction of noise into each task. In each experiment, we compare the four experimental conditions previously discussed.
+
+\subsubsection{Overview of Experiments}
+Below, we specify the details of data, task splits, and hyperparameter choices for such experiments.
+
+\textbf{Dataset and Task Splits:} As stated in the beginning of Section \ref{sec: experiments}, we will be utilizing a randomly generated sine dataset for our regression experiments, as it is a standard benchmark for continual learning in regression settings. Recall that each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ This controlled variation across tasks provides a simple, yet nontrivial, setting to evaluate a model’s ability to learn sequentially and resist catastrophic forgetting.
+
+\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2--C4, we use cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in Tables~\ref{tab:hyperparameters} and~\ref{tab:sine_hyperparams} of Appendix~\ref{app:standard_cl}
+
+
+% \begin{figure}
+%         \centering
+%         \includegraphics[width=1\linewidth]{paperFigures/regtask2.png}
+%         \caption{Experiment 1: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstrain}
+% \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1\linewidth]{paperFigures/origregtest.png}
+%     \caption{Experiment 1: Comparing loss values on test data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstest}
+% \end{figure}
+
+\begin{figure}[!htb]
     \centering
-    \includegraphics[width=1\linewidth]{paperFigures/origregtest.png}
-    \caption{Experiment 1: Comparing loss values on test data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstest}
+    \includegraphics[width=0.95\linewidth]{paperFigures/sine_2task_results.pdf}
+    \caption{Sine regression (2 tasks): Comparison of conditions C1--C4. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Average MSE showing C4 achieves 33\% improvement over baseline.}
+    \label{fig:sine_2task_comprehensive}
 \end{figure}
-\textbf{Experiment 1:} For the first experiment, we learn five tasks and train $500$ epochs on each task. We  record in Figure \ref{reg5taskstrain} the loss function progression with respect to training epochs. In this experiment we first examine the behavior of a standard CL regime where no change in the architecture is performed. This serves as our baseline and is depicted by the red graph. Next, the blue graph describes the loss value if we change the architecture at each task with random re-initialization. The green graph shows the loss value when our method of changing the architecture is used at each step low-rank transfer is utilized to retain learning.
+
+\subsubsection{Experiment 1}
+ For the first experiment, we learn two tasks and train $500$ epochs on each task. 
+ 
+ 
+ 
+ We  record in Figure \ref{reg5taskstrain} the loss function progression with respect to training epochs. In this experiment we first examine the behavior of a standard CL regime where no change in the architecture is performed (Condition C1). This serves as our baseline and is depicted by the red graph. Next, the blue graph describes the loss value if we change the architecture at each task with random re-initialization (Condition C3). The green graph shows the loss value when our method of changing the architecture is used at each step low-rank transfer is utilized to retain learning (Condition C4).
 
 We note from the red graph that, with the introduction of new tasks, the model's loss function does not reduce, indicating a stagnation of learning. This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in Lemma~\ref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. This behavior is observed through the red graph.
 
@@ -977,14 +1018,10 @@ The green graph displays a decrease in the loss value on the training data in co
 
 Figure~\ref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions (C1--C4) on a 2-task setup. Panel (a) shows test MSE on experience replay data, where C4 (AWB Full) achieves the lowest error throughout training. Panel (b) displays Hamiltonian loss evolution with C4 demonstrating faster convergence. Panel (c) summarizes average MSE: C4 achieves 33\% lower MSE than the baseline (0.019 vs 0.028). These results validate the theoretical conclusions from Theorem~\ref{thm:lower_HJB}.
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/sine_2task_results.pdf}
-    \caption{Sine regression (2 tasks): Comparison of conditions C1--C4. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Average MSE showing C4 achieves 33\% improvement over baseline.}
-    \label{fig:sine_2task_comprehensive}
-\end{figure}
 
-\textbf{Experiment 2:} For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of task. In this process we learn $10$ tasks of data and train $500$ epochs on each task and plot the loss values in Figure \ref{reg10taskstrain}. We compare the performance of the standard continual learning method used in \cite{raghavan2021formalizing} with no change made to the architecture across tasks and with our approach (represented by the blue curve) where the architecture is modified and the learning is transferred between the two tasks. We observe similar conclusions from Figures \ref{reg5taskstrain} and \ref{reg5taskstest} where changing the architecture and transferring learning are   helpful. In particular, the red curve is saturated after the first task and does not provide any improvement while the blue curve keeps on improving. After Task 6, however,  no more reduction in loss is seen. It is expected that after a few iterations of architecture search and transfer of learning, a new architecture with better performance is not found. Therefore, the approach does not provide any additional improvement. This behavior is an artifact of the architecture search method where better architectures cannot be found. We noted that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}. However, the theoretical conclusions are still valid with this approach, and the conclusions extend to the test dataset as in Figure \ref{reg10taskstest}.
+
+\subsubsection{Experiment 2}
+For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of task. In this process we learn $10$ tasks of data and train $500$ epochs on each task and plot the loss values in Figure \ref{reg10taskstrain}. We compare the performance of the standard continual learning method used in \cite{raghavan2021formalizing} with no change made to the architecture across tasks and with our approach (represented by the blue curve) where the architecture is modified and the learning is transferred between the two tasks. We observe similar conclusions from Figures \ref{reg5taskstrain} and \ref{reg5taskstest} where changing the architecture and transferring learning are   helpful. In particular, the red curve is saturated after the first task and does not provide any improvement while the blue curve keeps on improving. After Task 6, however,  no more reduction in loss is seen. It is expected that after a few iterations of architecture search and transfer of learning, a new architecture with better performance is not found. Therefore, the approach does not provide any additional improvement. This behavior is an artifact of the architecture search method where better architectures cannot be found. We noted that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}. However, the theoretical conclusions are still valid with this approach, and the conclusions extend to the test dataset as in Figure \ref{reg10taskstest}.
 
     
     \begin{figure}
@@ -1031,11 +1068,12 @@ Figure~\ref{fig:sine_10task_comprehensive} shows detailed training dynamics with
 \includegraphics[width=1\linewidth]{paperFigures/noisydata1.png}
         \caption{Regression Experiment 3: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture when noise in the data is increased}\label{reg5noise}
     \end{figure}
-\textbf{Experiment 3:} For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model 
+\subsubsection{Experiment 3}
+For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model 
 %when the architecture is changed loss value 
 when we change the architecture at each step and we complete the low-rank transfer to retain learning. Since the blue graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning, we conclude that changing the architecture while also transferring learning at each task increases performance even when subsequent tasks  introduce large jumps in the loss function, thus violating Theorem~\ref{thm:contMeasure}.
 
-\subsection{MNIST Classification}
+\subsection{MNIST Classification Experiments}
 
 To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We split MNIST into 2 tasks by grouping digit pairs (digits 0--4 for Task 0, digits 5--9 for Task 1).
 

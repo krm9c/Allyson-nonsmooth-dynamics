@@ -213,13 +213,13 @@ For a layer with weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$:
 
 \newpage
 
-\section{MLP AWB Calculation}
+\section{Feedforawrd Neural Network $AWB$ Matrix Calculation Example}\label{app: MLP AB}
+In this section, complete an explicit example determining the sizes for $A$ and $B$ matrices for each layer of a feedforward neural network to transfer learning from the architecture of $[64,128,128,10]$ to the architecture of $[64,256,256,10].$ 
 
-\subsection{Architecture Specification}
-
-\textbf{Original architecture:}
+\subsection{Original Architecture and Weights Matrix Specifications}
+We begin with the following architecture:
 \begin{equation}
-\text{sizes} = [64, 128, 128, 10]
+\text{Original architecture} = [64, 128, 128, 10]
 \end{equation}
 
 This defines a 3-layer network:
@@ -229,7 +229,16 @@ This defines a 3-layer network:
     \item Layer 2: $128 \rightarrow 10$ (second hidden to output)
 \end{itemize}
 
-\textbf{AWB architecture:}
+This 3-layer network provides us with the following weights matrices:
+\begin{align}
+\mathbf{W}_0 &\in \mathbb{R}^{128 \times 64} \quad \text{(maps $64 \rightarrow 128$)} \\
+\mathbf{W}_1 &\in \mathbb{R}^{128 \times 128} \quad \text{(maps $128 \rightarrow 128$)} \\
+\mathbf{W}_2 &\in \mathbb{R}^{10 \times 128} \quad \text{(maps $128 \rightarrow 10$)}
+\end{align}
+
+
+\subsection{Optimal Architecture Specifications}
+After completing an architecture search, it was determined that the following architecture was optimal:
 \begin{equation}
 \text{new\_arch} = [64, 256, 256, 10]
 \end{equation}
@@ -241,17 +250,9 @@ This expands hidden layers while preserving input (64) and output (10):
     \item Layer 2: $256 \rightarrow 10$
 \end{itemize}
 
-\subsection{Original Weight Matrices}
+\subsection{Determining Appropriate $A$ and $B$ Matrices}
 
-\begin{align}
-\mathbf{W}_0 &\in \mathbb{R}^{128 \times 64} \quad \text{(maps $64 \rightarrow 128$)} \\
-\mathbf{W}_1 &\in \mathbb{R}^{128 \times 128} \quad \text{(maps $128 \rightarrow 128$)} \\
-\mathbf{W}_2 &\in \mathbb{R}^{10 \times 128} \quad \text{(maps $128 \rightarrow 10$)}
-\end{align}
-
-\subsection{AWB Transformation Matrices}
-
-The transformation matrices are constructed as:
+Our goal is to obtain weights matrices $V$ such that which correspond to the new architecture. This is completed by determing matrices $A_i$ and $B_i$ for each layer $i$ such that $A_iW_iB_i^T = V_i.$  The transformation matrices are constructed as:
 
 \begin{align}
 \mathbf{A}_i &\in \mathbb{R}^{\text{new\_out}_i \times \text{old\_out}_i} \\
@@ -278,9 +279,12 @@ For each layer:
 \mathbf{B}_2 &\in \mathbb{R}^{256 \times 128} \quad \text{(input: $128 \rightarrow 256$)}
 \end{align}
 
-\newpage
 
-\subsection{Layer 0 Transformation}
+\subsection{Computing and Verifying Matrix $V$}
+
+Below we visually represent each layer transformation and complete a dimension verification.
+
+\textbf{Layer 0 Transformation:}
 
 \begin{equation}
 \mathbf{V}_0 = \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T
@@ -334,7 +338,7 @@ For each layer:
 &= (256 \times 64) \quad \checkmark
 \end{align}
 
-\subsection{Layer 1 Transformation}
+\textbf{Layer 1 Transformation}
 
 \begin{equation}
 \mathbf{V}_1 = \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T
@@ -347,7 +351,7 @@ For each layer:
     \draw[step=0.5,black,thin] (0,1) grid (2,5);
     \node at (1, 3) {\Large $\mathbf{A}_1$};
     \node[below] at (1, 0.7) {128};
-    \node[left] at (-0.3, 3) {256};
+    \node[left] at (-0.3, 3.6) {256};
 
     % Multiplication symbol
     \node at (2.7, 3) {\huge $\cdot$};
@@ -357,7 +361,7 @@ For each layer:
     \draw[step=0.5,black,thin] (3.4,1) grid (5.4,5);
     \node at (4.4, 3) {\Large $\mathbf{W}_1$};
     \node[below] at (4.4, 0.7) {128};
-    \node[left] at (3.1, 3) {128};
+    \node[left] at (3.1, 3.6) {128};
 
     % Multiplication symbol
     \node at (6.1, 3) {\huge $\cdot$};
@@ -367,7 +371,7 @@ For each layer:
     \draw[step=0.5,black,thin] (6.8,1.5) grid (10.8,4.5);
     \node at (8.8, 3) {\Large $\mathbf{B}_1^T$};
     \node[below] at (8.8, 1.2) {256};
-    \node[left] at (6.5, 3) {128};
+    \node[left] at (6.5, 3.6) {128};
 
     % Equals symbol
     \node at (11.5, 3) {\huge $=$};
@@ -377,7 +381,7 @@ For each layer:
     \draw[step=0.5,black,thin] (12.2,1.5) grid (16.2,4.5);
     \node at (14.2, 3) {\Large $\mathbf{V}_1$};
     \node[below] at (14.2, 1.2) {256};
-    \node[left] at (11.9, 3) {256};
+    \node[left] at (11.9, 3.6) {256};
 \end{tikzpicture}
 \end{center}
 
@@ -388,7 +392,7 @@ For each layer:
 &= (256 \times 256) \quad \checkmark
 \end{align}
 
-\subsection{Layer 2 Transformation}
+\textbf{Layer 2 Transformation}
 
 \begin{equation}
 \mathbf{V}_2 = \mathbf{A}_2 \mathbf{W}_2 \mathbf{B}_2^T
@@ -401,7 +405,7 @@ For each layer:
     \draw[step=0.5,black,thin] (0,1.5) grid (1.5,3.5);
     \node at (0.75, 2.5) {\Large $\mathbf{A}_2$};
     \node[below] at (0.75, 1.2) {10};
-    \node[left] at (-0.3, 4.5) {10};
+    \node[left] at (-0.3, 3.6) {10};
 
     % Multiplication symbol
     \node at (2.2, 2.5) {\huge $\cdot$};
@@ -411,7 +415,7 @@ For each layer:
     \draw[step=0.5,black,thin] (2.9,1.5) grid (6.9,3.5);
     \node at (4.9, 2.5) {\Large $\mathbf{W}_2$};
     \node[below] at (4.9, 1.2) {128};
-    \node[left] at (2.6, 4.5) {10};
+    \node[left] at (2.6, 3.6) {10};
 
     % Multiplication symbol
     \node at (7.6, 2.5) {\huge $\cdot$};
@@ -421,7 +425,7 @@ For each layer:
     \draw[step=0.5,black,thin] (8.3,1) grid (12.3,4);
     \node at (10.3, 2.5) {\Large $\mathbf{B}_2^T$};
     \node[below] at (10.3, 0.7) {256};
-    \node[left] at (8, 4.5) {128};
+    \node[left] at (8, 3.6) {128};
 
     % Equals symbol
     \node at (13, 2.5) {\huge $=$};
@@ -431,7 +435,7 @@ For each layer:
     \draw[step=0.5,black,thin] (13.7,1) grid (17.7,4);
     \node at (15.7, 2.5) {\Large $\mathbf{V}_2$};
     \node[below] at (15.7, 0.7) {256};
-    \node[left] at (13.4, 4.5) {10};
+    \node[left] at (13.4, 3.6) {10};
 \end{tikzpicture}
 \end{center}
 
@@ -443,31 +447,26 @@ For each layer:
 \end{align}
 
 \subsection{Summary}
+In the table below, we summarize the matrix size information. 
 
 \begin{table}[h]
 \centering
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-Layer & Original $\mathbf{W}$ & AWB $\mathbf{A}$ & AWB $\mathbf{B}$ & Result $\mathbf{V}$ \\
+Layer & Original $\mathbf{W}$ & $\mathbf{A}$ & $\mathbf{B}$ & Result $\mathbf{V = AWB^T}$ \\
 \midrule
 0 & $128 \times 64$ & $256 \times 128$ & $64 \times 64$ & $256 \times 64$ \\
 1 & $128 \times 128$ & $256 \times 128$ & $256 \times 128$ & $256 \times 256$ \\
 2 & $10 \times 128$ & $10 \times 10$ & $256 \times 128$ & $10 \times 256$ \\
 \bottomrule
 \end{tabular}
-\caption{MLP AWB transformation dimensions}
+\caption{FFN transformation dimensions}
 \end{table}
 
-\textbf{Key observations:}
-\begin{itemize}
-    \item Input dimension preserved: $64 \rightarrow 64$ (Layer 0 input)
-    \item Output dimension preserved: $10 \rightarrow 10$ (Layer 2 output)
-    \item Hidden layer expanded: $128 \rightarrow 256$ (Layers 0, 1, 2 hidden dimensions)
-\end{itemize}
 
 \newpage
 
-\section{CNN3D AWB Calculation}
+\section{CNN3D AWB Calculation}\label{app: CNN3d AB}
 
 CNN3D processes 3-channel images (e.g., CIFAR) with both convolutional and feed-forward layers.
 
@@ -667,7 +666,7 @@ This transformation is applied to each filter in each convolutional layer, expan
 
 \newpage
 
-\section{CNN AWB Calculation}
+\section{CNN AWB Calculation}\label{app: CNN AB}
 
 CNN processes single-channel images (e.g., MNIST) with one convolutional layer followed by feed-forward layers.
 
@@ -805,7 +804,7 @@ With AWB filters:
 
 \newpage
 
-\section{GCN AWB Calculation}
+\section{GCN AWB Calculation}\label{app: GCN}
 
 Graph Convolutional Networks (GCN) consist of graph convolutional layers followed by feed-forward layers for graph classification.
 

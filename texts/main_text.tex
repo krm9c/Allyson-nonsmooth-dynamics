@@ -1067,6 +1067,30 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
     \label{fig:mnist_comprehensive}
 \end{figure}
 
+\subsubsection{Transform Difficulty Analysis}
+\label{sec:transform_analysis}
+
+To understand the source of task-level performance variation in transform-based continual learning experiments, we analyze how affine transform parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle.
+
+Figure~\ref{fig:transform_heatmap} presents a 2D heatmap of classification accuracy as a function of rotation and shear angles. We trained a baseline CNN to 98\% accuracy on clean MNIST, then evaluated it on test images transformed with each (rotation, shear) combination. Several observations emerge:
+
+\begin{enumerate}
+    \item \textbf{Diagonal coupling effect}: The red dashed line marks where $\text{shear} = \text{rotation}$, which is our task generation strategy. Points along this diagonal experience both rotation and shear simultaneously, creating more severe distortion than either transform alone.
+
+    \item \textbf{Non-monotonic difficulty}: Accuracy does not decrease monotonically with angle magnitude. Certain angle combinations (particularly near $90^\circ$) create ambiguous digit shapes that confuse the classifier, while angles closer to $0^\circ$ or $180^\circ$ preserve more discriminative features.
+
+    \item \textbf{Task 3 anomaly}: The yellow circle highlights the transform parameters for Task 3 (rotation $\approx 92^\circ$, shear $\approx 92^\circ$), which achieves only 55--62\% accuracy---significantly lower than other tasks. This ``difficult region'' corresponds to transforms that create near-symmetric digit representations, particularly problematic for digits like `6' and `9' or `3' and `8'.
+\end{enumerate}
+
+The inset images show digit `3' at representative points: (a) original image, (b) $90^\circ$ rotation only, (c) $90^\circ$ shear only, and (d) combined $90^\circ$ rotation + shear, demonstrating the compounding effect. This analysis explains the anomalous accuracy drops observed at certain tasks and motivates the use of AWB's adaptive mechanism to handle such difficult task transitions.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}
+    \caption{MNIST transform difficulty analysis. Heatmap shows classification accuracy (\%) as a function of rotation and shear angles. The diagonal line (red dashed) indicates the task generation strategy where shear = rotation. White circles mark five task configurations (T0--T4), with Task 3 (yellow highlight) falling in a particularly difficult region near $92^\circ$. Inset images show digit `3' under different transforms: (a) original, (b) rotation only, (c) shear only, (d) combined.}
+    \label{fig:transform_heatmap}
+\end{figure}
+
 % \subsection{Omniglot Classification}
 
 

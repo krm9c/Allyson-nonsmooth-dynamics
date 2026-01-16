@@ -180,36 +180,36 @@ providing the result
 \end{proof}
 
 
-\section{Introduction}
+% \section{Introduction}
 
-\subsection{AWB Transformation Principle}
+% \subsection{AWB Transformation Principle}
 
-The Adaptive Weight Basis (AWB) enables architecture morphing during continual learning through the transformation:
+% The Adaptive Weight Basis (AWB) enables architecture morphing during continual learning through the transformation:
 
-\begin{equation}
-\mathbf{V} = \mathbf{A} \mathbf{W} \mathbf{B}^T
-\end{equation}
+% \begin{equation}
+% \mathbf{V} = \mathbf{A} \mathbf{W} \mathbf{B}^T
+% \end{equation}
 
-where:
-\begin{itemize}
-    \item $\mathbf{W}$: Original weight matrix from the previous architecture
-    \item $\mathbf{A}$: Output transformation matrix
-    \item $\mathbf{B}$: Input transformation matrix
-    \item $\mathbf{V}$: New weight matrix in the expanded architecture
-\end{itemize}
+% where:
+% \begin{itemize}
+%     \item $\mathbf{W}$: Original weight matrix from the previous architecture
+%     \item $\mathbf{A}$: Output transformation matrix
+%     \item $\mathbf{B}$: Input transformation matrix
+%     \item $\mathbf{V}$: New weight matrix in the expanded architecture
+% \end{itemize}
 
-\subsection{Key Invariant}
+% \subsection{Key Invariant}
 
-\textbf{Architecture morphing rule:} Input and output dimensions must be preserved, while hidden layer dimensions can be expanded.
+% \textbf{Architecture morphing rule:} Input and output dimensions must be preserved, while hidden layer dimensions can be expanded.
 
-\subsection{Notation}
+% \subsection{Notation}
 
-For a layer with weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$:
-\begin{itemize}
-    \item $n$ = input dimension (number of input features)
-    \item $m$ = output dimension (number of output features)
-    \item Forward pass: $\mathbf{y} = \mathbf{W}\mathbf{x}$ where $\mathbf{x} \in \mathbb{R}^n$, $\mathbf{y} \in \mathbb{R}^m$
-\end{itemize}
+% For a layer with weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$:
+% \begin{itemize}
+%     \item $n$ = input dimension (number of input features)
+%     \item $m$ = output dimension (number of output features)
+%     \item Forward pass: $\mathbf{y} = \mathbf{W}\mathbf{x}$ where $\mathbf{x} \in \mathbb{R}^n$, $\mathbf{y} \in \mathbb{R}^m$
+% \end{itemize}
 
 \newpage
 
@@ -463,30 +463,101 @@ Layer & Original $\mathbf{W}$ & $\mathbf{A}$ & $\mathbf{B}$ & Result $\mathbf{V 
 \caption{FFN transformation dimensions}
 \end{table}
 
-
 \newpage
 
-\section{CNN3D AWB Calculation}\label{app: CNN3d AB}
+\section{CNN3D AWB Calculation}\label{app: CNN3d AB}\label{app: CNN AB}
+CNN processes single-channel images (e.g., MNIST) with one convolutional layer followed by feed-forward layers. In this section, we complete an explicit example that determines the sizes for $A$ and $B$ matrices for each layer of a convolutional neural network to transfer learning. This includes the $A$ and $B$ matrices for both the filter and the feedforward portion of the neural network.
 
-CNN3D processes 3-channel images (e.g., CIFAR) with both convolutional and feed-forward layers.
-
-\subsection{Feed-Forward Layers}
-
-\textbf{Original architecture:}
+\subsection{Original Architecture}
+We begin with the following original architecture: 
 \begin{equation}
 \text{feed\_sizes} = [2304, 256, 10]
 \end{equation}
-
+and
+\begin{equation}
+    \text{filter\_size} = 3.
+\end{equation}
 After two conv+pool layers, the flattened feature size is 2304. This feeds into:
 \begin{itemize}
     \item Layer 0: $2304 \rightarrow 256$
     \item Layer 1: $256 \rightarrow 10$
 \end{itemize}
 
-\textbf{AWB architecture:}
+\subsection{Optimal Architecture Specifications}
+
+After completing an architecture search, it was determined that the following architecture was optimal:
 \begin{equation}
 \text{new\_arch} = [1600, 512, 10]
 \end{equation}
+and
+\begin{equation}
+    \text{filter\_size} = 5.
+\end{equation}
+
+\subsection{Determining Appropriate $A$ and $B$ Matrices}
+
+We need to obtain weights matrices for both the covolutional layer and the feed forward layers which correspond to the new architecture. This is completed by determines transfer matrices. We let $A_\text{filter}$ and $B_\text{filter}$ be the transfer matrices used to determine the new weights, denoted $V_\text{filter}$ for the convolutional layer. We let $A_i$ and $B_i$ be the transfer matrices used to determine the new weights, denoted $V_i$ for the feedforward layers. We break these calculations into two sections for clarity.\\
+
+\textbf{Convolutional Filter Transformation}\\
+
+Recall that the original filter size is $3$ and the new filter size is $5.$ For a single convolutional filter $\mathbf{W}_{\text{filter}}^{(i,c)}$ where $i$ is the output channel and $c$ is the input channel:
+
+\begin{equation}
+\mathbf{V}_{\text{filter}}^{(i,c)} = \mathbf{A}_{\text{conv}}^{(i,c)} \mathbf{W}_{\text{filter}}^{(i,c)} \mathbf{B}_{\text{conv}}^{(i,c)T}
+\end{equation}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+    % A matrix (5 x 3)
+    \draw[fill=matrixA, draw=black, thick] (0,1) rectangle (1.5,3.5);
+    \draw[step=0.5,black,thin] (0,1) grid (1.5,3.5);
+    \node at (0.75, 2.25) {$\mathbf{A}$};
+    \node[below] at (0.75, .7) {3};
+    \node[left] at (-0.3, 3) {5};
+
+    % Multiplication symbol
+    \node at (2.1, 2.25) {$\cdot$};
+
+    % W matrix (3 x 3)
+    \draw[fill=matrixW, draw=black, thick] (2.7,1) rectangle (4.2,3.5);
+    \draw[step=0.5,black,thin] (2.7,1) grid (4.2,3.5);
+    \node at (3.45, 2.25) {$\mathbf{W}$};
+    \node[below] at (3.45, 0.7) {3};
+    \node[left] at (2.4, 3) {3};
+
+    % Multiplication symbol
+    \node at (4.8, 2.25) {$\cdot$};
+
+    % B^T matrix (3 x 5)
+    \draw[fill=matrixB, draw=black, thick] (5.4,1.5) rectangle (7.9,3);
+    \draw[step=0.5,black,thin] (5.4,1.5) grid (7.9,3);
+    \node at (6.65, 2.25) {$\mathbf{B}^T$};
+    \node[below] at (6.65, 1.2) {5};
+    \node[left] at (5.1, 3) {3};
+
+    % Equals symbol
+    \node at (8.5, 2.25) {$=$};
+
+    % V matrix (5 x 5)
+    \draw[fill=matrixV, draw=black, thick] (9.1,1) rectangle (11.6,3.5);
+    \draw[step=0.5,black,thin] (9.1,1) grid (11.6,3.5);
+    \node at (10.35, 2.25) {$\mathbf{V}$};
+    \node[below] at (10.35, 0.7) {5};
+    \node[left] at (8.8, 3) {5};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Dimension verification:}
+\begin{align}
+\mathbf{V}_{\text{filter}} &= \mathbf{A} \mathbf{W}_{\text{filter}} \mathbf{B}^T \\
+&= (5 \times 3) \cdot (3 \times 3) \cdot (3 \times 5) \\
+&= (5 \times 5) \quad \checkmark
+\end{align}
+
+This transformation is applied to each filter in each convolutional layer, expanding the spatial kernel size from $3 \times 3$ to $5 \times 5$. Note that a single-channel would be used when training on the MNIST dataset. When using RGB dataset, we would use a three-channel network.
+
+
+\textbf{Feed-Forward Layers}
 
 With expanded filters (5×5 instead of 3×3), the flattened size becomes 1600:
 \begin{itemize}
@@ -494,7 +565,7 @@ With expanded filters (5×5 instead of 3×3), the flattened size becomes 1600:
     \item Layer 1: $512 \rightarrow 10$
 \end{itemize}
 
-\subsection{Feed Layer 0 Transformation}
+\textbf{Feed Layer 0 Transformation}
 
 \begin{equation}
 \mathbf{V}_0 = \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T
@@ -548,7 +619,7 @@ With expanded filters (5×5 instead of 3×3), the flattened size becomes 1600:
 &= (512 \times 1600) \quad \checkmark
 \end{align}
 
-\subsection{Feed Layer 1 Transformation}
+\textbf{Feed Layer 1 Transformation}
 
 \begin{equation}
 \mathbf{V}_1 = \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T
@@ -602,207 +673,147 @@ With expanded filters (5×5 instead of 3×3), the flattened size becomes 1600:
 &= (10 \times 512) \quad \checkmark
 \end{align}
 
-\subsection{Convolutional Filter Transformation}
-
-For a single convolutional filter $\mathbf{W}_{\text{filter}}^{(i,c)}$ where $i$ is the output channel and $c$ is the input channel:
-
-\textbf{Original filter:} $3 \times 3$ kernel
-
-\textbf{AWB filter:} $5 \times 5$ kernel
-
-\begin{equation}
-\mathbf{V}_{\text{filter}}^{(i,c)} = \mathbf{A}_{\text{conv}}^{(i,c)} \mathbf{W}_{\text{filter}}^{(i,c)} \mathbf{B}_{\text{conv}}^{(i,c)T}
-\end{equation}
-
-\begin{center}
-\begin{tikzpicture}[scale=1.0]
-    % A matrix (5 x 3)
-    \draw[fill=matrixA, draw=black, thick] (0,1) rectangle (1.5,3.5);
-    \draw[step=0.5,black,thin] (0,1) grid (1.5,3.5);
-    \node at (0.75, 2.25) {$\mathbf{A}$};
-    \node[below] at (0.75, 0.7) {3};
-    \node[left] at (-0.3, 4.25) {5};
-
-    % Multiplication symbol
-    \node at (2.1, 2.25) {$\cdot$};
-
-    % W matrix (3 x 3)
-    \draw[fill=matrixW, draw=black, thick] (2.7,1) rectangle (4.2,3.5);
-    \draw[step=0.5,black,thin] (2.7,1) grid (4.2,3.5);
-    \node at (3.45, 2.25) {$\mathbf{W}$};
-    \node[below] at (3.45, 0.7) {3};
-    \node[left] at (2.4, 4.25) {3};
-
-    % Multiplication symbol
-    \node at (4.8, 2.25) {$\cdot$};
-
-    % B^T matrix (3 x 5)
-    \draw[fill=matrixB, draw=black, thick] (5.4,1.5) rectangle (7.9,3);
-    \draw[step=0.5,black,thin] (5.4,1.5) grid (7.9,3);
-    \node at (6.65, 2.25) {$\mathbf{B}^T$};
-    \node[below] at (6.65, 1.2) {5};
-    \node[left] at (5.1, 4.25) {3};
-
-    % Equals symbol
-    \node at (8.5, 2.25) {$=$};
-
-    % V matrix (5 x 5)
-    \draw[fill=matrixV, draw=black, thick] (9.1,1) rectangle (11.6,3.5);
-    \draw[step=0.5,black,thin] (9.1,1) grid (11.6,3.5);
-    \node at (10.35, 2.25) {$\mathbf{V}$};
-    \node[below] at (10.35, 0.7) {5};
-    \node[left] at (8.8, 4.25) {5};
-\end{tikzpicture}
-\end{center}
-
-\textbf{Dimension verification:}
-\begin{align}
-\mathbf{V}_{\text{filter}} &= \mathbf{A} \mathbf{W}_{\text{filter}} \mathbf{B}^T \\
-&= (5 \times 3) \cdot (3 \times 3) \cdot (3 \times 5) \\
-&= (5 \times 5) \quad \checkmark
-\end{align}
-
-This transformation is applied to each filter in each convolutional layer, expanding the spatial kernel size from $3 \times 3$ to $5 \times 5$.
-
 \newpage
 
-\section{CNN AWB Calculation}\label{app: CNN AB}
+% \section{CNN AWB Calculation}\label{app: CNN AB}
 
-CNN processes single-channel images (e.g., MNIST) with one convolutional layer followed by feed-forward layers.
+% In this section, we complete an explicit example that determines the sizes for $A$ and $B$ matrices for each layer of a convolutional neural network to transfer learning. This includes the $A$ and $B$ matrices for both the filter and the feedforward portion of the neural network. 
 
-\subsection{Feed-Forward Layers}
+% CNN processes single-channel images (e.g., MNIST) with one convolutional layer followed by feed-forward layers.
 
-\textbf{Original architecture:}
-\begin{equation}
-\text{feed\_sizes} = [1728, 64, 10]
-\end{equation}
+% \subsection{Feed-Forward Layers}
 
-After conv+pool, the flattened size is 1728:
-\begin{itemize}
-    \item Layer 0: $1728 \rightarrow 64$
-    \item Layer 1: $64 \rightarrow 10$
-\end{itemize}
+% \textbf{Original architecture:}
+% \begin{equation}
+% \text{feed\_sizes} = [1728, 64, 10]
+% \end{equation}
 
-\textbf{AWB architecture:}
-\begin{equation}
-\text{new\_arch} = [1875, 700, 10]
-\end{equation}
+% After conv+pool, the flattened size is 1728:
+% \begin{itemize}
+%     \item Layer 0: $1728 \rightarrow 64$
+%     \item Layer 1: $64 \rightarrow 10$
+% \end{itemize}
 
-With AWB filters:
-\begin{itemize}
-    \item Layer 0: $1875 \rightarrow 700$
-    \item Layer 1: $700 \rightarrow 10$
-\end{itemize}
+% \textbf{AWB architecture:}
+% \begin{equation}
+% \text{new\_arch} = [1875, 700, 10]
+% \end{equation}
 
-\subsection{Feed Layer 0 Transformation}
+% With AWB filters:
+% \begin{itemize}
+%     \item Layer 0: $1875 \rightarrow 700$
+%     \item Layer 1: $700 \rightarrow 10$
+% \end{itemize}
 
-\begin{equation}
-\mathbf{V}_0 = \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T
-\end{equation}
+% \subsection{Feed Layer 0 Transformation}
 
-\begin{center}
-\begin{tikzpicture}[scale=0.7]
-    % A0 matrix (700 x 64)
-    \draw[fill=matrixA, draw=black, thick] (0,1) rectangle (1.5,6);
-    \draw[step=0.5,black,thin] (0,1) grid (1.5,6);
-    \node at (0.75, 3.5) {\Large $\mathbf{A}_0$};
-    \node[below] at (0.75, 0.7) {64};
-    \node[left] at (-0.3, 4.5) {700};
+% \begin{equation}
+% \mathbf{V}_0 = \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T
+% \end{equation}
 
-    % Multiplication symbol
-    \node at (2.2, 3.5) {\huge $\cdot$};
+% \begin{center}
+% \begin{tikzpicture}[scale=0.7]
+%     % A0 matrix (700 x 64)
+%     \draw[fill=matrixA, draw=black, thick] (0,1) rectangle (1.5,6);
+%     \draw[step=0.5,black,thin] (0,1) grid (1.5,6);
+%     \node at (0.75, 3.5) {\Large $\mathbf{A}_0$};
+%     \node[below] at (0.75, 0.7) {64};
+%     \node[left] at (-0.3, 4.5) {700};
 
-    % W0 matrix (64 x 1728)
-    \draw[fill=matrixW, draw=black, thick] (2.9,2.5) rectangle (8.9,4.5);
-    \draw[step=0.5,black,thin] (2.9,2.5) grid (8.9,4.5);
-    \node at (5.9, 3.5) {\Large $\mathbf{W}_0$};
-    \node[below] at (5.9, 2.2) {1728};
-    \node[left] at (2.6, 4.5) {64};
+%     % Multiplication symbol
+%     \node at (2.2, 3.5) {\huge $\cdot$};
 
-    % Multiplication symbol
-    \node at (9.6, 3.5) {\huge $\cdot$};
+%     % W0 matrix (64 x 1728)
+%     \draw[fill=matrixW, draw=black, thick] (2.9,2.5) rectangle (8.9,4.5);
+%     \draw[step=0.5,black,thin] (2.9,2.5) grid (8.9,4.5);
+%     \node at (5.9, 3.5) {\Large $\mathbf{W}_0$};
+%     \node[below] at (5.9, 2.2) {1728};
+%     \node[left] at (2.6, 4.5) {64};
 
-    % B0^T matrix (1728 x 1875)
-    \draw[fill=matrixB, draw=black, thick] (10.3,1.5) rectangle (16.3,5.5);
-    \draw[step=0.5,black,thin] (10.3,1.5) grid (16.3,5.5);
-    \node at (13.3, 3.5) {\Large $\mathbf{B}_0^T$};
-    \node[below] at (13.3, 1.2) {1875};
-    \node[left] at (10, 4.5) {1728};
+%     % Multiplication symbol
+%     \node at (9.6, 3.5) {\huge $\cdot$};
 
-    % Equals symbol
-    \node at (17, 3.5) {\huge $=$};
+%     % B0^T matrix (1728 x 1875)
+%     \draw[fill=matrixB, draw=black, thick] (10.3,1.5) rectangle (16.3,5.5);
+%     \draw[step=0.5,black,thin] (10.3,1.5) grid (16.3,5.5);
+%     \node at (13.3, 3.5) {\Large $\mathbf{B}_0^T$};
+%     \node[below] at (13.3, 1.2) {1875};
+%     \node[left] at (10, 4.5) {1728};
 
-    % V0 matrix (700 x 1875)
-    \draw[fill=matrixV, draw=black, thick] (17.7,1.5) rectangle (23.7,5.5);
-    \draw[step=0.5,black,thin] (17.7,1.5) grid (23.7,5.5);
-    \node at (20.7, 3.5) {\Large $\mathbf{V}_0$};
-    \node[below] at (20.7, 1.2) {1875};
-    \node[left] at (17.4, 4.5) {700};
-\end{tikzpicture}
-\end{center}
+%     % Equals symbol
+%     \node at (17, 3.5) {\huge $=$};
 
-\textbf{Dimension verification:}
-\begin{align}
-\mathbf{V}_0 &= \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T \\
-&= (700 \times 64) \cdot (64 \times 1728) \cdot (1728 \times 1875) \\
-&= (700 \times 1875) \quad \checkmark
-\end{align}
+%     % V0 matrix (700 x 1875)
+%     \draw[fill=matrixV, draw=black, thick] (17.7,1.5) rectangle (23.7,5.5);
+%     \draw[step=0.5,black,thin] (17.7,1.5) grid (23.7,5.5);
+%     \node at (20.7, 3.5) {\Large $\mathbf{V}_0$};
+%     \node[below] at (20.7, 1.2) {1875};
+%     \node[left] at (17.4, 4.5) {700};
+% \end{tikzpicture}
+% \end{center}
 
-\subsection{Feed Layer 1 Transformation}
+% \textbf{Dimension verification:}
+% \begin{align}
+% \mathbf{V}_0 &= \mathbf{A}_0 \mathbf{W}_0 \mathbf{B}_0^T \\
+% &= (700 \times 64) \cdot (64 \times 1728) \cdot (1728 \times 1875) \\
+% &= (700 \times 1875) \quad \checkmark
+% \end{align}
 
-\begin{equation}
-\mathbf{V}_1 = \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T
-\end{equation}
+% \subsection{Feed Layer 1 Transformation}
 
-\begin{center}
-\begin{tikzpicture}[scale=0.8]
-    % A1 matrix (10 x 10)
-    \draw[fill=matrixA, draw=black, thick] (0,1.5) rectangle (1.5,3.5);
-    \draw[step=0.5,black,thin] (0,1.5) grid (1.5,3.5);
-    \node at (0.75, 2.5) {\Large $\mathbf{A}_1$};
-    \node[below] at (0.75, 1.2) {10};
-    \node[left] at (-0.3, 4.5) {10};
+% \begin{equation}
+% \mathbf{V}_1 = \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T
+% \end{equation}
 
-    % Multiplication symbol
-    \node at (2.2, 2.5) {\huge $\cdot$};
+% \begin{center}
+% \begin{tikzpicture}[scale=0.8]
+%     % A1 matrix (10 x 10)
+%     \draw[fill=matrixA, draw=black, thick] (0,1.5) rectangle (1.5,3.5);
+%     \draw[step=0.5,black,thin] (0,1.5) grid (1.5,3.5);
+%     \node at (0.75, 2.5) {\Large $\mathbf{A}_1$};
+%     \node[below] at (0.75, 1.2) {10};
+%     \node[left] at (-0.3, 4.5) {10};
 
-    % W1 matrix (10 x 64)
-    \draw[fill=matrixW, draw=black, thick] (2.9,1.5) rectangle (5.9,3.5);
-    \draw[step=0.5,black,thin] (2.9,1.5) grid (5.9,3.5);
-    \node at (4.4, 2.5) {\Large $\mathbf{W}_1$};
-    \node[below] at (4.4, 1.2) {64};
-    \node[left] at (2.6, 4.5) {10};
+%     % Multiplication symbol
+%     \node at (2.2, 2.5) {\huge $\cdot$};
 
-    % Multiplication symbol
-    \node at (6.6, 2.5) {\huge $\cdot$};
+%     % W1 matrix (10 x 64)
+%     \draw[fill=matrixW, draw=black, thick] (2.9,1.5) rectangle (5.9,3.5);
+%     \draw[step=0.5,black,thin] (2.9,1.5) grid (5.9,3.5);
+%     \node at (4.4, 2.5) {\Large $\mathbf{W}_1$};
+%     \node[below] at (4.4, 1.2) {64};
+%     \node[left] at (2.6, 4.5) {10};
 
-    % B1^T matrix (64 x 700)
-    \draw[fill=matrixB, draw=black, thick] (7.3,1) rectangle (11.3,4);
-    \draw[step=0.5,black,thin] (7.3,1) grid (11.3,4);
-    \node at (9.3, 2.5) {\Large $\mathbf{B}_1^T$};
-    \node[below] at (9.3, 0.7) {700};
-    \node[left] at (7, 4.5) {64};
+%     % Multiplication symbol
+%     \node at (6.6, 2.5) {\huge $\cdot$};
 
-    % Equals symbol
-    \node at (12, 2.5) {\huge $=$};
+%     % B1^T matrix (64 x 700)
+%     \draw[fill=matrixB, draw=black, thick] (7.3,1) rectangle (11.3,4);
+%     \draw[step=0.5,black,thin] (7.3,1) grid (11.3,4);
+%     \node at (9.3, 2.5) {\Large $\mathbf{B}_1^T$};
+%     \node[below] at (9.3, 0.7) {700};
+%     \node[left] at (7, 4.5) {64};
 
-    % V1 matrix (10 x 700)
-    \draw[fill=matrixV, draw=black, thick] (12.7,1) rectangle (16.7,4);
-    \draw[step=0.5,black,thin] (12.7,1) grid (16.7,4);
-    \node at (14.7, 2.5) {\Large $\mathbf{V}_1$};
-    \node[below] at (14.7, 0.7) {700};
-    \node[left] at (12.4, 4.5) {10};
-\end{tikzpicture}
-\end{center}
+%     % Equals symbol
+%     \node at (12, 2.5) {\huge $=$};
 
-\textbf{Dimension verification:}
-\begin{align}
-\mathbf{V}_1 &= \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T \\
-&= (10 \times 10) \cdot (10 \times 64) \cdot (64 \times 700) \\
-&= (10 \times 700) \quad \checkmark
-\end{align}
+%     % V1 matrix (10 x 700)
+%     \draw[fill=matrixV, draw=black, thick] (12.7,1) rectangle (16.7,4);
+%     \draw[step=0.5,black,thin] (12.7,1) grid (16.7,4);
+%     \node at (14.7, 2.5) {\Large $\mathbf{V}_1$};
+%     \node[below] at (14.7, 0.7) {700};
+%     \node[left] at (12.4, 4.5) {10};
+% \end{tikzpicture}
+% \end{center}
 
-\newpage
+% \textbf{Dimension verification:}
+% \begin{align}
+% \mathbf{V}_1 &= \mathbf{A}_1 \mathbf{W}_1 \mathbf{B}_1^T \\
+% &= (10 \times 10) \cdot (10 \times 64) \cdot (64 \times 700) \\
+% &= (10 \times 700) \quad \checkmark
+% \end{align}
+
+% \newpage
 
 \section{GCN AWB Calculation}\label{app: GCN}
 

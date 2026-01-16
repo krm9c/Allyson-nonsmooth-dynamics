@@ -209,7 +209,7 @@ The goal of this section is to formalize the mathematical modeling required to i
     The number $k$ is the order of the Sobolev space, and the Sobolev space norm is defined as 
     \[ \|f\|_{\sobolev} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} f \|_{L^{p}(\domain)}.\]
 \end{definition}
-% \Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. So, should we flip this part by saying it is only practical to assume we have a finite set which is automatically closed and bounded and hence compact? What is currently here, to me, sounds like "because it is a subset of $\rn$ we can assume it is compact and closed by H-B," which is not true. Additionally, a "domain" is an open and connected subset. In this context, do we mean "domain" in the sense of "points which can be inputs" rather than the topological definition? If so, is this something the audience knows?}
+\Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. The makes it sound like "because it's a subset it's automatically compact," which is not true. I think want to assume the set is closed and bounded because the data set will always be finite in practice. Then, we get that the set is compact as a result of Heine-Borel.}
 In Definition \ref{defn:sobo}, two key notions must be highlighted. First, the $\domain$ is by definition a subset of $\rn,$ which by virtue of the Heine--Borel theorem of ~\cite{rudin1976principles} is compact and closed. The implications of this assumption are important. $\domain$, in this context, is the data sample space, and therefore the assumption of compact and closedness applies to the data space. For any standard AI application, this assumption implies that the data space is finite and the numerical values are bounded. Both are notable practical considerations that must be followed in any AI model training as it is well known that  without the normalization, the AI model training fails to converge~\cite{huang2023normalization}. 
 GAIL - Here and throughout, this way of referencing seems a bit odd -- having the author name followed by parens and the date but not separation from the text -- usually one has (Author year) or "as discussed by author (year), not just "fails to converge Huang et al. (2023)" -- as if Huang et al. wee failing to converge!
 
@@ -471,8 +471,7 @@ To begin, we prove that the expected value function, that is, $\int_{\vx\in A}
     \end{align*}
     as desired.
 \end{proof}
-Now we show that two tasks $\tx(t), \tx(t+1)$  when similar~(connected sets) such that $\mu(\tx(t)\bigtriangleup \tx(t+1))<\delta$ imply that $\abs{\clcost-\clcostt}<\varepsilon$ for a small $\varepsilon >0$  with a  $\delta >0.$
-We prove this result in the following lemma. 
+Now, we show that if two tasks $\tx(t), \tx(t+1)$  are similar, then the corresponding loss values are similar. We prove this result in the following lemma. 
 \begin{lemma}
     Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as 
     defined in Definition~\ref{defintersect}. 
@@ -483,10 +482,10 @@ We prove this result in the following lemma.
         \clcost & =\int_0^t \ea \;  d~\tau  = \int_{\vx\in \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(\tau),\psi(\tau))( \vx ) )d\tau . 
     \end{align}
     Let $\varepsilon >0$ and $\delta(\varepsilon)>0$ chosen such that $\ea$ is continuous w.r.t. measure $\mu$.
-    Then, if
-    $\mu(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau))<\delta$ implies 
-    $\abs{\clcostt- \clcost} \leq \varepsilon$ with $\Delta t = 1.$
-    GAIL - I don't follow the preceding: If XXX less than delta implies YYY -- where is the If... then part?
+    Then, for $\Delta t = 1,$
+    $\mu(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau))<\delta$, implies
+    $\abs{\clcostt- \clcost} \leq \varepsilon.$
+    %GAIL - I don't follow the preceding: If XXX less than delta implies YYY -- where is the If... then part?
 \end{lemma}
 
 \begin{proof}
@@ -806,7 +805,7 @@ Before we dive into the steps of this method, let us set some assumptions and no
 
 In order of appearance, we assign the values of $\psi(t)$ to the values $r_i,s_i$ for each $i$ such that $1\leq i\leq d.$ If $\psi^*(t)$ represents the optimal architecture returned from the NDDS completed for task $t,$ then similarly we can assign the values of the dimensions of the weights matrices of each layer of $\psi_i^*(t)$ to be $a_i,b_i$ for $1\leq i\leq d.$ Our goal is to utilize the original weights matrices to project into the weights matrix space for the new architecture.
 
-To begin, we initialize dimension $3$ tensors $\mathrm{A}(t),\mathrm{B}(t),$ which  each comprise  $d$ matrices. Let each matrix $\mathrm{A}_i(t)$ in $\mathrm{A}(t)$ be randomly generated with dimensions $a_i\times r_i$ for $1\leq i\leq d.$ Similarly, let each matrix $\mathrm{B}_i $ in $\mathrm{B}(t)$ be randomly generated with size $b_i\times s_i$ for $1\leq i\leq d.$ Then, set $C(t) = \mathrm{A}(t)\weight(t)\mathrm{B}^T(t).$ More specifically $C(t)$  comprises $d$ matrices such that $C_i(t) = \mathrm{A}_i(t)\weight_i(t)B^T_i(t)$ for all $1\leq i\leq d.$ Notice that the dimensions of each $C_i(t)$ are $a_i\times b_i.$ These are the dimensions of the weights matrices for a neural netowrk with the new optimal architecture $\psi^*(t).$ See Figure \ref{LRT} to understand the construction of $C(t)$ more explicitly.
+To begin, we initialize dimension $3$ tensors $\mathrm{A}(t),\mathrm{B}(t),$ which  each comprise  $d$ matrices. Let each matrix $\mathrm{A}_i(t)$ in $\mathrm{A}(t)$ be randomly generated with dimensions $a_i\times r_i$ for $1\leq i\leq d.$ Similarly, let each matrix $\mathrm{B}_i $ in $\mathrm{B}(t)$ be randomly generated with size $b_i\times s_i$ for $1\leq i\leq d.$ Then, set $C(t) = \mathrm{A}(t)\weight(t)\mathrm{B}^T(t).$ More specifically $C(t)$  comprises $d$ matrices such that $C_i(t) = \mathrm{A}_i(t)\weight_i(t)B^T_i(t)$ for all $1\leq i\leq d.$ Notice that the dimensions of each $C_i(t)$ are $a_i\times b_i.$ These are the dimensions of the weights matrices for a neural network with the new optimal architecture $\psi^*(t).$ See Figure \ref{LRT} to understand the construction of $C(t)$ more explicitly.
     \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{paperFigures/CLsolution1.png}
@@ -982,19 +981,7 @@ Below, we specify the details of data, task splits, and hyperparameter choices f
 
 \textbf{Dataset and Task Splits:} As stated in the beginning of Section \ref{sec: experiments}, we will be utilizing a randomly generated sine dataset for our regression experiments, as it is a standard benchmark for continual learning in regression settings. Recall that each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ This controlled variation across tasks provides a simple, yet nontrivial, setting to evaluate a model’s ability to learn sequentially and resist catastrophic forgetting.
 
-\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2--C4, we use cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in Tables~\ref{tab:hyperparameters} and~\ref{tab:sine_hyperparams} of Appendix~\ref{app:standard_cl}
-
-
-% \begin{figure}
-%         \centering
-%         \includegraphics[width=1\linewidth]{paperFigures/regtask2.png}
-%         \caption{Experiment 1: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstrain}
-% \end{figure}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=1\linewidth]{paperFigures/origregtest.png}
-%     \caption{Experiment 1: Comparing loss values on test data for baseline continual learning method and method of learning optimal task architecture}\label{reg5taskstest}
-% \end{figure}
+\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2,C3, and C4 we use a cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in Tables~\ref{tab:hyperparameters} and~\ref{tab:sine_hyperparams} of Appendix~\ref{app:standard_cl}
 
 \begin{figure}[!htb]
     \centering
@@ -1004,41 +991,23 @@ Below, we specify the details of data, task splits, and hyperparameter choices f
 \end{figure}
 
 \subsubsection{Experiment 1}
- For the first experiment, we learn two tasks and train $500$ epochs on each task. 
+ For the first experiment, we learn two tasks and train $500$ epochs on each task. Figure ~\ref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions for this two task experiment. In ~\ref{fig:sine_2task_comprehensive} (b), with introduction of a new task, we observe that the model's Hamiltonian loss does not reduce under baseline CL condition (C1) or Heuristic condition (C2). This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in Lemma~\ref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. 
  
- 
- 
- We  record in Figure \ref{reg5taskstrain} the loss function progression with respect to training epochs. In this experiment we first examine the behavior of a standard CL regime where no change in the architecture is performed (Condition C1). This serves as our baseline and is depicted by the red graph. Next, the blue graph describes the loss value if we change the architecture at each task with random re-initialization (Condition C3). The green graph shows the loss value when our method of changing the architecture is used at each step low-rank transfer is utilized to retain learning (Condition C4).
+To obviate this behavior, we seek to change the architecture on the fly. The architecture is changed with random reinitialization of weights in C3, and in C4 the architecture is changed with knowledge transfer of weights via transfer matrices $A$ and $B.$ In ~\ref{fig:sine_2task_comprehensive} (b) and (c), we observe that while the architecture search alone (C3) reduces the Hamiltonian loss compared to the baseline (C1) or Heuristics (C2) by 7\%, 
+with the addition of the $AWB$ transfer (C4), we achieve a 33\% improvement over the baseline (C1). 
 
-We note from the red graph that, with the introduction of new tasks, the model's loss function does not reduce, indicating a stagnation of learning. This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in Lemma~\ref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. This behavior is observed through the red graph.
-
-To obviate this behavior, we seek to change the architecture on the fly. The progression of the loss function with changing architecture on the fly is shown in the blue curve. However, this process introduces a small spike at the onset of each new task. Notably, with the blue curve the weights are initialized at random after the new architecture is chosen, and therefore the continuity of the loss function across two subsequent task is not upheld by the model, indicated by the spikes in the loss progression. We note that even with the new architecture, the model does improve over the red curve. There are two reasons. First, in many cases the initialization point of the model for the new task biases the learning for the new task, and new information therefore is not learned effectively. Second, we simply needed to learn the new task for a larger number of epochs.  The blue graph suggests that changing architecture without transfer of learning from previous tasks to the next task leads to loss of learning. 
-
-The green graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning and the case when the architecture is changed without transfer. We can deduce that changing the architecture and transferring learning across tasks leads to increased performance. We see that at the onset of each new task there is still a small spike in the loss function. This spike is expected because there is a change in the size of the parameter space. This implies  that with the presence of transfer between the parameters spaces, the loss function drops drastically. We note that the transfer between parameter spaces not only counters the effect of changing tasks, as proved in Theorem~\ref{thm:lower_HJB}, but also intuitively provides a better starting point for learning the new tasks. The difference is that learning behavior between the red curve and the green curve implies that the conclusions from Lemmas~\ref{lem:upper_arch} and \ref{lem:upper_weight} are indeed valid where change in the architecture  lowers in the upper bound indicated by the lower loss values. All conclusions from Figure~\ref{reg5taskstrain} extend to Figure \ref{reg5taskstest}, where the test loss values are graphed.
-
-Figure~\ref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions (C1--C4) on a 2-task setup. Panel (a) shows test MSE on experience replay data, where C4 (AWB Full) achieves the lowest error throughout training. Panel (b) displays Hamiltonian loss evolution with C4 demonstrating faster convergence. Panel (c) summarizes average MSE: C4 achieves 33\% lower MSE than the baseline (0.019 vs 0.028). These results validate the theoretical conclusions from Theorem~\ref{thm:lower_HJB}.
-
+We note that the transfer between parameter spaces completed in C4 not only counters the effect of changing tasks, as proved in Theorem~\ref{thm:lower_HJB}, but also intuitively provides a better starting point for learning the new tasks. The difference is that learning behavior between the baseline (C1) and $AWB$ Full (C4) implies that the conclusions from Lemmas~\ref{lem:upper_arch} and \ref{lem:upper_weight} are indeed valid, where change in the architecture lowers the upper bound indicated by the lower loss values. All conclusions from Figure~\ref{fig:sine_2task_comprehensive} (b) extend to Figure \ref{fig:sine_2task_comprehensive} (c), where the test MSE values are graphed.
 
 
 \subsubsection{Experiment 2}
-For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of task. In this process we learn $10$ tasks of data and train $500$ epochs on each task and plot the loss values in Figure \ref{reg10taskstrain}. We compare the performance of the standard continual learning method used in \cite{raghavan2021formalizing} with no change made to the architecture across tasks and with our approach (represented by the blue curve) where the architecture is modified and the learning is transferred between the two tasks. We observe similar conclusions from Figures \ref{reg5taskstrain} and \ref{reg5taskstest} where changing the architecture and transferring learning are   helpful. In particular, the red curve is saturated after the first task and does not provide any improvement while the blue curve keeps on improving. After Task 6, however,  no more reduction in loss is seen. It is expected that after a few iterations of architecture search and transfer of learning, a new architecture with better performance is not found. Therefore, the approach does not provide any additional improvement. This behavior is an artifact of the architecture search method where better architectures cannot be found. We noted that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}. However, the theoretical conclusions are still valid with this approach, and the conclusions extend to the test dataset as in Figure \ref{reg10taskstest}.
+For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of tasks. In this process, we learn $10$ tasks of data and train $500$ epochs on each task. To ensure statistical reliability we run this $10$ task experiment with three random seeds. The results and an extensive comparison of the four conditions is provided in Figure~\ref{fig:sine_10task_comprehensive} and Table~\ref{tab:sine_cl_metrics}. In Table~\ref{tab:sine_cl_metrics}, we observe that AWB Full (C4) achieves a 39\% reduction in average MSE compared to the baseline (C1). Additionally, we see a 37\% reduction in forgetting over the baseline (0.0144 vs. 0.0227) and an increase in backwards transfer. More importantly though, AWB Full (C4) achieves a 37\% improvement in average MSE and 35\% improvement in forgetting in comparison to architecture search alone without knowledge transfer (C3). This is crucial, as we again observe the significant impact of transferring knowledge over architecture search alone, and we validate the theory we developed. These concludes are also reflected in the test MSE displayed in Figure~\ref{fig:sine_10task_comprehensive} (a), and the gradient norm evolution in (c) indicates training stability.
 
-    
-    \begin{figure}
-        \centering
-        \includegraphics[width=.95\linewidth]{paperFigures/reg10tasks.png}
-        \caption{Regression Experiment 2: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}\label{reg10taskstrain}
-    \end{figure}
-    \begin{figure}
-        \centering
-        \includegraphics[width=.95\linewidth]{paperFigures/reg10Test.png}
-        \caption{Regression Experiment 2: Comparing loss values on test data for baseline continual learning method and method of learning optimal task architecture}\label{reg10taskstest}
-    \end{figure}
+In Figure~\ref{fig:sine_10task_comprehensive} (d), (e), and (f), error bands ($\pm$ 1 std) across the three seeds. We observe a large error bound in the AWB Full (C4) condition across panels (d), (e), and (f). This is due to the inherent instability of architecture search methods and is expected. We again note that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}.
 
-% Added by Claude: Multi-seed quantitative comparison table for sine regression
+
 \begin{table}[!htb]
 \centering
-\caption{Continual learning metrics for sine regression (10 tasks, 3 seeds). Values reported as mean $\pm$ std. Best values are highlighted in \textbf{bold}. Lower is better for Avg MSE and Forgetting; higher (more positive) is better for BWT and FWT.}
+\caption{Continual learning metrics for sine regression (10 tasks, 3 seeds). Values reported as mean $\pm$ std. Best values are highlighted in \textbf{bold}. Improvement equates to reduced Avg MSE and Forgetting values and increased BWT and FWT.}
 \label{tab:sine_cl_metrics}
 \begin{tabular}{lcccc}
 \toprule
@@ -1052,10 +1021,6 @@ C4: AWB Full         & $\mathbf{0.0156 \pm 0.0027}$ & $\mathbf{0.0005 \pm 0.0018
 \end{tabular}
 \end{table}
 
-To ensure statistical reliability, we run the 10-task experiment with 3 random seeds and report results in Table~\ref{tab:sine_cl_metrics}. C4 (AWB Full) achieves a 39\% reduction in average MSE compared with the baseline (0.0156 vs 0.0256) and a 37\% reduction in forgetting (0.0144 vs 0.0227). The comparison between C3 (architecture search without transfer) and C4 (architecture search with AWB transfer) is critical: both conditions change the architecture, but only C4 transfers knowledge. C3 shows marginal improvement (0.0251 vs 0.0256 for C1), while C4 shows substantial gains. This validates that the low-rank transfer mechanism from Theorem~\ref{thm:lower_HJB} is essential---architecture adaptation alone is insufficient.
-
-Figure~\ref{fig:sine_10task_comprehensive} shows detailed training dynamics with error bands ($\pm$1 std) across the 3 seeds. Panel (a) shows test MSE on experience replay with C4 maintaining consistently lower error. Panel (b) displays Hamiltonian loss convergence. Panel (c) shows gradient norm evolution, indicating training stability. Panels (d)--(f) summarize the continual learning metrics from Table~\ref{tab:sine_cl_metrics}.
-
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.95\linewidth]{paperFigures/sine_10task_3seed_results.pdf}
@@ -1063,25 +1028,13 @@ Figure~\ref{fig:sine_10task_comprehensive} shows detailed training dynamics with
     \label{fig:sine_10task_comprehensive}
 \end{figure}
 
-\begin{figure}
-        \centering
-\includegraphics[width=1\linewidth]{paperFigures/noisydata1.png}
-        \caption{Regression Experiment 3: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture when noise in the data is increased}\label{reg5noise}
-    \end{figure}
-<<<<<<< Updated upstream
+
 \subsubsection{Experiment 3}
-For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model 
-%when the architecture is changed loss value 
-when we change the architecture at each step and we complete the low-rank transfer to retain learning. Since the blue graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning, we conclude that changing the architecture while also transferring learning at each task increases performance even when subsequent tasks  introduce large jumps in the loss function, thus violating Theorem~\ref{thm:contMeasure}.
+For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior.
 
-\subsection{MNIST Classification Experiments}
-=======
-\textbf{Experiment 3:} For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of Lemma~\ref{lem:upper_arch} and \ref{lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. Figure \ref{reg5noise} reveals the loss values as the neural network training (on the training data). The red graph is again the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks. Supporting the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight}, we observe that with increasing noise there is an increase in the difference in the performance between two subsequent tasks. In other words, in the presence of changing tasks, the capacity diverges as in Theorem~\ref{thm:task_nonstationary_weights}, and changing weights is not enough to maintain performance as in Lemma~\ref{lem:upper_weight}. The blue graph shows that even in the presence of noise, there is improvement in the performance of the model
-%when the architecture is changed loss value
-when we change the architecture at each step and we complete the low-rank transfer to retain learning. Since the blue graph displays a decrease in the loss value on the training data in comparison with the baseline continual learning, we conclude that changing the architecture while also transferring learning at each task increases performance even when subsequent tasks  introduce large jumps in the loss function, thus violating Theorem~\ref{thm:contMeasure}.
+In Figure~\ref{fig:sine_noise_comprehensive}, we provide a comprehensive comparison across the four conditions on the noisy data with three random seeds. We note that panels (a), (b), and (c) are on a logarithmic scale.  We observe a continual decrease in the Hamiltonian loss of the baseline (C1) and heuristic (C2) conditions, which contrasts results of experiments 1 and 2. Additionally, we achieve consistently lower error throughout training on C4. In panels (d), (e), and (f), we see that C4 provides a 4\% improvement in average MSE over C1. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data, and supports the conclusions from Theorem~\ref{thm:contMeasure} and Lemmas \ref{lem:upper_arch} and \ref{lem:upper_weight},
 
-Figure~\ref{fig:sine_noise_comprehensive} provides a comprehensive comparison across all four experimental conditions (C1--C4) on the noisy sine regression benchmark with 3 random seeds. Panel (a) shows test MSE on experience replay data, with C4 (AWB Full) achieving consistently lower error throughout training. Panel (b) displays Hamiltonian loss convergence on a logarithmic scale, demonstrating faster and more stable convergence for C4. Panel (c) shows gradient norm evolution, indicating training stability across conditions. Panels (d)--(f) summarize the continual learning metrics: C4 achieves the lowest average MSE ($0.0249 \pm 0.0001$) compared with the baseline C1 ($0.0259 \pm 0.0000$), representing a 4\% improvement. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data.
-
+ 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.95\linewidth]{paperFigures/sine_noise_5task_3seed_results.pdf}
@@ -1089,7 +1042,7 @@ Figure~\ref{fig:sine_noise_comprehensive} provides a comprehensive comparison ac
     \label{fig:sine_noise_comprehensive}
 \end{figure}
 
-\textbf{Architecture Evolution:} Figure~\ref{fig:arch_evolution} visualizes the Hamiltonian loss trajectory alongside architecture changes at task boundaries for C3 (architecture search only) and C4 (AWB full). Each label indicates the network architecture at that task (e.g., $[64,64]$ denotes two hidden layers with 64 neurons each). In C3, architecture changes occur without knowledge transfer, resulting in loss spikes at each transition. In C4, the AWB transfer mechanism preserves learned representations, leading to smoother transitions and consistently lower Hamiltonian loss. This visualization provides direct evidence that architecture adaptation combined with low-rank transfer (C4) outperforms architecture adaptation alone (C3).
+\textbf{Architecture Evolution:} Figure~\ref{fig:arch_evolution} visualizes the Hamiltonian loss alongside the change in architecture at each task. Under architecture search alone (C3), such search occurs without previous task knowledge since we randomly reinitialize weights. This results in the spikes in loss values at each task transition. In C4, we observe that transferring the learning via the AWB method, allows for the knowledge of previous tasks upon searching. This leads not only to smoother transitions between tasks, but consistent reduction in Hamiltonian loss. This visualization provides direct evidence that architecture adaptation combined with low-rank transfer (C4) outperforms architecture adaptation alone (C3).
 
 \begin{figure}[!htb]
     \centering
@@ -1098,9 +1051,7 @@ Figure~\ref{fig:sine_noise_comprehensive} provides a comprehensive comparison ac
     \label{fig:arch_evolution}
 \end{figure}
 
-\subsection{MNIST Classification}
->>>>>>> Stashed changes
-
+\subsection{MNIST Classification Experiments}
 To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We split MNIST into 2 tasks by grouping digit pairs (digits 0--4 for Task 0, digits 5--9 for Task 1).
 
 \textbf{Hyperparameter Choices:} We use a convolutional neural network with two convolutional layers (filter size 3, 3 output channels each) followed by $2 \times 2$ max-pooling and ReLU activations. The flattened features pass through a feedforward network with hidden layers of size 512 and 64. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, for 200 epochs per task. For C2--C4, we use cosine learning rate scheduling with 25 warmup epochs. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$. Full hyperparameter details are in Appendix~\ref{app:standard_cl}.
@@ -1116,29 +1067,29 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
     \label{fig:mnist_comprehensive}
 \end{figure}
 
-\subsection{Omniglot Classification}
+% \subsection{Omniglot Classification}
 
 
-\textbf{Dataset and Task Splits:} The Omniglot dataset~\cite{Lake_2015} is a cornerstone benchmark for few-shot and meta-learning, designed to test how well models can learn new concepts from extremely limited data. Comprising $1,623$ handwritten characters from $50$ diverse alphabets, each rendered $20$ times by different individuals, it captures rich variation in writing style and structure. Its $105 \times 105$ grayscale images provide clean, simple inputs while still offering enough complexity to challenge learning algorithms. We split the Omniglot dataset into multiple tasks by randomly selecting three classes and applying rotational transformations on them to generate a task.
+% \textbf{Dataset and Task Splits:} The Omniglot dataset~\cite{Lake_2015} is a cornerstone benchmark for few-shot and meta-learning, designed to test how well models can learn new concepts from extremely limited data. Comprising $1,623$ handwritten characters from $50$ diverse alphabets, each rendered $20$ times by different individuals, it captures rich variation in writing style and structure. Its $105 \times 105$ grayscale images provide clean, simple inputs while still offering enough complexity to challenge learning algorithms. We split the Omniglot dataset into multiple tasks by randomly selecting three classes and applying rotational transformations on them to generate a task.
 
-\textbf{Hyperparameter Choices:} For the classification experiment, we use a convolutional neural network with one feedforward layer. The convolutional layers are followed by max-pooling and a $ReLU$ activation function, which extract spatial features from the input. Flattened convolutional outputs are passed through a small feedforward network with fully connected layers. We initialize the architecture with a convolutional filter size of $3$ and hidden layers sizes of $512$ and $64.$  We learn $5$ tasks of data based on the Omniglot dataset and train $500$ epochs on each task. We use AdamW~\cite{loshchilov2017fixing}  with a learning rate of $1\times 10^{-4}$ in the training regime. 
+% \textbf{Hyperparameter Choices:} For the classification experiment, we use a convolutional neural network with one feedforward layer. The convolutional layers are followed by max-pooling and a $ReLU$ activation function, which extract spatial features from the input. Flattened convolutional outputs are passed through a small feedforward network with fully connected layers. We initialize the architecture with a convolutional filter size of $3$ and hidden layers sizes of $512$ and $64.$  We learn $5$ tasks of data based on the Omniglot dataset and train $500$ epochs on each task. We use AdamW~\cite{loshchilov2017fixing}  with a learning rate of $1\times 10^{-4}$ in the training regime. 
 
 
-\textbf{Results:} 
- Figure \ref{cnn} shows the loss function values as the CNN trains~(on the training data) with respect to different methods as discussed in Section~\ref{sec:reg} on the five tasks. The red graph is the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks; this  serves as our baseline for comparison. The blue graph shows the progression of loss values when our proposed method is used. 
+% \textbf{Results:} 
+%  Figure \ref{cnn} shows the loss function values as the CNN trains~(on the training data) with respect to different methods as discussed in Section~\ref{sec:reg} on the five tasks. The red graph is the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks; this  serves as our baseline for comparison. The blue graph shows the progression of loss values when our proposed method is used. 
 
-For the regression experiment, we learned the number of neurons per layer through our architecture search. With this experiment, however, we determine the optimal filter size for the convolutional layers and the optimal number of neurons in the feedforward neural network. Thus, the low-rank transfer is performed for the filters, and the weights matrices are determined by the feedforward neural network. In particular, this highlights the flexibility of our method, where we can perform transfer of information between convolutional filters as well as standard weight matrices. 
+% For the regression experiment, we learned the number of neurons per layer through our architecture search. With this experiment, however, we determine the optimal filter size for the convolutional layers and the optimal number of neurons in the feedforward neural network. Thus, the low-rank transfer is performed for the filters, and the weights matrices are determined by the feedforward neural network. In particular, this highlights the flexibility of our method, where we can perform transfer of information between convolutional filters as well as standard weight matrices. 
 
-With the first 500 epochs of training, we observe from Figure \ref{cnn} that both the blue curve and the red curve coincide. After the first task is introduced, however, the red curve has a large jump. This jump is common in classification problem because, unlike regression, classification problems do not have task-to-task dependency:  each task is sampled independently, by virtue of iid sampling. This leads to a lot of jumps in the loss function and its gradients and incurs large forgetting. We note, however, that our approach counters this jump significantly with increased performance for each subsequent task. Notably, the jump in some tasks is larger compared with other tasks. We note that some of the jumps pertain to how well $A$ and $B$ matrices transfer information between tasks. 
+% With the first 500 epochs of training, we observe from Figure \ref{cnn} that both the blue curve and the red curve coincide. After the first task is introduced, however, the red curve has a large jump. This jump is common in classification problem because, unlike regression, classification problems do not have task-to-task dependency:  each task is sampled independently, by virtue of iid sampling. This leads to a lot of jumps in the loss function and its gradients and incurs large forgetting. We note, however, that our approach counters this jump significantly with increased performance for each subsequent task. Notably, the jump in some tasks is larger compared with other tasks. We note that some of the jumps pertain to how well $A$ and $B$ matrices transfer information between tasks. 
 
-It was shown in Theorem~\ref{thm:lower_HJB} that the eigenvalues of the Jacobian induced by the change in the data must be countered by the singular values of $A$ and $B$ matrices. However, this is hard to ensure in practice, especially when the tasks are independently sampled as in the Omniglot dataset case. Although it is feasible to devise a method that exactly establishes the conditions outlined in Theorem~\ref{thm:lower_HJB},  such an approach requires careful engineering and has been relegated to future work. Despite this, the conclusions from Section~\ref{sec:reg} carry forward to this case with the key difference that the jumps between tasks are large.
+% It was shown in Theorem~\ref{thm:lower_HJB} that the eigenvalues of the Jacobian induced by the change in the data must be countered by the singular values of $A$ and $B$ matrices. However, this is hard to ensure in practice, especially when the tasks are independently sampled as in the Omniglot dataset case. Although it is feasible to devise a method that exactly establishes the conditions outlined in Theorem~\ref{thm:lower_HJB},  such an approach requires careful engineering and has been relegated to future work. Despite this, the conclusions from Section~\ref{sec:reg} carry forward to this case with the key difference that the jumps between tasks are large.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/cnn5tasks1.png}
-    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}
-    \label{cnn}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1\linewidth]{paperFigures/cnn5tasks1.png}
+%     \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}
+%     \label{cnn}
+% \end{figure}
 
 \subsection{Graph Classification}
 

@@ -5,7 +5,7 @@ This appendix provides implementation details for the four experimental conditio
 
 
 %=======This is Appendix J=======%
-\subsection{Experimental Conditions Overview}
+\subsection{Experimental Conditions Overview \& Algorithm}
 
 Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a unified algorithmic framework. Each condition builds upon the previous one:
 \begin{itemize}
@@ -137,11 +137,12 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
 \label{fig:alg_conditions}
 \end{figure}
 
-\subsection{Supporting Algorithms}
 
-The following algorithms are referenced by the conditions above.
 
-\subsubsection{Task Warmup}
+\subsection{Supporting Algorithms to Figure~\ref{fig:alg_conditions}}
+The algorithms below are those referenced in Figure~\ref{fig:alg_conditions}.
+
+\textbf{Task Warm-up}
 
 {\small
 \begin{algorithm}[H]
@@ -157,7 +158,7 @@ $\eta_w \gets 0.1 \cdot \eta_0$, $[\alpha,\beta,\gamma] \gets [1, 0, 0]$\;
 \end{algorithm}
 }
 
-\subsubsection{Adaptive Gradient Weights}
+\textbf{Adaptive Gradient Weights}
 
 {\small
 \begin{algorithm}[H]
@@ -172,7 +173,7 @@ $\gamma \gets 0.1$\;
 \end{algorithm}
 }
 
-\subsubsection{Architecture Search}
+\textbf{Architecture Search}
 
 {\small
 \begin{algorithm}[H]
@@ -186,7 +187,7 @@ $\psi^* \gets \arg\min_{\psi' \in \mathcal{S}} J(\texttt{init}(\psi'), \psi', \t
 \end{algorithm}
 }
 
-\subsubsection{Train A/B Matrices}
+\textbf{Train A/B Matrices}
 
 {\small
 \begin{algorithm}[H]
@@ -204,7 +205,7 @@ $A \gets I_{m \times n}$, $B \gets I_{p \times q}$ where dims match $\psi_{\text
 \end{algorithm}
 }
 
-\subsubsection{Hamiltonian Gradient}
+\textbf{Hamiltonian Gradient}
 
 {\small
 \begin{algorithm}[H]

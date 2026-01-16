@@ -1105,12 +1105,20 @@ Figure~\ref{fig:transform_heatmap} presents a 2D heatmap of classification accur
     \item \textbf{Task 3 anomaly}: The yellow circle highlights the transform parameters for Task 3 (rotation $\approx 92^\circ$, shear $\approx 92^\circ$), which achieves only 55--62\% accuracy---significantly lower than other tasks. This ``difficult region'' corresponds to transforms that create near-symmetric digit representations, particularly problematic for digits like `6' and `9' or `3' and `8'.
 \end{enumerate}
 
-The inset images show digit `3' at representative points: (a) original image, (b) $90^\circ$ rotation only, (c) $90^\circ$ shear only, and (d) combined $90^\circ$ rotation + shear, demonstrating the compounding effect. This analysis explains the anomalous accuracy drops observed at certain tasks and motivates the use of AWB's adaptive mechanism to handle such difficult task transitions.
+The inset images show digit `3' at representative points: (a) original image, (b) $90^\circ$ rotation only, (c) $90^\circ$ shear only, and (d) combined $90^\circ$ rotation + shear, demonstrating the compounding effect. 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}
+    \caption{ Heatmap shows classification accuracy (\%) as a function of rotation and shear angles. The diagonal line (red dashed) indicates the task generation strategy where shear = rotation. White circles mark five task configurations (T0--T4), with Task 3 (yellow highlight) falling in a particularly difficult region near $92^\circ$. Inset images show digit `3' under different transforms: (a) original, (b) rotation only, (c) shear only, (d) combined.}
+    \label{fig:transform_heatmap}
+\end{figure}
+
+As discussed in theory, that the prime way of handling such cases is to smoothen out the effect using A/B matrices which we use in this work. The key find is that the quality of smoothing is proportional to the number of epochs A/B matrices are trained for. A study of using different A/B matrices and their effect on the jump introduced by a rotation angle of 92 deg is shown in Figure.~\ref{fig:AB_ablation}
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}
-    \caption{MNIST transform difficulty analysis. Heatmap shows classification accuracy (\%) as a function of rotation and shear angles. The diagonal line (red dashed) indicates the task generation strategy where shear = rotation. White circles mark five task configurations (T0--T4), with Task 3 (yellow highlight) falling in a particularly difficult region near $92^\circ$. Inset images show digit `3' under different transforms: (a) original, (b) rotation only, (c) shear only, (d) combined.}
+    \caption{}
     \label{fig:transform_heatmap}
 \end{figure}
 

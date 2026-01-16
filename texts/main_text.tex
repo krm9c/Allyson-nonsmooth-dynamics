@@ -1067,6 +1067,29 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
     \label{fig:mnist_comprehensive}
 \end{figure}
 
+\subsubsection{Mnist-ten tasks}
+As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we run the training from Figure.~\ref{fig:mnist_comprehensive} for 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
+
+On careful investigation it is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon, careful investigation, it was observed that, the smoothing behavior is proportional to how many epochs are utilized for a/b training. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
+    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the mnist dataset}
+    \label{cnn}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
+    \caption{Classification experiment: More insight into the jump observed in the mnist data set experiment}
+    \label{fig:diagnostics}
+\end{figure}
+
+Towards identifying the effect of A/B epochs, we perform the following experiment. 
+
+
 \subsubsection{Transform Difficulty Analysis}
 \label{sec:transform_analysis}
 
@@ -1114,27 +1137,6 @@ The inset images show digit `3' at representative points: (a) original image, (b
 %     \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}
 %     \label{cnn}
 
-As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we run the training from Figure.~\ref{fig:mnist_comprehensive} for 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
-
-On careful investigation it is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon, careful investigation, it was observed that, the smoothing behavior is proportional to how many epochs are utilized for a/b training. 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
-    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the mnist dataset}
-    \label{cnn}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
-    \caption{Classification experiment: More insight into the jump observed in the mnist data set experiment}
-    \label{fig:diagnostics}
-\end{figure}
-
-
-Towards identifying the effect of A/B epochs, we perform the following experiment. 
 
 
 

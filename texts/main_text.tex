@@ -1089,10 +1089,32 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
 %     \includegraphics[width=1\linewidth]{paperFigures/cnn5tasks1.png}
 %     \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}
 %     \label{cnn}
-% \end{figure}
+
+As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we run the training from Figure.~\ref{fig:mnist_comprehensive} for 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
+
+On careful investigation it is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon, careful investigation, it was observed that, the smoothing behavior is proportional to how many epochs are utilized for a/b training. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
+    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the mnist dataset}
+    \label{cnn}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
+    \caption{Classification experiment: More insight into the jump observed in the mnist data set experiment}
+    \label{fig:diagnostics}
+\end{figure}
+
+
+Towards identifying the effect of A/B epochs, we perform the following experiment. 
+
+
 
 \subsection{Graph Classification}
-
 \textbf{Hyperparameter Choices:} For the graph classification task, a graph convolutional network (GCN)  was implemented that involved multiple graph convolutional layers, each transforming node features while incorporating neighborhood information via adjacency matrices. Following the convolutional layers, a graph pooling layer aggregates node-level embeddings into a fixed-size graph representation. The pooled embeddings are then processed through fully connected feedforward layers to produce graph-level predictions. The network employs leaky ReLU activations and optional dropout for regularization. We begin with a single GCN layer  with filter size $3$ followed by a feedforward neural network with $4$ layers where the hidden layers  are of size $140.$ We learn five tasks of data and train $125$ epochs on each task. We use AdamW with a learning rate of $1\times 10^{-4}$ in the training regime. For each GCN layer, we observe the best filter size with the architecture search approach presented here.
 
 \textbf{Datasets and Task Splits:} We generate our tasks by sampling through a FakeHeteroDataset class, which is a synthetic dataset class in the PyTorch Geometric~\cite{pyg} library that generates random heterogeneous graphs. Heterogeneous graphs imply that subsequent tasks do not have the same number of nodes or edges.  The datasets returned are purely random---node and edge features, connectivity, and labels.

@@ -1151,6 +1151,67 @@ As shown from  Figure~\ref{gnn}, the red graph stagnates in its learning, and th
         \label{gnn}
     \end{figure}
 
+\subsubsection{Synthetic Graph with Domain Shift}
+\label{sec:synthetic_graph}
+
+To further evaluate the AWB framework under controlled domain shift, we conduct experiments on a synthetic graph classification task with 10 sequential tasks.
+
+\textbf{Data Generation:} The synthetic graph dataset consists of 500 graphs generated using PyTorch Geometric's FakeDataset, with an 80/20 train/test split applied once at initialization to prevent data leakage. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. To simulate domain shift in the continual learning setting, we employ a task-shift paradigm where all tasks share the same 5 classes but introduce progressive perturbations across the 10-task sequence. Specifically, for task $k$ ($k \geq 1$), we apply three types of perturbations using a linear scaling mode: (1) Gaussian feature noise with standard deviation $\sigma_k = 0.02k$, (2) random edge dropout with probability $p_k = 0.01k$, and (3) constant feature shift of magnitude $s_k = 0.01k$. Task 0 serves as the unperturbed baseline. This design creates a challenging continual learning benchmark where the underlying classification task remains constant, but the input distribution shifts progressively---testing the model's ability to adapt to domain drift while retaining knowledge from earlier distributions.
+
+\textbf{Model Architecture and Hyperparameters:} We employ a Graph Convolutional Network (GCN) architecture consisting of two graph convolution layers with hidden dimensions $[10 \rightarrow 32 \rightarrow 32]$, followed by max pooling and a 3-layer feedforward classifier with dimensions $[32 \rightarrow 32 \rightarrow 16 \rightarrow 5]$. All layers use LeakyReLU activations except the final classification layer. The model is trained using the Adam optimizer with learning rate $\eta = 10^{-4}$, batch size 128, and gradient clipping at norm 1.0. The Hamiltonian gradient is computed with weights $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task loss, experience replay loss, and regularization respectively. Each task is trained for 200 epochs with task warmup enabled (20 epochs at 10\% learning rate). For the AWB Full condition (Condition 4), architecture search is performed with the following settings: 5 preliminary training epochs, 150 A/B matrix training epochs, 50 warmup epochs, and modified Adam betas $(0.5, 0.999)$ for V-training to enable faster adaptation after the warmup-to-main transition.
+
+\textbf{Results:} Figure~\ref{fig:synthetic_graph_results} presents the comprehensive results across three experimental conditions: Baseline (fixed architecture, constant learning rate), Heuristics (task warmup, adaptive learning rate), and AWB Full (architecture search with A/B transfer). The top row shows training dynamics: (a) test accuracy on experience replay, (b) Hamiltonian loss, and (c) gradient norm over the 10-task sequence. The bottom row presents summary metrics: (d) average accuracy, (e) backward transfer (BWT), and (f) forgetting.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/synthetic_graph_10task_3seed_results.pdf}
+    \caption{Synthetic graph classification with domain shift (10 tasks, 3 seeds). Top row: (a) Test accuracy on experience replay shows AWB Full maintaining high accuracy throughout training; (b) Hamiltonian loss; (c) Gradient norm. Bottom row: (d) AWB Full achieves 89.3\% average accuracy vs 79.4\% for Baseline; (e) Backward transfer; (f) Forgetting measure.}
+    \label{fig:synthetic_graph_results}
+\end{figure}
+
+Figure~\ref{fig:task_accuracy_noise} provides deeper insight into the accuracy-forgetting trade-off by showing per-task final accuracy alongside the increasing noise level. Despite the linearly increasing perturbation (dashed line), AWB Full maintains consistently high accuracy (87--92\%) across all tasks, while Baseline exhibits flat but lower accuracy (74--81\%).
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf}
+    \caption{Per-task accuracy vs domain shift. Grouped bars show final accuracy on each task after training all 10 tasks. The dashed line indicates increasing feature noise ($\sigma$). AWB Full maintains high accuracy despite increasing perturbation, while Baseline shows flat but lower performance.}
+    \label{fig:task_accuracy_noise}
+\end{figure}
+
+\begin{table}[!htb]
+\centering
+\caption{Accuracy range summary for synthetic graph experiments. AWB Full achieves significantly higher mean accuracy with a tighter range, indicating consistent performance despite domain shift.}
+\label{tab:accuracy_range}
+\begin{tabular}{lccccl}
+\toprule
+\textbf{Method} & \textbf{Min Acc} & \textbf{Max Acc} & \textbf{Range} & \textbf{Mean $\pm$ Std} & \textbf{Interpretation} \\
+\midrule
+Baseline   & 0.74 & 0.81 & 0.07 & $0.794 \pm 0.020$ & Flat accuracy, limited learning \\
+Heuristics & 0.67 & 0.75 & 0.08 & $0.709 \pm 0.025$ & Variable performance \\
+AWB Full   & 0.87 & 0.92 & \textbf{0.05} & $\mathbf{0.893 \pm 0.015}$ & High accuracy, marginal forgetting \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption{Forgetting statistics for synthetic graph experiments. While AWB Full shows forgetting on more tasks, the absolute magnitude remains small (3.6\% average), representing a favorable trade-off for the 12.5\% accuracy improvement.}
+\label{tab:forgetting_stats}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Avg Forgetting} & \textbf{Max Forgetting} & \textbf{Tasks w/ Forgetting} \\
+\midrule
+Baseline   & \textbf{0.005} & 0.03 & 2/10 \\
+Heuristics & 0.013 & 0.04 & 5/10 \\
+AWB Full   & 0.036 & 0.07 & 8/10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation:} The results reveal a favorable accuracy-forgetting trade-off for the AWB approach. The Baseline model exhibits \emph{flat accuracy} (74--81\%, range=7\%) across all domain shifts---it neither learns effectively from new domains nor forgets significantly. In contrast, AWB Full achieves \textbf{12.5\% higher average accuracy} (89.3\% vs 79.4\%) while maintaining a \emph{tighter accuracy range} (5\% vs 7\%), demonstrating consistent high performance despite increasing perturbation.
+
+The forgetting analysis (Table~\ref{tab:forgetting_stats}) shows that AWB Full exhibits marginal forgetting (3.6\% average) on 8 out of 10 tasks, compared to near-zero forgetting for Baseline (0.5\% average on 2 tasks). However, this small forgetting cost is offset by dramatically superior learning capacity: AWB Full starts at higher accuracy and remains above Baseline even after forgetting. This demonstrates that the low-rank transfer mechanism ($V = A \cdot W \cdot B^T$) successfully preserves learned representations while enabling adaptation to new domains.
+
 
 % ---------------------
 \section{Conclusion}

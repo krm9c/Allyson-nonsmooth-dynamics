@@ -1,0 +1,5 @@
+COMPLETED_SUCCESSFULLY
+Timestamp: Thu Jan 15 11:34:09 AM CST 2026
+Config: mnist_condition3_arch_no_transfer.json
+Run ID: 0
+Output: /home/kraghavan/projects/ContLearn/runs__/experiments/mnist/results/mnist_condition3_arch_no_transfer_run0

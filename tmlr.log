@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  8 JAN 2026 11:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  19 JAN 2026 09:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1029,6 +1029,9 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `boundedremark' multiply defined.
 
+
+LaTeX Warning: Label `cnn' multiply defined.
+
 )
 \openout1 = `tmlr.aux'.
 
@@ -1171,7 +1174,7 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 155.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 155.
-<paperFigures/CL1.png, id=408, 2657.93pt x 723.70375pt>
+<paperFigures/CL1.png, id=331, 2657.93pt x 723.70375pt>
 File: paperFigures/CL1.png Graphic file (type png)
 <use paperFigures/CL1.png>
 Package pdftex.def Info: paperFigures/CL1.png  used on input line 163.
@@ -1181,7 +1184,7 @@ Package pdftex.def Info: paperFigures/CL1.png  used on input line 163.
 [3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
 cal/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <./paperFigures/CL1.p
 ng>]
-<Figures/par_space.png, id=430, 2011.515pt x 1032.85875pt>
+<Figures/par_space.png, id=353, 2011.515pt x 1032.85875pt>
 File: Figures/par_space.png Graphic file (type png)
 <use Figures/par_space.png>
 Package pdftex.def Info: Figures/par_space.png  used on input line 187.
@@ -1196,19 +1199,18 @@ res/par_space.png>]
 [6]
 
 [7]
-<paperFigures/problem1.png, id=532, 2655.9225pt x 1938.24126pt>
+<paperFigures/problem1.png, id=456, 2655.9225pt x 1938.24126pt>
 File: paperFigures/problem1.png Graphic file (type png)
 <use paperFigures/problem1.png>
 Package pdftex.def Info: paperFigures/problem1.png  used on input line 321.
 (pdftex.def)             Requested size: 375.80542pt x 274.25029pt.
-
-
-[8 <./paperFigures/problem1.png>]
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <14.4> on input line 376.
 
 
-[9]
+[8]
+
+[9 <./paperFigures/problem1.png>]
 
 [10]
 
@@ -1217,7 +1219,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [12]
 
 [13]
-Underfull \hbox (badness 1062) in paragraph at lines 644--645
+Underfull \hbox (badness 1062) in paragraph at lines 643--644
 []\T1/lmr/m/n/10 The fol-low-ing re-sult tells us that in the case of dis-sim-i
 -lar tasks and with dis-sim-i-lar loss val-ues
  []
@@ -1228,15 +1230,15 @@ Underfull \vbox (badness 1924) has occurred while \output is active []
 
 
 [14]
-<paperFigures/intersect22.png, id=631, 3059.43pt x 1768.6075pt>
+<paperFigures/intersect22.png, id=555, 3059.43pt x 1768.6075pt>
 File: paperFigures/intersect22.png Graphic file (type png)
 <use paperFigures/intersect22.png>
-Package pdftex.def Info: paperFigures/intersect22.png  used on input line 686.
+Package pdftex.def Info: paperFigures/intersect22.png  used on input line 685.
 (pdftex.def)             Requested size: 469.75499pt x 271.5406pt.
 
 
 [15]
-Underfull \hbox (badness 1571) in paragraph at lines 715--716
+Underfull \hbox (badness 1571) in paragraph at lines 714--715
 \T1/lmr/m/it/10 ce-dure, and choose $\OML/lmm/m/it/10 u\OT1/lmr/m/n/10 (\OML/lm
 m/m/it/10 t\OT1/lmr/m/n/10 ) = \OMS/lmsy/m/n/10 ^^@ [][] \OML/lmm/m/it/10 \OT1
 /lmr/m/n/10 (\OML/lmm/m/it/10 i\OT1/lmr/m/n/10 )g[]\OML/lmm/m/it/10 ;$ \T1/lmr/
@@ -1246,7 +1248,7 @@ nd $\OML/lmm/m/it/10 \OT1/lmr/m/n/10 (\OML/lmm/m/it/10 i\OT1/lmr/m/n/10 )$ \T1
  []
 
 
-Underfull \hbox (badness 2245) in paragraph at lines 715--716
+Underfull \hbox (badness 2245) in paragraph at lines 714--715
 \T1/lmr/m/it/10 learn-ing rate. Choose $\OML/lmm/m/it/10 \OT1/lmr/m/n/10 (\OML
 /lmm/m/it/10 i\OT1/lmr/m/n/10 )$ \T1/lmr/m/it/10 such that $[][] [][] \OMS/lmsy
 /m/n/10 ! \OT1/lmr/m/n/10 0$ \T1/lmr/m/it/10 as $\OML/lmm/m/it/10 I \OMS/lmsy/m
@@ -1256,80 +1258,80 @@ Underfull \hbox (badness 2245) in paragraph at lines 715--716
 
 
 [16 <./paperFigures/intersect22.png>]
-<paperFigures/method.png, id=666, 2657.93pt x 1346.02875pt>
+<paperFigures/method.png, id=589, 2657.93pt x 1346.02875pt>
 File: paperFigures/method.png Graphic file (type png)
 <use paperFigures/method.png>
-Package pdftex.def Info: paperFigures/method.png  used on input line 730.
+Package pdftex.def Info: paperFigures/method.png  used on input line 729.
 (pdftex.def)             Requested size: 516.73335pt x 261.6838pt.
 
-Overfull \hbox (46.97836pt too wide) in paragraph at lines 730--731
+Overfull \hbox (46.97836pt too wide) in paragraph at lines 729--730
  [][] 
  []
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 736.
+(hyperref)                removing `math shift' on input line 735.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@@underline' on input line 736.
+(hyperref)                removing `\@@underline' on input line 735.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 736.
+(hyperref)                removing `\hbox' on input line 735.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 736.
+(hyperref)                removing `\mathsurround' on input line 735.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 736.
+(hyperref)                removing `\z@' on input line 735.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 736.
+(hyperref)                removing `math shift' on input line 735.
 
 
 
 [17 <./paperFigures/method.png>]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7
-83.
+82.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 801.
+(hyperref)                removing `math shift' on input line 800.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\@@underline' on input line 801.
+(hyperref)                removing `\@@underline' on input line 800.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\hbox' on input line 801.
+(hyperref)                removing `\hbox' on input line 800.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\mathsurround' on input line 801.
+(hyperref)                removing `\mathsurround' on input line 800.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\z@' on input line 801.
+(hyperref)                removing `\z@' on input line 800.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 801.
+(hyperref)                removing `math shift' on input line 800.
 
 
 
 [18]
-<paperFigures/CLsolution1.png, id=688, 927.465pt x 652.4375pt>
+<paperFigures/CLsolution1.png, id=611, 927.465pt x 652.4375pt>
 File: paperFigures/CLsolution1.png Graphic file (type png)
 <use paperFigures/CLsolution1.png>
-Package pdftex.def Info: paperFigures/CLsolution1.png  used on input line 812.
+Package pdftex.def Info: paperFigures/CLsolution1.png  used on input line 811.
 (pdftex.def)             Requested size: 469.75499pt x 330.45894pt.
 
 
@@ -1342,227 +1344,202 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [21]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 8
-77.
+76.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 
 Package natbib Warning: Citation `lecun1998mnist' on page 22 undefined on input
- line 879.
+ line 878.
 
 
 Package natbib Warning: Citation `lopez2017gradient' on page 22 undefined on in
-put line 886.
+put line 883.
 
 
 Package natbib Warning: Citation `chaudhry2018riemannian' on page 22 undefined 
-on input line 886.
+on input line 883.
 
 
 Package natbib Warning: Citation `diaz2018dont' on page 22 undefined on input l
-ine 886.
+ine 883.
 
 
 Package natbib Warning: Citation `lopez2017gradient' on page 22 undefined on in
-put line 894.
+put line 891.
 
 
 
 [22{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
 
 Package natbib Warning: Citation `chaudhry2018riemannian' on page 23 undefined 
-on input line 899.
-
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 23 undefined on input lin
-e 911.
-
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 23 undefined on input lin
-e 913.
-
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 23 undefined on input lin
-e 915.
-
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 23 undefined on input lin
-e 917.
+on input line 897.
 
 
 
 [23]
-Underfull \hbox (badness 1661) in paragraph at lines 936--937
-[]\T1/lmr/bx/n/10 Feedforward Net-works: \T1/lmr/m/n/10 Start-ing from ar-chi-t
-ec-ture $\OT1/lmr/m/n/10 [10\OML/lmm/m/it/10 ; \OT1/lmr/m/n/10 40\OML/lmm/m/it/
-10 ; \OT1/lmr/m/n/10 40\OML/lmm/m/it/10 ; \OT1/lmr/m/n/10 10]$ \T1/lmr/m/n/10 w
-ith step size 5, can-di-dates
- []
-
-<paperFigures/regtask2.png, id=791, 782.32275pt x 381.3447pt>
-File: paperFigures/regtask2.png Graphic file (type png)
-<use paperFigures/regtask2.png>
-Package pdftex.def Info: paperFigures/regtask2.png  used on input line 962.
-(pdftex.def)             Requested size: 469.75499pt x 228.98314pt.
-<paperFigures/origregtest.png, id=792, 738.71985pt x 381.3447pt>
-File: paperFigures/origregtest.png Graphic file (type png)
-<use paperFigures/origregtest.png>
-Package pdftex.def Info: paperFigures/origregtest.png  used on input line 967.
-(pdftex.def)             Requested size: 469.75499pt x 242.50613pt.
-
 
 [24]
+Underfull \hbox (badness 10000) in paragraph at lines 966--967
 
-[25 <./paperFigures/regtask2.png> <./paperFigures/origregtest.png>]
+ []
 
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 26 undefined on
- input line 978.
 
-<paperFigures/sine_2task_results.pdf, id=822, 717.69319pt x 247.51802pt>
+Underfull \hbox (badness 10000) in paragraph at lines 968--969
+
+ []
+
+<paperFigures/sine_2task_results.pdf, id=740, 717.69319pt x 247.51802pt>
 File: paperFigures/sine_2task_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_2task_results.pdf>
 Package pdftex.def Info: paperFigures/sine_2task_results.pdf  used on input lin
-e 982.
+e 988.
 (pdftex.def)             Requested size: 446.2658pt x 153.90524pt.
-<paperFigures/reg10tasks.png, id=831, 738.71985pt x 381.3447pt>
-File: paperFigures/reg10tasks.png Graphic file (type png)
-<use paperFigures/reg10tasks.png>
-Package pdftex.def Info: paperFigures/reg10tasks.png  used on input line 992.
-(pdftex.def)             Requested size: 446.2658pt x 230.37965pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-
-[26]
-<paperFigures/reg10Test.png, id=838, 738.71985pt x 381.3447pt>
-File: paperFigures/reg10Test.png Graphic file (type png)
-<use paperFigures/reg10Test.png>
-Package pdftex.def Info: paperFigures/reg10Test.png  used on input line 997.
-(pdftex.def)             Requested size: 446.2658pt x 230.37965pt.
-
-
-LaTeX Warning: Reference `tab:sine_cl_metrics' on page 27 undefined on input li
-ne 1018.
-
-
-
-[27 <./paperFigures/sine_2task_results.pdf> <./paperFigures/reg10tasks.png>]
-
-LaTeX Warning: Reference `fig:sine_10task_comprehensive' on page 28 undefined o
-n input line 1020.
-
-
-LaTeX Warning: Reference `tab:sine_cl_metrics' on page 28 undefined on input li
-ne 1020.
-
-<paperFigures/sine_10task_3seed_results.pdf, id=908, 862.21812pt x 502.3342pt>
+[25]
+<paperFigures/sine_10task_3seed_results.pdf, id=768, 862.21812pt x 502.3342pt>
 File: paperFigures/sine_10task_3seed_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_10task_3seed_results.pdf>
 Package pdftex.def Info: paperFigures/sine_10task_3seed_results.pdf  used on in
-put line 1024.
+put line 1026.
 (pdftex.def)             Requested size: 446.2658pt x 260.00421pt.
-<paperFigures/noisydata1.png, id=909, 737.51535pt x 376.88805pt>
-File: paperFigures/noisydata1.png Graphic file (type png)
-<use paperFigures/noisydata1.png>
-Package pdftex.def Info: paperFigures/noisydata1.png  used on input line 1031.
-(pdftex.def)             Requested size: 469.75499pt x 240.05734pt.
-
-LaTeX Warning: Reference `fig:sine_noise_comprehensive' on page 28 undefined on
- input line 1038.
-
-
-
-[28 <./paperFigures/reg10Test.png>]
-Underfull \vbox (badness 2644) has occurred while \output is active []
-
-
-
-[29 <./paperFigures/sine_10task_3seed_results.pdf> <./paperFigures/noisydata1.p
-ng>]
-<paperFigures/sine_noise_5task_3seed_results.pdf, id=1004, 862.93945pt x 501.95
-28pt>
-File: paperFigures/sine_noise_5task_3seed_results.pdf Graphic file (type pdf)
-<use paperFigures/sine_noise_5task_3seed_results.pdf>
-Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used 
-on input line 1042.
-(pdftex.def)             Requested size: 446.2658pt x 259.58469pt.
-
-
-LaTeX Warning: Reference `fig:arch_evolution' on page 30 undefined on input lin
-e 1047.
-
-<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=1005, 717.67813pt x 573.2
-065pt>
-File: paperFigures/hamiltonian_arch_evolution_c3c4.pdf Graphic file (type pdf)
-<use paperFigures/hamiltonian_arch_evolution_c3c4.pdf>
-Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used
- on input line 1051.
-(pdftex.def)             Requested size: 446.2658pt x 356.43391pt.
-
-Package natbib Warning: Citation `lecun1998mnist' on page 30 undefined on input
- line 1058.
-
-
-LaTeX Warning: Reference `fig:mnist_comprehensive' on page 30 undefined on inpu
-t line 1062.
-
-
-
-[30 <./paperFigures/sine_noise_5task_3seed_results.pdf>]
-<paperFigures/mnist_2task_results.pdf, id=1092, 717.68187pt x 247.51802pt>
-File: paperFigures/mnist_2task_results.pdf Graphic file (type pdf)
-<use paperFigures/mnist_2task_results.pdf>
-Package pdftex.def Info: paperFigures/mnist_2task_results.pdf  used on input li
-ne 1068.
-(pdftex.def)             Requested size: 446.2658pt x 153.9128pt.
-
-
-[31 <./paperFigures/hamiltonian_arch_evolution_c3c4.pdf>]
-<paperFigures/cnn5tasks1.png, id=1188, 738.8403pt x 363.5181pt>
-File: paperFigures/cnn5tasks1.png Graphic file (type png)
-<use paperFigures/cnn5tasks1.png>
-Package pdftex.def Info: paperFigures/cnn5tasks1.png  used on input line 1092.
-(pdftex.def)             Requested size: 469.75499pt x 231.13095pt.
-
-Underfull \vbox (badness 1005) has occurred while \output is active []
-
-
-
-[32 <./paperFigures/mnist_2task_results.pdf>]
-<paperFigures/gnnfix.png, id=1264, 738.71985pt x 392.4261pt>
-File: paperFigures/gnnfix.png Graphic file (type png)
-<use paperFigures/gnnfix.png>
-Package pdftex.def Info: paperFigures/gnnfix.png  used on input line 1109.
-(pdftex.def)             Requested size: 469.75499pt x 249.55307pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[33 <./paperFigures/cnn5tasks1.png>])
+[26 <./paperFigures/sine_2task_results.pdf>]
+<paperFigures/sine_noise_5task_3seed_results.pdf, id=843, 863.60968pt x 502.334
+2pt>
+File: paperFigures/sine_noise_5task_3seed_results.pdf Graphic file (type pdf)
+<use paperFigures/sine_noise_5task_3seed_results.pdf>
+Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used 
+on input line 1040.
+(pdftex.def)             Requested size: 446.2658pt x 259.58264pt.
 
-[34 <./paperFigures/gnnfix.png>] (./tmlr.bbl
 
-[35]
+[27 <./paperFigures/sine_10task_3seed_results.pdf>]
+<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=921, 717.67813pt x 573.20
+65pt>
+File: paperFigures/hamiltonian_arch_evolution_c3c4.pdf Graphic file (type pdf)
+<use paperFigures/hamiltonian_arch_evolution_c3c4.pdf>
+Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used
+ on input line 1049.
+(pdftex.def)             Requested size: 446.2658pt x 356.43391pt.
 
-[36]) (./texts/supp.tex
+
+Package natbib Warning: Citation `lecun1998mnist' on page 28 undefined on input
+ line 1055.
+
+<paperFigures/mnist_2task_results.pdf, id=927, 717.68187pt x 247.51802pt>
+File: paperFigures/mnist_2task_results.pdf Graphic file (type pdf)
+<use paperFigures/mnist_2task_results.pdf>
+Package pdftex.def Info: paperFigures/mnist_2task_results.pdf  used on input li
+ne 1065.
+(pdftex.def)             Requested size: 446.2658pt x 153.9128pt.
+
+
+[28 <./paperFigures/sine_noise_5task_3seed_results.pdf>]
+
+LaTeX Warning: Text page 29 contains only floats.
+
+
+
+[29 <./paperFigures/hamiltonian_arch_evolution_c3c4.pdf> <./paperFigures/mnist_
+2task_results.pdf>]
+<paperFigures/mnist_publication_figure.pdf, id=1150, 862.22186pt x 502.3342pt>
+File: paperFigures/mnist_publication_figure.pdf Graphic file (type pdf)
+<use paperFigures/mnist_publication_figure.pdf>
+Package pdftex.def Info: paperFigures/mnist_publication_figure.pdf  used on inp
+ut line 1077.
+(pdftex.def)             Requested size: 469.75499pt x 273.67856pt.
+<paperFigures/mnist_diagnostic.pdf, id=1151, 1011.78pt x 722.7pt>
+File: paperFigures/mnist_diagnostic.pdf Graphic file (type pdf)
+<use paperFigures/mnist_diagnostic.pdf>
+Package pdftex.def Info: paperFigures/mnist_diagnostic.pdf  used on input line 
+1085.
+(pdftex.def)             Requested size: 469.75499pt x 335.54475pt.
+
+
+LaTeX Warning: Reference `fig:transform_curve' on page 30 undefined on input li
+ne 1093.
+
+<paperFigures/mnist_transform_analysis.pdf, id=1152, 717.76971pt x 356.22398pt>
+
+File: paperFigures/mnist_transform_analysis.pdf Graphic file (type pdf)
+<use paperFigures/mnist_transform_analysis.pdf>
+Package pdftex.def Info: paperFigures/mnist_transform_analysis.pdf  used on inp
+ut line 1096.
+(pdftex.def)             Requested size: 446.2658pt x 221.48167pt.
+<paperFigures/mnist_awb_recovery.png, id=1154, 1003.5894pt x 710.655pt>
+File: paperFigures/mnist_awb_recovery.png Graphic file (type png)
+<use paperFigures/mnist_awb_recovery.png>
+Package pdftex.def Info: paperFigures/mnist_awb_recovery.png  used on input lin
+e 1106.
+(pdftex.def)             Requested size: 446.2658pt x 316.00734pt.
+
+
+[30 <./paperFigures/mnist_publication_figure.pdf>]
+
+[31 <./paperFigures/mnist_diagnostic.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[32 <./paperFigures/mnist_transform_analysis.pdf>]
+<paperFigures/gnnfix.png, id=1415, 738.71985pt x 392.4261pt>
+File: paperFigures/gnnfix.png Graphic file (type png)
+<use paperFigures/gnnfix.png>
+Package pdftex.def Info: paperFigures/gnnfix.png  used on input line 1149.
+(pdftex.def)             Requested size: 469.75499pt x 249.55307pt.
+
+
+[33 <./paperFigures/mnist_awb_recovery.png>]
+<paperFigures/synthetic_graph_10task_3seed_results.pdf, id=1422, 862.18106pt x 
+502.41963pt>
+File: paperFigures/synthetic_graph_10task_3seed_results.pdf Graphic file (type 
+pdf)
+<use paperFigures/synthetic_graph_10task_3seed_results.pdf>
+Package pdftex.def Info: paperFigures/synthetic_graph_10task_3seed_results.pdf 
+ used on input line 1167.
+(pdftex.def)             Requested size: 469.75499pt x 273.74045pt.
+<paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf, id=1424, 717.55327pt 
+x 356.13551pt>
+File: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf Graphic file (typ
+e pdf)
+<use paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf>
+Package pdftex.def Info: paperFigures/synthetic_graph_task_accuracy_vs_noise.pd
+f  used on input line 1176.
+(pdftex.def)             Requested size: 446.2658pt x 221.49187pt.
+
+
+[34 <./paperFigures/gnnfix.png>]
+
+LaTeX Warning: Text page 35 contains only floats.
+
+
+
+[35 <./paperFigures/synthetic_graph_10task_3seed_results.pdf> <./paperFigures/s
+ynthetic_graph_task_accuracy_vs_noise.pdf>])
+
+[36] (./tmlr.bbl
+
+[37]
+
+[38]) (./texts/supp.tex
 Overfull \hbox (7.63908pt too wide) detected at line 13
 []
  []
 
 
 
-[37]
+[39]
 Overfull \hbox (7.63908pt too wide) detected at line 67
 []
  []
 
 
-
-[38]
-
-[39]
 
 [40]
 
@@ -1572,24 +1549,80 @@ Overfull \hbox (7.63908pt too wide) detected at line 67
 
 [43]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <20.74> on input line 299.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 299.
+(Font)              <12> on input line 216.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 216.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 216.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 253.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 253.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 253.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 253.
+
 
 
 [44]
 
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 283.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 283.
+
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <20.74> on input line 303.
+
+
 [45]
-Overfull \hbox (40.47336pt too wide) in paragraph at lines 542--543
- [] 
+
+[46]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 497.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 497.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 497.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 497.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 499--500
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 501--502
+
  []
 
 
 
-[46]
-
 [47]
-Overfull \hbox (30.51494pt too wide) in paragraph at lines 742--743
+Overfull \hbox (40.47336pt too wide) in paragraph at lines 612--613
  [] 
  []
 
@@ -1607,36 +1640,32 @@ Overfull \hbox (30.51494pt too wide) in paragraph at lines 742--743
 
 [53]
 
-LaTeX Warning: Reference `fig:alg_conditions' on page 54 undefined on input lin
-e 8.
+LaTeX Font Warning: Font shape `T1/lmr/m/scit' undefined
+(Font)              using `T1/lmr/m/scsl' instead on input line 98.
 
 
 LaTeX Font Warning: Font shape `T1/lmr/m/scit' undefined
-(Font)              using `T1/lmr/m/scsl' instead on input line 96.
-
-
-LaTeX Font Warning: Font shape `T1/lmr/m/scit' undefined
-(Font)              using `T1/lmr/m/scsl' instead on input line 128.
+(Font)              using `T1/lmr/m/scsl' instead on input line 130.
 
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <8> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 131.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 133.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 131.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 133.
 
-LaTeX Warning: Float too large for page by 14.9502pt on input line 136.
+LaTeX Warning: Float too large for page by 14.9502pt on input line 138.
 
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 147.
+(Font)              <9> on input line 150.
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <9> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 147.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 150.
 
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 147.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 150.
 ! Missing { inserted.
 <to be read again> 
                    \begingroup 
-l.154 \textbf
+l.157 \textbf
              {Return} $\weight$\;
 A left brace was mandatory here, so I've put one in.
 You might want to delete and/or insert some corrections
@@ -1646,7 +1675,7 @@ so that I will find a matching right brace soon.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.154 \textbf
+l.157 \textbf
              {Return} $\weight$\;
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -1657,14 +1686,6 @@ my insertion and my current dilemma will both disappear.
 
 
 [54]
-
-LaTeX Warning: Reference `tab:sine_hyperparams' on page 55 undefined on input l
-ine 222.
-
-
-LaTeX Warning: Reference `tab:mnist_hyperparams' on page 55 undefined on input 
-line 222.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -1698,146 +1719,60 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package rerunfilecheck Warning: File `tmlr.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `tmlr.out':
-(rerunfilecheck)             Before: 108983E4CE22C037B9A1FC48BBEC28A3;14237
-(rerunfilecheck)             After:  67C3D21BB1BC163A79EE7F6AA14974E7;13309.
+Package rerunfilecheck Info: File `tmlr.out' has not changed.
+(rerunfilecheck)             Checksum: 27F55998691D45BC6E65995A36D56C1C;12298.
  ) 
 Here is how much of TeX's memory you used:
- 28651 strings out of 473190
- 547703 string characters out of 5715801
- 973271 words of memory out of 5000000
- 50908 multiletter control sequences out of 15000+600000
+ 28599 strings out of 473190
+ 547736 string characters out of 5715801
+ 976598 words of memory out of 5000000
+ 50891 multiletter control sequences out of 15000+600000
  723484 words of font info for 168 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,26n,107p,1934b,720s stack positions out of 10000i,1000n,20000p,200000b,200000s
-
-pdfTeX warning (dest): name{algocf.16} has been referenced but does not exist, 
-replaced by a fixed one
-
-
-pdfTeX warning (dest): name{algocf.13} has been referenced but does not exist, 
-replaced by a fixed one
-
-
-pdfTeX warning (dest): name{algocf.12} has been referenced but does not exist, 
-replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.5.4} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.5.3} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.5.2} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.5.1} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.J.5} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.6} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.5} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.4} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.3} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.2} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.3.1} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.2.8} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.2.7} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.J.2.6} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.7.2.3} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.7.2.2} has been referenced but does n
-ot exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsubsection.7.2.1} has been referenced but does n
-ot exist, replaced by a fixed one
-
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/loc
-al/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texlive
-/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texm
-f-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fon
-ts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
-blic/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmb
-x7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></us
-r/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/tex
-live/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2025
-/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2025/texmf-di
-st/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2025/texmf-dist/fonts
-/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pub
-lic/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmm
-i12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></u
-sr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/te
-xlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025/
-texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2025/texmf-dist/
-fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1
-/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/
-lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.pfb></
-usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/te
-xlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025/t
-exmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2025/texmf-dist/fo
-nts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
-blic/lm/lmri10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lm
-ri7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri8.pfb></u
-sr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/te
-xlive/2025/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/20
-25/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-d
-ist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/t
-ype1/public/lm/lmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public
-/lm/lmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9.p
-fb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/l
-ocal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texliv
-e/2025/texmf-dist/fonts/type1/public/lm/lmtt9.pfb></usr/local/texlive/2025/texm
-f-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/
-texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2
-025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/texmf
--dist/fonts/type1/public/wasy-type1/wasy10.pfb>
-Output written on tmlr.pdf (58 pages, 9866219 bytes).
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/l
+ocal/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texli
+ve/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/te
+xmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/f
+onts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
+public/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/l
+mbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></
+usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/t
+exlive/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/20
+25/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2025/texmf-
+dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2025/texmf-dist/fon
+ts/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/p
+ublic/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/l
+mmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb><
+/usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/
+texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/202
+5/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2025/texmf-dis
+t/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/typ
+e1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/l
+m/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.pfb>
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/
+texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025
+/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2025/texmf-dist/
+fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
+public/lm/lmri10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/
+lmri7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri8.pfb><
+/usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/
+texlive/2025/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/
+2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf
+-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts
+/type1/public/lm/lmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/publ
+ic/lm/lmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9
+.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr
+/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texl
+ive/2025/texmf-dist/fonts/type1/public/lm/lmtt9.pfb></usr/local/texlive/2025/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/202
+5/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive
+/2025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/tex
+mf-dist/fonts/type1/public/wasy-type1/wasy10.pfb>
+Output written on tmlr.pdf (58 pages, 3341027 bytes).
 PDF statistics:
- 1838 PDF objects out of 2073 (max. 8388607)
- 1336 compressed objects within 14 object streams
- 387 named destinations out of 1000 (max. 500000)
- 783 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 2129 PDF objects out of 2487 (max. 8388607)
+ 1298 compressed objects within 13 object streams
+ 352 named destinations out of 1000 (max. 500000)
+ 631 words of extra memory for PDF output out of 10000 (max. 10000000)
 

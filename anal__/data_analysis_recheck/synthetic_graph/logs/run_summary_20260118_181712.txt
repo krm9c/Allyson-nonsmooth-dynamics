@@ -1,0 +1,43 @@
+SYNTHETIC GRAPH EXPERIMENTS - MULTIPLE RUNS
+Started: Sun Jan 18 06:17:12 PM CST 2026
+Runs per condition: 3
+Total experiments: 12
+
+
+========================================
+RESULTS SUMMARY
+========================================
+
+Condition: synthetic_graph_10task_condition1_baseline
+  ✓ run0: SUCCESS
+  ✓ run1: SUCCESS
+  ✓ run2: SUCCESS
+  Summary: 3/3 successful
+
+Condition: synthetic_graph_10task_condition2_heuristics
+  ✓ run0: SUCCESS
+  ✓ run1: SUCCESS
+  ✓ run2: SUCCESS
+  Summary: 3/3 successful
+
+Condition: synthetic_graph_10task_condition3_arch_no_transfer
+  ✓ run0: SUCCESS
+  ✓ run1: SUCCESS
+  ✓ run2: SUCCESS
+  Summary: 3/3 successful
+
+Condition: synthetic_graph_10task_condition4_awb_full
+  ✓ run0: SUCCESS
+  ✓ run1: SUCCESS
+  ✓ run2: SUCCESS
+  Summary: 3/3 successful
+
+========================================
+OVERALL SUMMARY
+========================================
+Total experiments run: 12
+Successful: 12
+Failed: 0
+Skipped (previously completed): 0
+Finished: Mon Jan 19 01:26:00 AM CST 2026
+========================================

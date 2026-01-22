@@ -210,7 +210,7 @@ The goal of this section is to formalize the mathematical modeling required to i
     \[ \|f\|_{\sobolev} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} f \|_{L^{p}(\domain)}.\]
 \end{definition}
 \Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. The makes it sound like "because it's a subset it's automatically compact," which is not true. I think want to assume the set is closed and bounded because the data set will always be finite in practice. Then, we get that the set is compact as a result of Heine-Borel.}
-In Definition \ref{defn:sobo}, two key notions must be highlighted. First, the $\domain$ is by definition a subset of $\rn,$ which by virtue of the Heine--Borel theorem of ~\cite{rudin1976principles} is compact and closed. The implications of this assumption are important. $\domain$, in this context, is the data sample space, and therefore the assumption of compact and closedness applies to the data space. For any standard AI application, this assumption implies that the data space is finite and the numerical values are bounded. Both are notable practical considerations that must be followed in any AI model training as it is well known that  without the normalization, the AI model training fails to converge~\cite{huang2023normalization}. 
+In Definition \ref{defn:sobo}, two key notions must be highlighted. First, the $\domain$ is by definition a subset of $\rn,$ which by virtue of the Heine--Borel theorem of ~\cite{rudin1976principles} is compact and closed. The implications of this assumption are important. $\domain$, in this context, is the data sample space, and therefore the assumption of compact and closedness applies to the data space. For any standard AI application, this assumption implies that the data space is finite and the numerical values are bounded. Both are notable practical considerations that must be followed in any AI model training as it is well known that  without the normalization, the AI model training fails to converge, as seen in ~\cite{huang2023normalization}. 
 GAIL - Here and throughout, this way of referencing seems a bit odd -- having the author name followed by parens and the date but not separation from the text -- usually one has (Author year) or "as discussed by author (year), not just "fails to converge Huang et al. (2023)" -- as if Huang et al. wee failing to converge!
 
 Therefore, this assumption is not only practical but necessary. 
@@ -482,7 +482,7 @@ Now, we show that if two tasks $\tx(t), \tx(t+1)$  are similar, then the corresp
         \clcost & =\int_0^t \ea \;  d~\tau  = \int_{\vx\in \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(\tau),\psi(\tau))( \vx ) )d\tau . 
     \end{align}
     Let $\varepsilon >0$ and $\delta(\varepsilon)>0$ chosen such that $\ea$ is continuous w.r.t. measure $\mu$.
-    Then, for $\Delta t = 1,$
+    Then, 
     $\mu(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau))<\delta$, implies
     $\abs{\clcostt- \clcost} \leq \varepsilon.$
     %GAIL - I don't follow the preceding: If XXX less than delta implies YYY -- where is the If... then part?
@@ -527,12 +527,12 @@ Now, we show that if two tasks $\tx(t), \tx(t+1)$  are similar, then the corresp
 
 % remark justifying the union.
 \begin{remark}\label{boundedremark}
-    The  equality  $\int_0^t \ea \;  d~\tau  = \int_{\vx\in \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(\tau),\psi(\tau))( \vx ) )d\tau $ is not always guaranteed because the duplicates among all $\tx(\tau), \forall \tau$  are counted only once. However, we assume that within the construction of $\ell,$ there is an average between all duplications, and only one instance of these duplicates survives. This is reasonable because, in practice, a batch of data is uniformly sampled and averaged over.
+    The  equality  $\int_0^t \ea \;  d~\tau  = \int_{\vx\in \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(\tau),\psi(\tau))( \vx ) )d\tau $ is not always guaranteed as duplicates among all $\tx(\tau), \forall \tau$  are counted only once. However, we assume that within the construction of $\ell,$ there is an average between all duplications, and only one instance of these duplicates survives. This is reasonable because, in practice, a batch of data is uniformly sampled and averaged over.
 \end{remark}
 
 Lemma~\ref{lem:contMeasure} solidifies the notion that similar 
 tasks produce similar loss values and that $\clcost$ is continuous with respect 
-to the measure $\mu$ for any $ \tx(t), \tx(t+1) \in \mathcal{B}(\overline{\tx}).$  The  lemma provides the conditions for when a solution between two consecutive tasks  exists. If  Lemma~\ref{lem:contMeasure} is upheld for every $t \in [0,T],$, then the CL problem will have a solution for the whole interval $[0,T].$ To provide a rigorous notion of this, we have the following definition.
+to the measure $\mu$ for any $ \tx(t), \tx(t+1) \in \mathcal{B}(\overline{\tx}).$  The  lemma provides the conditions for when a solution between two consecutive tasks  exists. If  Lemma~\ref{lem:contMeasure} is upheld for every $t \in [0,T],$ then the CL problem will have a solution for the whole interval $[0,T].$ To provide a rigorous notion of this, we have the following definition.
 \begin{definition}
     \label{defabsolutely_continuous}
      Consider the interval $[0,T]$ and  $\overline{\tx} = \bigcup_{t=0}^T \tx(t)$ with the power set $\mathcal{P(\overline{\tx})}$ as its topology. Set $\mathcal{B(\overline{\tx})}$ to be the Borel sigma algebra on $\overline{\tx}$ equipped with a probability measure  $\mu.$ Then, $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ forms a probability measure space. Define the set $[0,T] = [0,1] \cup  (1, 2], \cdots (t, t+1], \cdots, \cup, \cdots, \cup, (T-1, T].$  Let $\hat{f}: \overline{\tx}\rightarrow \mathbb{R}$ be a measurable function. For any 
@@ -687,7 +687,7 @@ It is now of interest to identify how to change the architecture and efficiently
     \label{fig:solution}
 \end{figure}
 \section{CL Solution}
-To understand how to change the architecture of the model and learn over a series of tasks within the CL paradigm, we consider Figure~\ref{fig:solution}. We begin at task $t = 1$ and determine an optimal weight denoted $w^*(1) = w^\infty(1).$ This gives us a neural network solution in $\mathcal{F}_1.$ Then, as the next task is observed, we perform a derivative-free hyperparameter search, in particular, the directional direct search method~\cite{larson2019derivative}, to obtain a new architecture. The solution to this search is denoted $\psi^\infty(2)$ as in  Figure ~\ref{fig:solution}. Notably,  a new quandary arises since the new architecture introduces a parameter space that may have a different size from the one used for the previous task. Unfortunately, it is not feasible to trivially transfer information from the previous architecture to the new one. The common and state-of-the-art solution to this problem is to initialize the parameters in the new architecture from random and retrain on all available tasks, which is resource heavy as well as impractical. Instead, we develop a low-rank transfer algorithm that seeks to transfer information between the previous architecture to the new architecture in an efficient way. Mathematically, our goal is to solve the following bi-level problem:
+To understand how to change the architecture of the model and learn over a series of tasks within the CL paradigm, we consider Figure~\ref{fig:solution}. We begin at task $t = 1$ and determine an optimal weight denoted $w^*(1) = w^\infty(1).$ This gives us a neural network solution in $\mathcal{F}_1.$ Then, as the next task is observed, we perform a derivative-free hyperparameter search, in particular, the directional direct search method~\cite{larson2019derivative}, to obtain a new architecture. The solution to this search is denoted $\psi^\infty(2)$ as in  Figure ~\ref{fig:solution}. Notably,  a new quandary arises since the new architecture introduces a parameter space that may have a different size from the one used for the previous task. Unfortunately, it is not feasible to trivially transfer information from the previous architecture to the new one. The common and state-of-the-art solution to this problem is to randomly re-initialize the parameters in the new architecture from retrain on all available tasks, which is resource heavy as well as impractical. Instead, we develop a low-rank transfer algorithm that seeks to transfer information between the previous architecture to the new architecture in an efficient way. Mathematically, our goal is to solve the following bi-level problem:
 \begin{align}\label{eq:bilevel} \tag{bi-level}
      V^*(t,\weight(t))  = \min_{\weight \in \mathcal{W}(\psi^*(t))} V(t,\weight(t)),\quad \text{ where}\; \;  \psi^*(t)  = \mathrm{arg}\min_{\psi\in \Psi} J(\weight(t),\psi,\tx(t)).
 \end{align}
@@ -710,6 +710,8 @@ where $\mathrm{A}$ and $\mathrm{B}$ are matrices that enable the transfer of inf
 Observe that \eqref{eq:HJB} is missing the term $\frac{\partials V^*}{\partials \psi}\frac{\partials \psi}{\partials t}.$ This omission is intentional because the exact effects of architecture cannot be measured through derivatives in this partial differential equation (PDE). Instead, in this PDE the effect is absorbed through the change in tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$.
 Because of this absorption we can now define a lower bound on $\partials_{t} V^*(t).$ This lower bound, which is essentially a lower bound on the variation, is equivalent to the lower bound on $\varepsilon$ in Theorem~\ref{thm:intersection} with the distinction that the lower bound is derived on $V^*$ instead of just the forgetting cost $J.$ The idea covers the effects of the dynamic program. We derive this bound below.
 
+\Ally{In the Theorem below, what is $g?$}\\
+
 \begin{theorem}\label{thm:lower_HJB}
 Given proposition~\ref{HJB}, assume there exists a stochastic-gradient-based optimization procedure,  and choose $ u(t) =- \sum^{I} \alpha(i) \mathrm{g}^{(i)},$ where $I$ is the number of updates and $\alpha(i)$ is some learning rate. Choose $\alpha(i)$ such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } \rightarrow 0$ as $I \rightarrow \infty$ and $\min_{\weight \in \mathcal{W}(\psi^*(t))} J(\weight(t),\psi^*(t),\tx(t)) \leq \varepsilon.$ Then, as long as the architecture is chosen such that $   \sing \delta = \left[ \singmin \norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } - \singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T} \right],$  the total variance in $V^*$ is bounded by $\varepsilon.$ 
 \end{theorem}
@@ -723,7 +725,10 @@ $\singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T}$, and this bound is
 \end{remark}
 
 
-Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. In summary~(refer to Figure~\ref{fig:method}), for every new task, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Once a new architecture is found,  we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Then, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks.  In the process of low-rank transfer, we guarantee transfer of learning by requiring that the $\partials_{t} \leq \eta$, allowing for the intersection of the neural network search spaces between subsequent tasks to increase. Thus, our algorithm comprises three components: step 1 --  architecture search, step 2 --  low-rank transfer, and step 3 --  continual learning. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
+Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. In summary~(refer to Figure~\ref{fig:method}), for every new task, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Once a new architecture is found,  we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Then, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks.  In the process of low-rank transfer, we guarantee transfer of learning by requiring that the $\partials_{t} \leq \eta$, allowing for the intersection of the neural network search spaces between subsequent tasks to increase.\\
+\Ally{In the previous sentence, what function/parameter we taking the partial derivative of? Additionally, what is $\eta?$ Previously, it appears on page 4 that it denotes "The threshold to identify acceptable loss values." Maybe we remind the reader of this since we are now on page 17.}
+Thus, our algorithm comprises three components: step 1 --  architecture search, step 2 --  low-rank transfer, and step 3 --  continual learning. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
+
 \begin{figure}
     \centering
     \includegraphics[width=1.1\linewidth]{paperFigures/method.png}
@@ -864,20 +869,19 @@ In this paper we attempt to combine the most profitable aspects of methods such 
 
 % \KR{start this}
 \section{Experimental Results}\label{sec: experiments}
-In this section we evaluate the algorithm in \ref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in Section~\ref{sec:motivation}? Does changing the architecture actually helps with learning over consecutive tasks~(Section~\ref{sec:upper_weight})? Does changing the architecture help improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? 
+In this section we evaluate the algorithm in \ref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in Section~\ref{sec:motivation}? Does changing the architecture actually help with learning over consecutive tasks~(Section~\ref{sec:upper_weight})? Does changing the architecture improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? We examine these questions for three continual learning problems: regression, image classification, and graph classification.
 
 %========datasets and Metrics============%
 \subsection{Datasets and Metrics}
-We examine these questions for three continual learning problems: regression, image classification, and graph classification.
 
-\textbf{Datasets:} We utilize three data sets, one for each experiment.
+\textbf{Datasets and Task Splits:} We utilize three data sets, one for each learning problem.
 
 \begin{itemize}
     \item \textbf{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
 
-    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs. Each task contains two digit classes. For example, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale.
+    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale.
 
-    \item \textbf{Synthetic Graphs:} We generate random heterogeneous graphs using PyTorch Geometric~\cite{pyg}. Tasks differ in node count, edge count, and connectivity patterns.
+    \item \textbf{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 \end{itemize}
 
 \textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy, and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
@@ -1051,14 +1055,21 @@ In Figure~\ref{fig:sine_noise_comprehensive}, we provide a comprehensive compari
     \label{fig:arch_evolution}
 \end{figure}
 
-\subsection{MNIST Classification Experiments}
-To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We split MNIST into 2 tasks by grouping digit pairs (digits 0--4 for Task 0, digits 5--9 for Task 1).
+\subsection{Image Classification Experiments}
+To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We perform two classification experiments: learning two tasks and learning 10 tasks.
 
-\textbf{Hyperparameter Choices:} We use a convolutional neural network with two convolutional layers (filter size 3, 3 output channels each) followed by $2 \times 2$ max-pooling and ReLU activations. The flattened features pass through a feedforward network with hidden layers of size 512 and 64. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, for 200 epochs per task. For C2--C4, we use cosine learning rate scheduling with 25 warmup epochs. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$. Full hyperparameter details are in Appendix~\ref{app:standard_cl}.
+\subsubsection{Overview of Experiments}
 
-\textbf{Results:} Figure~\ref{fig:mnist_comprehensive} compares all four conditions (C1--C4) on the 2-task MNIST benchmark. Panel (a) shows test accuracy on experience replay data. C4 (AWB Full) achieves the highest accuracy throughout training. Panel (b) displays Hamiltonian loss evolution with C4 showing faster convergence. Panel (c) summarizes average accuracy: C4 achieves 94.5\% compared with 92.8\% for the baseline (C1).
+\textbf{Dataset and Task Splits:} As stated above, we will be utilizing the $28 \times 28$ grayscale images in the MNIST dataset for our experiments. We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For our first experiment, we group digits $0$ through $4$ in Task $0$ and digits $5$ through $9$ in Task $1.$ For our second experiment (where we seek to learn $10$ tasks), each task consists of images of a different digit.
 
-Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while C4 shows zero forgetting. This demonstrates that random reinitialization after architecture changes leads to catastrophic forgetting, while the AWB transfer mechanism preserves learned knowledge. These results validate the conclusions from Theorem~\ref{thm:lower_HJB} for classification tasks.
+\textbf{Hyperparameter Choices:} We use a convolutional neural network with two convolutional layers (filter size 3, 3 output channels each) followed by $2 \times 2$ max-pooling and ReLU activations. The flattened features pass through a feedforward network with hidden layers of size 512 and 64. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, for 200 epochs per task. For C2--C4, we use cosine learning rate scheduling with 25 warm-up epochs. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$.
+
+
+\subsubsection{Experiment 1}
+
+For this first experiment, we learn two tasks and train for $500$ epochs on each task. Full hyperparameter details for this experiment are in Appendix~\ref{app:standard_cl}. Figure~\ref{fig:mnist_comprehensive} compares all four conditions (C1--C4) on the 2-task MNIST benchmark. Panel (a) shows test accuracy on experience replay data. C4 (AWB Full) achieves the highest accuracy throughout training. Panel (b) displays Hamiltonian loss evolution with C4 showing faster convergence. Panel (c) summarizes average accuracy: C4 achieves 94.5\% compared with 92.8\% for the baseline (C1).
+
+Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while C4 shows zero forgetting. This demonstrates that random re-initialization after architecture changes leads to catastrophic forgetting, while the AWB transfer mechanism preserves learned knowledge. These results validate the conclusions from Theorem~\ref{thm:lower_HJB} for classification tasks.
 
 \begin{figure}[!htb]
     \centering
@@ -1067,15 +1078,15 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
     \label{fig:mnist_comprehensive}
 \end{figure}
 
-\subsubsection{Mnist-ten tasks}
-As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we run the training from Figure.~\ref{fig:mnist_comprehensive} for 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
+\subsubsection{Experiment 2}
+As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
 
-On careful investigation it is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon, careful investigation, it was observed that, the smoothing behavior is proportional to how many epochs are utilized for a/b training. 
+It is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon careful investigation, it was observed that the smoothing behavior is proportional to how many epochs are utilized for A/B training. 
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
-    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the mnist dataset}
+    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the MNIST dataset}
     \label{cnn}
 \end{figure}
 
@@ -1083,12 +1094,13 @@ On careful investigation it is observed from Figure.~\ref{fig:diagnostics} that 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
-    \caption{Classification experiment: More insight into the jump observed in the mnist data set experiment}
+    \caption{Classification experiment: More insight into the jump observed in the MNIST data set experiment}
     \label{fig:diagnostics}
 \end{figure}
 
-Towards identifying the effect of A/B epochs, we perform the following experiment. 
-\subsubsection{The accuracy drop analysis}
+Towards identifying the effect of A/B epochs, we perform the following experiment in the section below.
+
+\subsubsection{Analysis of Reduced Accuracy in Experiment 2}
 \label{sec:transform_analysis}
 To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. Each task applies a random rotation and shear transform to MNIST digits, creating distribution shift between tasks. Figure~\ref{fig:transform_curve} shows how task difficulty varies with transform angle. The digit images at the top illustrate how each transform distorts the original digit.
 \begin{figure}[!htb]
@@ -1133,32 +1145,14 @@ It is clear from Figure.~\ref{fig:AB_ablation} that, with an increase in the num
 %     \label{cnn}
 
 
-
-
 \subsection{Graph Classification}
-\textbf{Hyperparameter Choices:} For the graph classification task, a graph convolutional network (GCN)  was implemented that involved multiple graph convolutional layers, each transforming node features while incorporating neighborhood information via adjacency matrices. Following the convolutional layers, a graph pooling layer aggregates node-level embeddings into a fixed-size graph representation. The pooled embeddings are then processed through fully connected feedforward layers to produce graph-level predictions. The network employs leaky ReLU activations and optional dropout for regularization. We begin with a single GCN layer  with filter size $3$ followed by a feedforward neural network with $4$ layers where the hidden layers  are of size $140.$ We learn five tasks of data and train $125$ epochs on each task. We use AdamW with a learning rate of $1\times 10^{-4}$ in the training regime. For each GCN layer, we observe the best filter size with the architecture search approach presented here.
-
-\textbf{Datasets and Task Splits:} We generate our tasks by sampling through a FakeHeteroDataset class, which is a synthetic dataset class in the PyTorch Geometric~\cite{pyg} library that generates random heterogeneous graphs. Heterogeneous graphs imply that subsequent tasks do not have the same number of nodes or edges.  The datasets returned are purely random---node and edge features, connectivity, and labels.
-
-
-\textbf{Results:} Figure \ref{gnn} shows  the loss values as the graph neural network  trains (on the training data) with respect to different methods on the five tasks. The red graph is a  graph continual learning method from \cite{raghavan2023learningcontinuallysequencegraphs},  equipped to consider the dynamic changes between nodes and edges in the continual learning setting. This serves as our baseline for comparison. The blue graph describes the loss value if we change the architecture at each task; but rather than utilizing the low-rank transfer (which we  describe in \ref{alg:three}), we randomly reinitialize the weights. The green graph shows the loss value with our proposed method of changing the architecture at each step and completing the low-rank transfer to retain learning.
-
-As shown from  Figure~\ref{gnn}, the red graph stagnates in its learning, and the architecture change along with low-rank transfer allows for significant improvements in the loss function. We observe that the loss function improvements are better for graph classification than the other two cases presented in the results section. We again observe that the conclusions from image classification and regression are upheld in Figure~\ref{gnn}, where changing the weights is not enough. 
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\linewidth]{paperFigures/gnnfix.png}
-        \caption{Graph classification experiment: Comparing loss values on training data for baseline continual learning method with method of learning optimal task architecture}
-        \label{gnn}
-    \end{figure}
-
-\subsubsection{Synthetic Graph with Domain Shift}
-\label{sec:synthetic_graph}
-
 To further evaluate the AWB framework under controlled domain shift, we conduct experiments on a synthetic graph classification task with 10 sequential tasks.
 
-\textbf{Data Generation:} The synthetic graph dataset consists of 500 graphs generated using PyTorch Geometric's FakeDataset, with an 80/20 train/test split applied once at initialization to prevent data leakage. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. To simulate domain shift in the continual learning setting, we employ a task-shift paradigm where all tasks share the same 5 classes but introduce progressive perturbations across the 10-task sequence. Specifically, for task $k$ ($k \geq 1$), we apply three types of perturbations using a linear scaling mode: (1) Gaussian feature noise with standard deviation $\sigma_k = 0.02k$, (2) random edge dropout with probability $p_k = 0.01k$, and (3) constant feature shift of magnitude $s_k = 0.01k$. Task 0 serves as the unperturbed baseline. This design creates a challenging continual learning benchmark where the underlying classification task remains constant, but the input distribution shifts progressively---testing the model's ability to adapt to domain drift while retaining knowledge from earlier distributions.
+\textbf{Dataset and Task Split:} As stated at the beginning of Section \ref{sec: experiments}, generate random graphs using PyTorch Geometric's FakeDataset. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 
-\textbf{Model Architecture and Hyperparameters:} We employ a Graph Convolutional Network (GCN) architecture consisting of two graph convolution layers with hidden dimensions $[10 \rightarrow 32 \rightarrow 32]$, followed by max pooling and a 3-layer feedforward classifier with dimensions $[32 \rightarrow 32 \rightarrow 16 \rightarrow 5]$. All layers use LeakyReLU activations except the final classification layer. The model is trained using the Adam optimizer with learning rate $\eta = 10^{-4}$, batch size 128, and gradient clipping at norm 1.0. The Hamiltonian gradient is computed with weights $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task loss, experience replay loss, and regularization respectively. Each task is trained for 200 epochs with task warmup enabled (20 epochs at 10\% learning rate). For the AWB Full condition (Condition 4), architecture search is performed with the following settings: 5 preliminary training epochs, 150 A/B matrix training epochs, 50 warmup epochs, and modified Adam betas $(0.5, 0.999)$ for V-training to enable faster adaptation after the warmup-to-main transition.
+
+\textbf{Hyperparameter Choices:} We utilize a Graph Convolutional Network (GCN) consisting of two graph convolution layers with hidden dimensions $[10 \rightarrow 32 \rightarrow 32]$, followed by max pooling and a 3-layer feedforward classifier with dimensions $[32 \rightarrow 32 \rightarrow 16 \rightarrow 5]$. All layers use LeakyReLU activations except the final classification layer. The model is trained using the Adam optimizer with learning rate $\eta = 10^{-4}$, batch size 128, and gradient clipping at norm 1.0. The Hamiltonian gradient is computed with weights $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task loss, experience replay loss, and regularization respectively. Each task is trained for 200 epochs with task warm-up enabled (20 epochs at 10\% learning rate). For the AWB Full condition (Condition 4), architecture search is performed with the following settings: 5 preliminary training epochs, 150 A/B matrix training epochs, 50 warmup epochs, and modified Adam betas $(0.5, 0.999)$ for V-training to enable faster adaptation after the warmup-to-main transition.
+
 
 \textbf{Results:} Figure~\ref{fig:synthetic_graph_results} presents the comprehensive results across three experimental conditions: Baseline (fixed architecture, constant learning rate), Heuristics (task warmup, adaptive learning rate), and AWB Full (architecture search with A/B transfer). The top row shows training dynamics: (a) test accuracy on experience replay, (b) Hamiltonian loss, and (c) gradient norm over the 10-task sequence. The bottom row presents summary metrics: (d) average accuracy, (e) backward transfer (BWT), and (f) forgetting.
 
@@ -1208,9 +1202,9 @@ AWB Full   & 0.036 & 0.07 & 8/10 \\
 \end{tabular}
 \end{table}
 
-\textbf{Interpretation:} The results reveal a favorable accuracy-forgetting trade-off for the AWB approach. The Baseline model exhibits \emph{flat accuracy} (74--81\%, range=7\%) across all domain shifts---it neither learns effectively from new domains nor forgets significantly. In contrast, AWB Full achieves \textbf{12.5\% higher average accuracy} (89.3\% vs 79.4\%) while maintaining a \emph{tighter accuracy range} (5\% vs 7\%), demonstrating consistent high performance despite increasing perturbation.
+These results reveal a favorable accuracy-forgetting trade-off for the AWB approach. The Baseline model exhibits \emph{flat accuracy} (74--81\%, range=7\%) across all domain shifts---it neither learns effectively from new domains nor forgets significantly. In contrast, AWB Full achieves \textbf{12.5\% higher average accuracy} (89.3\% vs 79.4\%) while maintaining a \emph{tighter accuracy range} (5\% vs 7\%), demonstrating consistent high performance despite increasing perturbation.
 
-The forgetting analysis (Table~\ref{tab:forgetting_stats}) shows that AWB Full exhibits marginal forgetting (3.6\% average) on 8 out of 10 tasks, compared to near-zero forgetting for Baseline (0.5\% average on 2 tasks). However, this small forgetting cost is offset by dramatically superior learning capacity: AWB Full starts at higher accuracy and remains above Baseline even after forgetting. This demonstrates that the low-rank transfer mechanism ($V = A \cdot W \cdot B^T$) successfully preserves learned representations while enabling adaptation to new domains.
+The forgetting analysis (Table~\ref{tab:forgetting_stats}) shows that AWB Full exhibits marginal forgetting (3.6\% average) on 8 out of 10 tasks, compared to near-zero forgetting for Baseline (0.5\% average on 2 tasks). However, this small forgetting cost is offset by dramatically superior learning capacity: AWB Full starts at higher accuracy and remains above Baseline even after forgetting. This demonstrates that the low-rank transfer mechanism successfully preserves learned representations while enabling adaptation to new domains.
 
 
 % ---------------------

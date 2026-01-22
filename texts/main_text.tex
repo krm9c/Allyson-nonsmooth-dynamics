@@ -209,11 +209,9 @@ The goal of this section is to formalize the mathematical modeling required to i
     The number $k$ is the order of the Sobolev space, and the Sobolev space norm is defined as 
     \[ \|f\|_{\sobolev} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} f \|_{L^{p}(\domain)}.\]
 \end{definition}
-\Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. The makes it sound like "because it's a subset it's automatically compact," which is not true. I think want to assume the set is closed and bounded because the data set will always be finite in practice. Then, we get that the set is compact as a result of Heine-Borel.}
-In Definition \ref{defn:sobo}, two key notions must be highlighted. First, the $\domain$ is by definition a subset of $\rn,$ which by virtue of the Heine--Borel theorem of ~\cite{rudin1976principles} is compact and closed. The implications of this assumption are important. $\domain$, in this context, is the data sample space, and therefore the assumption of compact and closedness applies to the data space. For any standard AI application, this assumption implies that the data space is finite and the numerical values are bounded. Both are notable practical considerations that must be followed in any AI model training as it is well known that  without the normalization, the AI model training fails to converge, as seen in ~\cite{huang2023normalization}. 
+% \Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. The makes it sound like "because it's a subset it's automatically compact," which is not true. I think want to assume the set is closed and bounded because the data set will always be finite in practice. Then, we get that the set is compact as a result of Heine-Borel.}
+In Definition \ref{defn:sobo}, $\domain$ is the data and  by definition, it is a finite subset of $\rn.$ Therefore, it is a closed set and by Heine--Borel theorem~\cite{rudin1976principles}, $\domain$ is also compact. For any standard AI application, this assumption implies that the data space is finite. This is an important practical consideration as, for AI model training to be efficient, one needs the numerical values of the data to be bounded, typically achieved through normalization~\cite{huang2023normalization}. 
 GAIL - Here and throughout, this way of referencing seems a bit odd -- having the author name followed by parens and the date but not separation from the text -- usually one has (Author year) or "as discussed by author (year), not just "fails to converge Huang et al. (2023)" -- as if Huang et al. wee failing to converge!
-
-Therefore, this assumption is not only practical but necessary. 
 
 The next assumption is the presence of weak derivatives. In a standard neural network, derivatives are assumed to exist since twice differentiability is necessary for training and typical training involves gradient-based methods~\cite{kingmaAdamMethodStochastic2017}. In fact, the existence of weak derivatives can be summarized for different activation functions as in Table~\ref{tab:Sobolev_acti}. As noted in the table, all standard activation functions can be recast in the purview of Definition~\ref{defn:sobo}, and a Sobolev space can be constructed that represents the class of functions that can be approximated by neural networks. The appropriateness of approximation and the conditions over which such approximations are possible are discussed in \cite{petersenTopologicalPropertiesSet2021a}  and \cite{adegokeHigherDerivativesInverse2016}.
 \begin{table}[!tb]
@@ -709,11 +707,9 @@ where $\mathrm{A}$ and $\mathrm{B}$ are matrices that enable the transfer of inf
 
 Observe that \eqref{eq:HJB} is missing the term $\frac{\partials V^*}{\partials \psi}\frac{\partials \psi}{\partials t}.$ This omission is intentional because the exact effects of architecture cannot be measured through derivatives in this partial differential equation (PDE). Instead, in this PDE the effect is absorbed through the change in tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$.
 Because of this absorption we can now define a lower bound on $\partials_{t} V^*(t).$ This lower bound, which is essentially a lower bound on the variation, is equivalent to the lower bound on $\varepsilon$ in Theorem~\ref{thm:intersection} with the distinction that the lower bound is derived on $V^*$ instead of just the forgetting cost $J.$ The idea covers the effects of the dynamic program. We derive this bound below.
-
-\Ally{In the Theorem below, what is $g?$}\\
-
+% \Ally{In the Theorem below, what is $g?$}\\
 \begin{theorem}\label{thm:lower_HJB}
-Given proposition~\ref{HJB}, assume there exists a stochastic-gradient-based optimization procedure,  and choose $ u(t) =- \sum^{I} \alpha(i) \mathrm{g}^{(i)},$ where $I$ is the number of updates and $\alpha(i)$ is some learning rate. Choose $\alpha(i)$ such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } \rightarrow 0$ as $I \rightarrow \infty$ and $\min_{\weight \in \mathcal{W}(\psi^*(t))} J(\weight(t),\psi^*(t),\tx(t)) \leq \varepsilon.$ Then, as long as the architecture is chosen such that $   \sing \delta = \left[ \singmin \norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } - \singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T} \right],$  the total variance in $V^*$ is bounded by $\varepsilon.$ 
+Given proposition~\ref{HJB}, assume there exists a stochastic-gradient-based optimization procedure,  and choose $ u(t) =- \sum^{I} \alpha(i) \mathrm{g}^{(i)},$ where $I$ is the number of updates and $\alpha(i)$ is some learning rate and $\mathrm{g}^{(i)}$ is the gradient. Choose $\alpha(i)$ such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } \rightarrow 0$ as $I \rightarrow \infty$ and $\min_{\weight \in \mathcal{W}(\psi^*(t))} J(\weight(t),\psi^*(t),\tx(t)) \leq \varepsilon.$ Then, as long as the architecture is chosen such that $   \sing \delta = \left[ \singmin \norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } - \singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T} \right],$  the total variance in $V^*$ is bounded by $\varepsilon.$ 
 \end{theorem}
 \begin{proof}
     The proof is in Section~\ref{sec:lower_HJB}.
@@ -725,9 +721,11 @@ $\singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T}$, and this bound is
 \end{remark}
 
 
-Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. In summary~(refer to Figure~\ref{fig:method}), for every new task, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Once a new architecture is found,  we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Then, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks.  In the process of low-rank transfer, we guarantee transfer of learning by requiring that the $\partials_{t} \leq \eta$, allowing for the intersection of the neural network search spaces between subsequent tasks to increase.\\
-\Ally{In the previous sentence, what function/parameter we taking the partial derivative of? Additionally, what is $\eta?$ Previously, it appears on page 4 that it denotes "The threshold to identify acceptable loss values." Maybe we remind the reader of this since we are now on page 17.}
-Thus, our algorithm comprises three components: step 1 --  architecture search, step 2 --  low-rank transfer, and step 3 --  continual learning. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
+Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. In summary~(refer to Figure~\ref{fig:method}), for every new task, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Once a new architecture is found,  we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Then, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks.  In the process of low-rank transfer, we guarantee transfer of learning by requiring that the $\partials_{t} \ell \leq \eta$, where $\eta$ is the acceptable tolerance on the loss value. Such tolerance allows the intersection of the neural network search spaces between subsequent tasks to increase such that the loss is small. Thus, our algorithm comprises three components: step 1 --  architecture search, step 2 --  low-rank transfer, and step 3 --  continual learning. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
+
+% \\
+% \Ally{In the previous sentence, what function/parameter we taking the partial derivative of? Additionally, what is $\eta?$ Previously, it appears on page 4 that it denotes "The threshold to identify acceptable loss values." Maybe we remind the reader of this since we are now on page 17.}
+
 
 \begin{figure}
     \centering
@@ -778,7 +776,7 @@ Let us walk through an example. Suppose we would like to learn the optimal numbe
 
 \begin{algorithm}[t]
 \caption{Neighborhood Directional Direct Search (NDDS)} \label{DDSalg}
-\textbf{GAIL - Please decide here and throughout whether you are talking about a neighborhood direct-directional search, a direct-directional neighborhood search, or neighborhood directional direct search}
+% \textbf{GAIL - Please decide here and throughout whether you are talking about a neighborhood direct-directional search, a direct-directional neighborhood search, or neighborhood directional direct search}
 \KwIn{Initial architecture $x_s$, step size $\alpha_0 \in \mathbb{N}$}
 \KwIn{Threshold parameter $\mathrm{threshold} \in \mathbb{R}$}
 \KwOut{Updated architecture $x_s$}
@@ -884,7 +882,10 @@ In this section we evaluate the algorithm in \ref{alg:three} and seek to answer 
     \item \textbf{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 \end{itemize}
 
-\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy, and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
+\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy.
+
+
+% , and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
 
 \begin{itemize}
     \item \textbf{Average Performance:} The mean performance across all tasks after training:
@@ -900,9 +901,9 @@ In this section we evaluate the algorithm in \ref{alg:three} and seek to answer 
 
     \item \textbf{Forgetting:} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}:
     \[
-    \text{Forgetting} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right)
+    \text{Forward Transfer} = FWT = \text{Forgetting} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right)
     \]
-    \item \Ally{In some of the tables there is a "FWT" (forward transfer) metric. Should this be included here? }
+    % \item \Ally{In some of the tables there is a "FWT" (forward transfer) metric. Should this be included here? }
 \end{itemize}
 
 For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
@@ -1209,9 +1210,9 @@ The forgetting analysis (Table~\ref{tab:forgetting_stats}) shows that AWB Full e
 
 % ---------------------
 \section{Conclusion}
-In this paper we elucidated the dependency between the architecture, weights, and  loss function through a Sobolev space design. We derive the necessary condition for the existence of the continual learning problem and show that it requires the forgetting cost to be absolutely continuous. We show both theoretically and with experimentation that just changing the weights of the network is not enough to satisfy the necessary condition, and we devise an approach to change the architecture of the model on the fly. We show  that  our approach  substantially improvemes the training and test performance even in the presence of noise in the tasks. We  also  show that, for a series of neural network architectures, we have better performance when changing architectures while learning continually on the series of tasks. 
+In this paper we elucidated the dependency between the architecture, weights, and  loss function through a Sobolev space design. We derive the necessary condition for the existence of the continual learning problem and show that it requires the forgetting cost to be absolutely continuous. We show both theoretically and with experimentation that just changing the weights of the network is not enough to satisfy the necessary condition, and we devise an approach to change the architecture of the model on the fly. We show  that  our approach  substantially improvement the training and test performance even in the presence of noise in the tasks. We  also  show that, for a series of neural network architectures, we have better performance when changing architectures while learning continually on the series of tasks. 
 
-\textbf{GAIL - throughout, are you talking about necessary condition or conditions?}
+% \textbf{GAIL - throughout, are you talking about necessary condition or conditions?}
 % ---------------------
 \section*{Acknowledgments:} 
-The first author AH was supported by the SWARM project, supported by the Department of Energy Award DE-SC0024387. The second author, KR, was supported by the U.S. Department of Energy, Office of Science (SC), Advanced Scientific Computing Research (ASCR), Competitive Portfolios Project on Energy Efficient Computing: A Holistic Methodology, under Contract DE-AC02-06CH11357. We also acknowledge the support by the U.S. Department of Energy for the SciDAC 6 RAPIDS institute. This research used resources of the Argonne Leadership Computing Facility, which is a DOE Office of Science User Facility supported under Contract DE-AC02- 06CH11357. We also thank the initial conversation with Dr. Stefan Wild, =Lawrence Berkeley National Laboratory, which led to all of this work.
+The first author AH was supported by the SWARM project, supported by the Department of Energy Award DE-SC0024387. The second author, KR, was supported by the U.S. Department of Energy, Office of Science (SC), Advanced Scientific Computing Research (ASCR), Competitive Portfolios Project on Energy Efficient Computing: A Holistic Methodology, under Contract DE-AC02-06CH11357. We also acknowledge the support by the U.S. Department of Energy for the SciDAC 6 RAPIDS institute. This research used resources of the Argonne Leadership Computing Facility, which is a DOE Office of Science User Facility supported under Contract DE-AC02- 06CH11357. We also thank the initial conversation with Dr. Stefan Wild, Lawrence Berkeley National Laboratory, which led to all of this work. We have utilized generative AI, particularly, claude-code from Anthropic to generate the plots, tables in the experiment. Some of the graphics and text in the appendix has been generated, \emph{claude-code}. Rest of the paper is the original product of the authors.

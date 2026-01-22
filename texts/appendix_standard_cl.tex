@@ -152,9 +152,8 @@ The algorithms below are those referenced in Figure~\ref{fig:alg_conditions}.
 $\eta_w \gets 0.1 \cdot \eta_0$, $[\alpha,\beta,\gamma] \gets [1, 0, 0]$\;
 \For{$e = 1$ \KwTo $N_{\text{warmup}}$}{
     $\mathcal{B} \gets$ \texttt{sample}$(\tx(t))$\;
-    $\weight \gets \weight - \eta_w \cdot \nabla_\weight \ell(\fhat(\weight), \mathcal{B})$\;
-}
-\textbf{Return} $\weight$\;
+    $\weight \gets \weight - \eta_w \cdot \nabla_\weight \ell(\fhat(\weight), \mathcal{B})$\; }
+\text{\textbf{Return}} $\weight$ \;
 \end{algorithm}
 }
 

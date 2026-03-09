@@ -1,4 +1,4 @@
-\begin{thebibliography}{39}
+\begin{thebibliography}{42}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -41,6 +41,22 @@ Supriyo Chakraborty and Krishnan Raghavan.
 \newblock On understanding of the dynamics of model capacity in continual
   learning.
 \newblock \emph{arXiv preprint arXiv:2508.08052}, 2025.
+
+\bibitem[Chaudhry et~al.(2018)Chaudhry, Dokania, Ajanthan, and
+  Torr]{chaudhry2018riemannian}
+Arslan Chaudhry, Puneet~K Dokania, Thalaiyasingam Ajanthan, and Philip~HS Torr.
+\newblock Riemannian walk for incremental learning: Understanding forgetting
+  and intransigence.
+\newblock In \emph{European Conference on Computer Vision}, pp.\  532--547,
+  2018.
+
+\bibitem[D{\'\i}az-Rodr{\'\i}guez et~al.(2018)D{\'\i}az-Rodr{\'\i}guez,
+  Lomonaco, Filliat, and Maltoni]{diaz2018dont}
+Natalia D{\'\i}az-Rodr{\'\i}guez, Vincenzo Lomonaco, David Filliat, and Davide
+  Maltoni.
+\newblock Don't forget, there is more than forgetting: New metrics for
+  continual learning.
+\newblock In \emph{NeurIPS Workshop on Continual Learning}, 2018.
 
 \bibitem[Evans(2022)]{evans2022partial}
 Lawrence~C Evans.
@@ -132,16 +148,16 @@ Song Lai, Haohan Zhao, Rong Feng, Changyi Ma, Wenzhuo Liu, Hongbo Zhao, Xi~Lin,
   post-training.
 \newblock \emph{arXiv preprint arXiv:2507.05386}, 2025.
 
-\bibitem[Lake et~al.(2015)Lake, Salakhutdinov, and Tenenbaum]{Lake_2015}
-Brenden~M Lake, Ruslan Salakhutdinov, and Joshua~B Tenenbaum.
-\newblock Human-level concept learning through probabilistic program induction.
-\newblock \emph{Science}, 350\penalty0 (6266):\penalty0 1332--1338, 2015.
-\newblock \doi{10.1126/science.aab3050}.
-
 \bibitem[Larson et~al.(2019)Larson, Menickelly, and Wild]{larson2019derivative}
 Jeffrey Larson, Matt Menickelly, and Stefan~M Wild.
 \newblock Derivative-free optimization methods.
 \newblock \emph{Acta Numerica}, 28:\penalty0 287--404, 2019.
+
+\bibitem[LeCun et~al.(1998)LeCun, Bottou, Bengio, and Haffner]{lecun1998mnist}
+Yann LeCun, L{\'e}on Bottou, Yoshua Bengio, and Patrick Haffner.
+\newblock Gradient-based learning applied to document recognition.
+\newblock \emph{Proceedings of the IEEE}, 86\penalty0 (11):\penalty0
+  2278--2324, 1998.
 
 \bibitem[Lin et~al.(2025)Lin, Zettlemoyer, Ghosh, Yih, Markosyan, Berges, and
   O{\u{g}}uz]{lin2025continual}
@@ -161,6 +177,12 @@ Yuqiao Liu, Yanan Sun, Bing Xue, Mengjie Zhang, Gary~G Yen, and Kay~Chen Tan.
 \newblock A survey on evolutionary neural architecture search.
 \newblock \emph{IEEE Transactions on Neural Networks and Learning Systems},
   34\penalty0 (2):\penalty0 550--570, 2021.
+
+\bibitem[Lopez-Paz \& Ranzato(2017)Lopez-Paz and Ranzato]{lopez2017gradient}
+David Lopez-Paz and Marc'Aurelio Ranzato.
+\newblock Gradient episodic memory for continual learning.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30, 2017.
 
 \bibitem[Loshchilov et~al.(2017)Loshchilov, Hutter,
   et~al.]{loshchilov2017fixing}

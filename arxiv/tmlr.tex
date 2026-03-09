@@ -1,0 +1,175 @@
+\documentclass[10pt]{article} % For LaTeX2e
+\usepackage{wasysym}  % you need this, fine
+\let\iint\relax
+\let\iiint\relax
+\usepackage[preprint]{tmlr}
+\usepackage[toc,page]{appendix} 
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{cancel}
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsfonts,bm, amssymb}
+
+
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,patterns}
+
+% Define colors
+\definecolor{matrixA}{RGB}{144,238,144}  % Light green
+\definecolor{matrixW}{RGB}{255,160,122}  % Light orange
+\definecolor{matrixB}{RGB}{173,216,230}  % Light blue
+\definecolor{matrixV}{RGB}{221,160,221}  % Light purple
+
+
+% % ===> Fix the conflict AFTER tmlr loaded ===
+% \makeatletter
+% \@ifpackageloaded{amsmath}{\let\iint\relax}{}
+% \makeatother
+% \DeclareMathOperator*{\iint}{\int\!\!\!\int}
+% % ============================================
+
+
+% % \let\iint\relax
+% % \usepackage{wasysym}
+% \usepackage{tmlr}
+
+% % If accepted, instead use the following line for the camera-ready submission:
+% %\usepackage[accepted]{tmlr}
+% % To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
+% %\usepackage[preprint]{tmlr}
+% \usepackage[toc,page]{appendix} 
+% % \usepackage{booktabs}
+% % \usepackage{caption}
+% % \usepackage{lineno,hyperref}
+% % \usepackage{dirtytalk}
+% % \usepackage{multirow}
+% % \usepackage[outdir=./]{epstopdf}
+\usepackage[export]{adjustbox}
+% % \usepackage{subfig}
+% % \usepackage{array}
+% % \usepackage{color, colortbl}
+% % \usepackage{newunicodechar}
+% % \usepackage[utf8]{inputenc}
+% % \usepackage{textcomp}
+% \usepackage{xcolor}
+% \usepackage{algorithmic}
+% % \usepackage{pdfpages}
+% \usepackage{tikz}
+% \usepackage{pifont}
+% % For Math
+\usepackage{fancyhdr}	% For fancy header/footer
+\usepackage{graphicx}	% For including figure/image
+\usepackage{cancel}		% To use the slash to cancel 
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{booktabs}
+%\usepackage{bigints}
+% \usepackage{eucal}
+\usepackage{algorithm2e}
+\RestyleAlgo{ruled}
+\SetKwProg{Fn}{Function}{:}{}
+\SetKw{KwReturn}{return}
+\usepackage{multicol}
+% %------------------------Bibliography things--
+% % \usepackage[backend=biber, style=authoryear]{biblatex}
+% % \addbibresource{NNbib.bib}
+% % \bibliography{NNbib.bib}
+% % \usepackage[authoryear,longnamesfirst]{natbib}
+% %------------------------
+% \input{math_commands.tex}
+\input{new_commands.tex}
+\usepackage{hyperref}
+\usepackage{url}
+
+% -----------------------------------------------------------
+\title{The effect of architecture during continual learning}
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the tmlr package is used without the [accepted] or [preprint] options.
+% Non-anonymous submissions will be rejected without review.
+\author{\name Allyson Hahn \email ahahn2813@gmail.com\\
+      \addr Mathematics and Computer Science \\
+      Argonne National Laboratory
+      \AND
+      \name Krishnan Raghavan\footnote{Corresponding Author} \email kraghavan@anl.gov \\
+      \addr Mathematics and Computer Science \\
+      Argonne National Laboratory }
+
+      
+%----------------New Commands---------------%
+% Uncomment and use as if needed
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proof}{Proof}
+\newtheorem{pot}{Proof of Theorem \ref{thm}}
+
+
+%----------------New Commands---------------%
+\newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\bigabs}[1]{\left \lvert #1 \right \rvert}
+\newcommand{\sobkp}[1]{W^{k,p}(#1)}
+\newcommand{\sob}{W^{k,p}}
+\newcommand{\Lloc}[1]{L_1^{loc}(#1)}
+\newcommand{\totalV}[1]{D_t^{\abs{#1}}V(t)}
+\newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
+\newcommand{\D}{\textbf{D}}
+\newcommand{\fhat}{\hat{f}}
+
+
+%minGW
+\newcommand{\argminpsi}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
+%minSmoothGW
+\newcommand{\minSmoothGW}{\min\limits_{g(\textbf{w}(t),\delta(\psi(t)))\in \sob}}
+% The \author macro works with any number of authors. Use \AND 
+% to separate the names and addresses of multiple authors.
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+\def\month{MM}  % Insert correct month for camera-ready version
+\def\year{YYYY} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
+
+% -----------------------------------------------------------
+\begin{document}
+\maketitle
+\begin{abstract}
+We investigate the role of neural network architecture in continual learning and identify that absolute continuity of the forgetting cost function is necessary to find a solution to the continual learning problem. To obtain the necessary condition, we introduce a mathematical framework that jointly models architecture and weights in a Sobolev function space. We then utilize this framework to characterize the coupling between model parameters and architectural choices and to analyze how changes in architecture affect the continuity of the forgetting loss. Using this insight, we demonstrate that training only the model weights is insufficient to mitigate catastrophic forgetting when data distributions evolve across tasks and architecture must be modified on the fly. To modify architecture while learning the weights, we formulate the continual learning as a bilevel optimization problem: the upper level selects an optimal architecture for a given task, while the lower level computes optimal weights through dynamic programming over all tasks.  
+
+To solve the upper-level problem, we introduce a derivative-free direct search algorithm that seeks to generate the best architecture by searching for the best architecture in the vicinity of the previous architecture. Once the architecture is found, we seek to transfer knowledge from the previous architecture to the new one. However, finding an optimal architecture on the fly would result in two parameter spaces with different and mismatched weight spaces. Therefore, we develop a low-rank transfer mechanism to map knowledge across architectures of mismatched dimensions. Empirical studies across regression and classification problems, including feedforward convolutional neural networks  and graph neural networks, demonstrate that architectures optimized on the fly yield substantially improved performance~(up to two orders of magnitude), reduced forgetting, and enhanced robustness in the presence of noise compared with static architecture approaches. 
+\end{abstract}
+\input{texts/main_text}
+
+\newpage
+\bibliography{NNbib.bib}
+\bibliographystyle{tmlr}
+\appendix
+\section{Appendix}
+\input{texts/supp}
+\input{texts/appendix_standard_cl}
+
+
+\begin{flushright}
+  \scriptsize
+
+  \framebox{\parbox{0.9\textwidth}{
+  The submitted manuscript has been created by UChicago Argonne, LLC, Operator of Argonne National Laboratory (“Argonne”).
+  Argonne, a U.S. Department of Energy Office of Science laboratory, is operated under Contract No. DE-AC02-06CH11357.
+  The U.S. Government retains for itself, and others acting on its behalf, a paid-up nonexclusive, irrevocable worldwide
+  license in said article to reproduce, prepare derivative works, distribute copies to the public, and perform publicly
+  and display publicly, by or on behalf of the Government.  The Department of Energy will provide public access to these
+  results of federally sponsored research in accordance with the DOE Public Access Plan.
+  \url{http://energy.gov/downloads/doe-public-access-plan}
+  }}
+  \end{flushright}
+\end{document}
+% -----------------------------------------------------------

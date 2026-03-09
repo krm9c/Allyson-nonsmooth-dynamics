@@ -35,7 +35,7 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
     }
     $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
 }
-\textbf{Return} $\weight$\;
+{\bfseries Return} $\weight$\;
 \end{algorithm}
 \vspace{0.3em}
 {\footnotesize \textit{Fixed $\psi_0$, constant $\eta$, no warmup.}}
@@ -62,7 +62,7 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
     }
     $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
 }
-\textbf{Return} $\weight$\;
+{\bfseries Return} $\weight$\;
 \end{algorithm}
 \vspace{0.3em}
 {\footnotesize \textit{Fixed $\psi_0$, adds warmup + cosine LR + adaptive gradients.}}
@@ -95,7 +95,7 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
     }
     $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
 }
-\textbf{Return} $\weight, \psi$\;
+{\bfseries Return} $\weight, \psi$\;
 \end{algorithm}
 \vspace{0.3em}
 {\footnotesize \textit{Adaptive $\psi(t)$, random reinit after arch change.}}
@@ -127,7 +127,7 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
     }
     $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
 }
-\textbf{Return} $\weight, \psi$\;
+{\bfseries Return} $\weight, \psi$\;
 \end{algorithm}
 \vspace{0.3em}
 {\footnotesize \textit{Adaptive $\psi(t)$, knowledge transfer via $V = A\weight B^T$.}}
@@ -139,85 +139,22 @@ Figure~\ref{fig:alg_conditions} presents the four experimental conditions as a u
 
 
 
-\subsection{Supporting Algorithms to Figure~\ref{fig:alg_conditions}}
-The algorithms below are those referenced in Figure~\ref{fig:alg_conditions}.
+\subsection{Supporting Algorithm References}
+\label{sec:supporting_algs}
 
-\textbf{Task Warm-up}
+The supporting algorithms referenced in Figure~\ref{fig:alg_conditions} are described as follows:
 
-{\small
-\begin{algorithm}[H]
-\caption{Task Warmup}\label{alg:warmup}
-\KwIn{$\weight, \tx(t)$}
-\KwOut{$\weight$}
-$\eta_w \gets 0.1 \cdot \eta_0$, $[\alpha,\beta,\gamma] \gets [1, 0, 0]$\;
-\For{$e = 1$ \KwTo $N_{\text{warmup}}$}{
-    $\mathcal{B} \gets$ \texttt{sample}$(\tx(t))$\;
-    $\weight \gets \weight - \eta_w \cdot \nabla_\weight \ell(\fhat(\weight), \mathcal{B})$\; }
-\text{\textbf{Return}} $\weight$ \;
-\end{algorithm}
-}
+\begin{itemize}
+\item \textbf{Task Warmup}\phantomsection\label{alg:warmup}: Initialize with reduced learning rate $\eta_w = 0.1 \cdot \eta_0$ and gradient weights $[\alpha,\beta,\gamma] = [1, 0, 0]$. Train on new task data for $N_{\text{warmup}}$ epochs before engaging experience replay.
 
-\textbf{Adaptive Gradient Weights}
+\item \textbf{Adaptive Gradient Weights}\phantomsection\label{alg:adaptive}: Compute loss ratio $r = J_{\text{curr}} / J_{\text{prev}}$ and adjust weights: $\alpha = \min(0.7, 0.3 + 0.4(r-1))$, $\beta = \max(0.2, 0.6 - 0.4(r-1))$, $\gamma = 0.1$.
 
-{\small
-\begin{algorithm}[H]
-\caption{Adaptive Gradient Weights}\label{alg:adaptive}
-\KwIn{$J_{\text{curr}}, J_{\text{prev}}$}
-\KwOut{$[\alpha, \beta, \gamma]$}
-$r \gets J_{\text{curr}} / J_{\text{prev}}$\;
-$\alpha \gets \min(0.7, 0.3 + 0.4 \cdot (r - 1))$ \tcp*[f]{Increase current task weight if loss ratio high}\;
-$\beta \gets \max(0.2, 0.6 - 0.4 \cdot (r - 1))$ \tcp*[f]{Decrease experience weight}\;
-$\gamma \gets 0.1$\;
-\textbf{Return} $[\alpha, \beta, \gamma]$\;
-\end{algorithm}
-}
+\item \textbf{Architecture Search}\phantomsection\label{alg:arch_search}: Extract layer dimensions $\{d_1, \ldots, d_L\}$, generate candidate architectures $\mathcal{S} = \{d_i \pm k \cdot 16 : k \in \{1,2,3\}\}$, select $\psi^* = \arg\min_{\psi' \in \mathcal{S}} J(\texttt{init}(\psi'), \psi', \tx_{\text{val}})$.
 
-\textbf{Architecture Search}
+\item \textbf{Train A/B Matrices}\phantomsection\label{alg:train_ab}: Initialize $A, B$ as identity matrices. For $N_{\text{AB}}$ epochs: sample batch, compute $V = A \cdot \weight \cdot B^T$, update $A, B$ via gradient descent on reconstruction loss.
 
-{\small
-\begin{algorithm}[H]
-\caption{NDDS Architecture Search}\label{alg:arch_search}
-\KwIn{$\psi, \tx(t)$}
-\KwOut{$\psi^*$}
-$\{d_1, \ldots, d_L\} \gets$ \texttt{extract\_dims}$(\psi)$\;
-$\mathcal{S} \gets \{d_i \pm k \cdot 16 : i \in [L], k \in \{1,2,3\}\}$\;
-$\psi^* \gets \arg\min_{\psi' \in \mathcal{S}} J(\texttt{init}(\psi'), \psi', \tx_{\text{val}})$\;
-\textbf{Return} $\psi^*$\;
-\end{algorithm}
-}
-
-\textbf{Train A/B Matrices}
-
-{\small
-\begin{algorithm}[H]
-\caption{Train A/B Matrices (W Frozen)}\label{alg:train_ab}
-\KwIn{Frozen $\weight$, $\psi_{\text{old}}, \psi_{\text{new}}, \tx(t)$}
-\KwOut{$A, B$}
-$A \gets I_{m \times n}$, $B \gets I_{p \times q}$ where dims match $\psi_{\text{old}} \to \psi_{\text{new}}$\;
-\For{$e = 1$ \KwTo $N_{\text{AB}}$}{
-    $\mathcal{B} \gets$ \texttt{sample}$(\tx(t))$\;
-    $V \gets A \cdot \weight \cdot B^T$\;
-    $\nabla_{A,B} \gets \nabla_{A,B} \ell(\fhat(V, \psi_{\text{new}}), \mathcal{B})$\;
-    $A, B \gets$ \texttt{optimizer\_step}$(A, B, \nabla_{A,B})$\;
-}
-\textbf{Return} $A, B$\;
-\end{algorithm}
-}
-
-\textbf{Hamiltonian Gradient}
-
-{\small
-\begin{algorithm}[H]
-\caption{Hamiltonian Gradient}\label{alg:hamiltonian}
-\KwIn{$\weight, \psi, \mathcal{B}_{\text{curr}}, \mathcal{B}_{\text{exp}}, [\alpha, \beta, \gamma]$}
-\KwOut{$\nabla_{\weight} H$}
-$\nabla_c \gets \nabla_{\weight} \ell(\fhat(\weight, \psi), \mathcal{B}_{\text{curr}})$ \tcp*[f]{Current task gradient}\;
-$\nabla_e \gets \nabla_{\weight} \ell(\fhat(\weight, \psi), \mathcal{B}_{\text{exp}})$ \tcp*[f]{Experience gradient}\;
-$\delta V \gets$ \textsc{PerturbationGrad}$(\weight, \psi, \mathcal{B}_{\text{exp}})$ \tcp*[f]{Regularization}\;
-$\nabla H \gets \alpha \cdot \nabla_c + \beta \cdot \nabla_e + \gamma \cdot \delta V$\;
-\textbf{Return} $\nabla H$\;
-\end{algorithm}
-}
+\item \textbf{Hamiltonian Gradient}\phantomsection\label{alg:hamiltonian}: Compute $\nabla_c = \nabla_{\weight} \ell(\mathcal{B}_{\text{curr}})$, $\nabla_e = \nabla_{\weight} \ell(\mathcal{B}_{\text{exp}})$, $\delta V = \textsc{PerturbationGrad}$. Return $\nabla H = \alpha \nabla_c + \beta \nabla_e + \gamma \delta V$.
+\end{itemize}
 
 \subsection{Hyperparameter Reference}
 

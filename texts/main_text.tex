@@ -127,10 +127,10 @@
 % \end{keywords}
 % \maketitle
 \section{Introduction}
-With the advent of large-scale AI models, the computational expense of training such models has also increased drastically; training these models efficiently often requires large-scale high-performance computing infrastructure. Despite such drastic expenditure, these models quickly become stale. The reason  is that the data distribution shifts or new data  gets generated, 
+The advent of large-scale AI models has substantially increased the computational expense of training models, particularly, training these models efficiently often requires large-scale high-performance computing infrastructure. However, with a shift in the distribution of data and/or the presence of new models, these models quickly become stale
 %as these models often drift~(become stale)
 %due to change in the data distribution
-requiring realignment. This necessity presents a quandary. Naive realignment leads to a phenomenon called catastrophic forgetting, where the model overwrites prior information. On the other hand, a complete retraining of the model would require significant resources, a solution that is extremely unattractive. 
+requiring realignment. This necessity presents a quandary. Naive realignment leads to a phenomenon called catastrophic forgetting~\cite{raghavan2021formalizing}, where the models overwrites prior information. On the other hand, a complete retraining of the model would require significant resources, a solution that is extremely unattractive. 
 
 A more viable option is  continual learning, where approaches seek to constrain the parameters of the model to reduce the amount of catastrophic forgetting the model experiences. Several works in the literature have attempted this direction, starting from early work on small multilayer perceptrons~\cite{mccloskey1989catastrophic} to recent works on large language models such as \cite{luo2025empirical, lai2025reinforcement, biderman2024lora} and \cite{lin2025continual}. One key commonality across all  these approaches is that they look to constrain the weight/parameters of the AI model to induce minimal forgetting. On the other hand, and more appropriately, some approaches seek a balance between forgetting and the learning of new data~(generalization); see, for example, ~\cite{raghavan2021formalizing, lu2025rethinking,lin2023theory}. Despite demonstrated success, this is not the full story. In fact,  under mild assumptions, it has been proven that simply changing the weight of the AI model is not sufficient to capture the drift in the data distribution, and the capacity of the neural network (its ability to represent tasks) eventually diverges if the data distribution keeps changing ~\cite{chakraborty2025understanding}. These intractability results from \cite{chakraborty2025understanding} highlight a conundrum:  if the capacity of the network eventually diverges, then should we still aim to continually train AI models?
 %even though continually learning such models is invaluable? 
@@ -524,7 +524,7 @@ Now, we show that if two tasks $\tx(t), \tx(t+1)$  are similar, then the corresp
 \end{remark}
 
 % remark justifying the union.
-\begin{remark}\label{boundedremark}
+\begin{remark}\label{unionremark}
     The  equality  $\int_0^t \ea \;  d~\tau  = \int_{\vx\in \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(\tau),\psi(\tau))( \vx ) )d\tau $ is not always guaranteed as duplicates among all $\tx(\tau), \forall \tau$  are counted only once. However, we assume that within the construction of $\ell,$ there is an average between all duplications, and only one instance of these duplicates survives. This is reasonable because, in practice, a batch of data is uniformly sampled and averaged over.
 \end{remark}
 
@@ -1080,7 +1080,7 @@ Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while 
 \end{figure}
 
 \subsubsection{Experiment 2}
-As an extension to Figure.~\ref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in Figure.~\label{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
+As an extension to Figure~\ref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in Figure~\ref{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. This jump introduces the sharp change what was shown in our theory to deteriorate performance. 
 
 It is observed from Figure.~\ref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the tasks leading to the models to perform poorly. The Proposed A/B training is expected to smooth over this change and this behavior is not observed in Figure.~\ref{fig:mnist_comprehensive}. Upon careful investigation, it was observed that the smoothing behavior is proportional to how many epochs are utilized for A/B training. 
 
@@ -1103,7 +1103,7 @@ Towards identifying the effect of A/B epochs, we perform the following experimen
 
 \subsubsection{Analysis of Reduced Accuracy in Experiment 2}
 \label{sec:transform_analysis}
-To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. Each task applies a random rotation and shear transform to MNIST digits, creating distribution shift between tasks. Figure~\ref{fig:transform_curve} shows how task difficulty varies with transform angle. The digit images at the top illustrate how each transform distorts the original digit.
+To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. Each task applies a random rotation and shear transform to MNIST digits, creating distribution shift between tasks. Figure~\ref{fig:transform_heatmap} shows how task difficulty varies with transform angle. The digit images at the top illustrate how each transform distorts the original digit.
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}

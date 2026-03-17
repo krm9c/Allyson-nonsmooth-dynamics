@@ -1,0 +1,1295 @@
+we exhausted our neighborhood search.
+Continual learning (CL) is the problem of learning a sequence of tasks while retaining
+knowledge from previous tasks. However, typical CL methods involve prefixed architectures
+leading to limited model capacity when data distribution shifts significantly across tasks.
+We introduce a mathematical framework enabling a rigorous investigation into the interplay
+between model capacity and effective CL. We derive the necessary conditions for CL solution
+and prove that learning only the model weights is insufficient to mitigate catastrophic for-
+getting under distribution shifts. Consequently, we prove that by learning the architecture
+and the weights simultaneously at each task, rather than the weights alone, we can reduce
+catastrophic forgetting. However, changing architectures on the fly requires a principled
+approach to knowledge transfer between weight spaces of different dimensions. We develop
+a low-rank transfer mechanism to map knowledge across architectures of mismatched di-
+mensions. Empirical studies across regression and classification problems, including feedfor-
+ward, convolutional, and graph neural networks, demonstrate that our approach of learning
+the optimal architecture and weights simultaneously yields substantially improved perfor-
+mance (up to two orders of magnitude), reduced forgetting, and enhanced robustness in the
+presence of noise compared with static architecture approaches.
+
+
+
+
+With the advent of large-scale AI models, the computational expense of training such models has increased
+drastically. In particular, training AI models efficiently often requires large-scale high-performance comput-
+ing (HPC) infrastructure. Despite such drastic expenditure, these models quickly become stale because in
+my real world applications, the data distribution shifts as new data gets generated due to regime change or
+changes in the scientific experimentation parameters. In such scenarios, it is necesary to re-align the model
+to the new data, however, this necessity presents a quandary. Naive realignment leads to a phenomenon
+called catastrophic forgetting, where the model overwrites prior information. On the other hand, a complete
+retraining of the model would require significant resources, a solution that is extremely unattractive.
+A more viable option is continual learning (CL), where one seeks to control catastrophic forgetting. Several
+works in the literature have attempted to constrain the weights of the AI model to minimize forgettin, starting
+from early work on multilayer perceptrons McCloskey & Cohen (1989) to recent works on large language
+models such as Luo et al. (2025); Lai et al. (2025); Biderman et al. (2024) and Lin et al. (2025). On the
+other hand, and more appropriately, many recent approaches have also sought a balance between catastrophic
+forgetting and the learning of new data (generalization); see, for example, Raghavan & Balaprakash (2021);
+Lu et al. (2025); Lin et al. (2023). Despite demonstrated success, this is not the full story. In fact, under
+mild assumptions, it has been proven that the capacity of the neural network (its ability to represent
+tasks) eventually diverges if the data distribution keeps changing Chakraborty & Raghavan (2025). The
+intractability results from Chakraborty & Raghavan (2025) highlight a conundrum: if the capacity of the
+network eventually diverges, then should we still aim to continually train AI models? In this paper we
+1
+demonstrate that the answer to this question is indeed “yes"; in fact, the solution in the presence of diverging
+capacity is to reliably change the architecture of the AI model on the fly according to the needs of the data
+distribution.
+However, two key bottlenecks remain before attaining this goal. (i) Reliably changing the architecture
+requires a methodical understanding of “how the tasks, the weights and the architecture of the model
+interact with each other." This understanding is dificult to observe with current optimization theory tools
+because architecture dependencies are not visible when the problem of continual learning is defined just
+over the weights as is done typically Chakraborty & Raghavan (2025); Raghavan & Balaprakash (2021)
+or Lu et al. (2025). Recent works such as CLEAS Gao et al. (2022) and SEAL Gambella et al. (2025)
+dynamically expand model capacity by adding layers. However, none enables generic architecture changes
+such as modifying the number of parameters, activation functions, or layer structure. (ii) The key obstacle is
+that a generic change in architecture requires transferring information between parameter spaces of different
+dimensions, a problem that remains unsolved.
+Contribution: To address these bottlenecks, we develop a comprehensive approach to enhance the theoret-
+ical understanding of CL and facilitate practical implementations to allow for joint training of architecture
+and weights. Our specific contributions are as follows.
+1. Theoretical Contributions: To observe the interplay between tasks, weights and the architecture, we
+formulate the problem of continual learning in a Sobolev space where both the architecture and the weights
+are treated as learnable parameters, making the coupling between model capacity and distribution shift
+amenable to rigorous analysis. Furthermore, we derive necessary conditions for the existence of a CL solution
+and prove that adapting weights alone is insufficient to mitigate catastrophic forgetting under distribution
+shift; in contrast, jointly adapting the architecture and weights yields strictly tighter error.
+2. Empirical Contributions: We develop a low-rank transfer mechanism that maps learned knowledge from
+a previous architecture to a new architecture of different dimensionality via learned transformation matri-
+ces, enabling generic architecture changes without discarding prior knowledge. We validate our approach
+empirically across regression and classification problems using feedforward, convolutional, and graph neural
+networks, demonstrating up to two orders of magnitude improvement in training loss, reduced forgetting,
+and enhanced robustness to noise compared with static-architecture baselines.
+Organization: Section 2 motivates the problem of continual learning and the necessity for function space
+modeling. Section 3 formulates neural networks as members of a Sobolev space. Section 4 derives the neces-
+sary conditions for the existence of a CL solution and demonstrates that adapting weights alone is insufficient.
+Section 5 presents our algorithm for architecture search and low-rank transfer across architectures. Section 6
+reviews related work, and Section 7 provides empirical validation.
+Notation: The notation follows Kolda & Bader (2009). We use N for natural numbers and R for real
+numbers. An mth-order tensor is a multidimensional array in RI1×I2×···×Im , where the order denotes the
+number of dimensions. We are concerned mostly with tensors of order 0, 1, 2, and 3, corresponding to scalars,
+vectors, matrices, and lists of matrices, respectively. Scalars are denoted by lowercase letters x; vectors by
+lowercase bold letters x; matrices by uppercase bold letters X; and higher-order tensors by Euler script
+letters X . We use ∥.∥ for the Euclidean norm (vectors), Frobenius norm (matrices), or an appropriate tensor
+norm, and ⟨·, ·⟩ for an appropriate dot product. Learnable or user-defined parameters (architecture, learning
+rate, etc.) are denoted by Greek letters. The ith element of x is x[i], the (i, j)th element of X is x[ij]. Indices
+run from 1 to their capital letter counterparts, e.g., i = 1, . . . , I.
+
+
+
+
+
+We will denote the AI model as ˆf (w, ψ), where f denotes the composition of the weights−w and the
+architecture−ψ. Notably, each task is represented by a data set X (t) obtained at a task instance t ∈ T , T =
+{0, 1, . . . , T }. We will assume that the dataset (a list of matrices, vectors, graphs) is sampled according to
+the distribution P and X (t) ⊂ D ⊂ Rn such that D is a measurable set with a non-empty interior. Moreover,
+(D, B(D), P) forms a probability triplet with B(D) being the Borel sigma algebra over the domain D. The
+problem of interest to us is to understand the behavior of the AI model when it is learning tasks X (t) for
+2
+X (1) X (2) X (3)
+ˆf (w(1), ψ(1)) ˆf (w(2), ψ(1)) ˆf (w(3), ψ(1))
+Transfer to X (2) Transfer to X (3)
+· · ·
+· · ·
+W1 W2
++
+w∗(1)
++
+w∗(2)
++
+w(2)
+X (2)
+w(2) ∈ W1 ∩ W2
+Figure 1: The basic problem of continual learning. Left: A sequence of tasks is presented to the model, which
+must transfer knowledge across tasks while retaining a fixed architecture ψ(1). Right: The CL solution
+w(2) must lie in the intersection of the weight spaces W1 and W2 that are acceptable for both tasks.
+every task instance t. Task instances can belong to N and R depending on the application at hand, but the
+key goal is to understand how the tasks are assimilated by the AI model. The basic notion of continual
+learning is described in the left of Fig. 1, where there are three tasks at t = 1, 2, and 3. For each of these
+three tasks, an architecture ψ(1) is chosen, and the three tasks are provided to the model in series. At t = 1,
+the model ˆf learns from the first tas by solving minw(1)ℓ( ˆf (w(1), ψ(1)), X (1)), where ℓ is some loss function
+that summarizes the model’s performance on the task at t = 1. Then, at t = 2, the model transfers to
+learn information from the second task such that the first task is not forgotten. Implicitly, the optimization
+problem is rewritten as minw(2)
+[
+ℓ( ˆf (w(2), ψ(1)), X (1)) + ℓ( ˆf (w(2), ψ(1)), X (2))
+]
+. Similarly, at t = 3, the
+model transfers to learn information from the third task, but both tasks 1 and 2 must not be forgotten. This
+implies that minw(3)
+[
+ℓ( ˆf (w(3), ψ(1)), X (1)) + ℓ( ˆf (w(3), ψ(1)), X (2)) + ℓ( ˆf (w(3), ψ(1)), X (3))
+]
+As shown,
+the objective function of the CL problem is a sum that grows with every new task. More generically, at any
+t, the CL objective also known as forgetting loss can be written as
+minw(t)
+t∑
+i=1
+[
+ℓ( ˆf (w(i), ψ), X (i))
+]
+, (Forgetting Loss)
+where we have removed the index from ψ to indicate that the architecture is fixed. In the CL literature,
+(Forgetting Loss) is typically optimized at the onset of every new task at t.
+For illustration, assume ℓ( ˆf (w(i), ψ, X (i))) is strongly convex. The right side of Fig. 1 depicts level sets
+in the parameter space, where each ball represents ℓ( ˆf (w(i), ψ, X (i))) ≤ η and the plus signs denote the
+minima for i = 1 and i = 2. For example, on MNIST, the two balls may correspond to digits 0 and 1: the
+boundary of each ball represents all parameters achieving cross-entropy loss below η = 1, with the plus sign
+at zero loss. Now consider an AI model that trains on digit 0 and achieves the minimum. When digit 1
+arrives, the model begins from this minimum, inheriting a bias from the previous task. It must then converge
+to a solution that performs well on both tasks, which lies in the intersection of the two balls. Since the size
+of this intersection depends on the dissimilarity between tasks, the following theorem is observed.
+Theorem 1 Fix the number of weight updates required to obtain the optimal value at each task. Assume
+that each subsequent task introduces a value of change into the model with the change described in some
+appropriate metric. Let ℓ be the Lipschitz continuous function, and choose a small learning rate. Then,
+capacity diverges as a function of the number of tasks. Please see Chakraborty & Raghavan (2025)
+for a full statement and its proof.
+The theorem implies that the AI model’s ability to successfully represent tasks will deteriorate as more tasks
+are introduced when the new tasks are different from the previous one. In such a case, continually training
+the AI model is bound to fail if we just update the weights of the network. An intuitive side effect of this
+3
+theorem is that, the intersection of the two balls in the right of Fig. 1 will shrink as the tasks become more
+different, and eventually, the intersection will be empty. In such a case, there is no solution.
+In this paper we hypothesize and prove that the size of the intersection space in Fig. 1 can be increased by
+modifying the architecture of the AI model, that is, by increasing the number of parameters in the model.
+Doing so, however, would require us to model the interplay between the weights, data, and the architecture.
+An idea impossible to imagine with the intuition laid out until now because the size of the intersection space
+is fixed by the size of the ball and the size of the ball, that is the capacity of the model, is fixed due to
+the choice of the architecture. Since the size of the weight space cannot be influenced by looking just at
+the weight space and the movement of weights within the weight space, we need alternate mathematical
+machinery.
+
+
+
+
+We will prescribe the AI model ˆf (w, ψ) to belong to a class of functions contained in a Sobolev space with
+k-bounded weak derivatives. Formally defined as follows.
+Definition 2 Let k ∈ N, the domain-D ⊂ Rn a measurable set with non-empty interior, and 1 < p < ∞.
+Then the Sobolev space W k,p(D) consists of all functions f on D such that for all multi-indices α with
+|α| ≤ k, the mixed partial derivative ∂(α)f exists in the weak sense and belongs to Lp(D). That is,
+W k,p(D) = {f ∈ Lp(D) : ∂|α|h ∈ Lp(D)∀|α| ≤ k}.
+The number k is the order of the Sobolev space, and the Sobolev space norm is defined as
+∥f ∥W k,p(D) := ∑
+|α|≤k
+∥∂|α|f ∥Lp(D).
+In Definition 2, D is our data space. For any standard AI application, we can assume that D is a finite
+subset of Rn. This is an important practical consideration as, for AI model training to be efficient, one needs
+the numerical values of the data to be bounded, typically achieved through normalization as in Huang et al.
+(2023). As D is a finite subset of Rn, it is a closed subset. Thus, by Heine–Borel, D is also compact, see
+Rudin (1976).
+The next assumption we note is the presence of weak derivatives. In a standard neural network, derivatives are
+assumed to exist since twice differentiability is necessary for training and typical training involves gradient-
+based methods such as Kingma & Ba (2017). In the Sobolev space, the existence of weak derivatives is a
+more general condition than the existence of classical derivatives. In particular, weak derivatiuves allow for
+functions that may not be differentiable in the classical sense but still have well-defined derivatives in the
+weak sense. This is important for the architecture choices as, many of these choices may not be differentiably
+in the classical sense, but they are differentiable in the weak sense. For example, the ReLU activation function
+is not differentiable at zero, but it has a well-defined weak derivative as discussed in Petersen et al. (2021)
+and Adegoke & Layeni (2016).
+To represent the class of functions described in Definition 2, we define a neural network as a function
+ˆf (w(t), ψ(t)) with d ∈ N layers. In this notation, w(t) is a long Rm vector that concatenates the weight
+parameters from the d layers, and ψ(t) comprises the architecture and other user-defined parameters in the
+neural network. Formally, we have
+Definition 3 A d-layered neural network is given by an operator (essentially a function) ˆf (w(t), ψ(t)) ∈
+W k,p(D) with W k,p(D) being a Sobolev space. Furthermore,
+ˆf (w(t), ψ(t))(.) = ˆfd(wd(t), ψd(t)) ◦ ˆfd−1(wd−1(t), ψd−1(t)) ◦ · · · ◦ ˆf2(w2(t), ψ2(t)) ◦ ˆf1(w1(t), ψ1(t))(.) (1)
+describes the layer-wise compositions, and (.) represents the input tensor to which the operator is applied.
+4
+Remark 1 We indicate approximate quantities with ˆ. and true (target) quantities without the hat. For
+instance, the target function f in Definition 2 is indicated without the hat, and the approximate function ˆf
+in Definition 3 is indicated with a hat.
+Remark 2 In Definition 3 we describe the operation across different layers using the composition; in terms
+of notation, we hide this complexity through the definition of the operator. Therefore, Definition 3 is generic
+and can be used to define feedforward, recurrent, convolutional, and graph neural networks and even a large
+language model. This prescription naturally aligns with practical implementation through Jax pytrees frostig
+et al. (2018) and equinox Kidger & Garcia (2021) where tunable parameters are representated through static
+and dynamic entities.
+Typically, the user-defined parameters are a combination of integer, categorical, and floating-point values
+and since the architecture varies with task instances. Therefore, ψ, denoting the architecture, is assumed
+to be a function of t. Since we cannot determine derivatives with respect to discrete parameters in the
+classical sense (i.e., derivative of ψ(t)), we define weak derivative with respect to these quantities such that
+the derivatives (with respect to or of ψ) can be approximated. The loss function on W k,p(D) with this
+construction is defined in Definitions 2 and 3.
+Definition 4 Let f (t) ∈ W k,p(D) for all t ∈ {0, . . . , T } denote the target function that is to be approximated,
+and let ˆf (w(t), ψ(t)) denote a neural network determined to approximate f (t) at task t. Then the loss function
+(or error of approximation) for x ∈ X (t) ⊆ D is given by
+ℓ( ˆf (w(t), ψ(t)), x) = ∥ ˆf (w(t), ψ(t))(x) − f (t)(x)∥W k,p(D).
+The function f in the context of machine learning is an ideal forecasting model that can forecast temperature
+perfectly or an ideal classification model that performs some classification problem.
+Remark 3 In applications, we assume D is compact to guarantee that the target function f (t) exists in
+a Sobolev space W k,p(D), by Corollary 3.5 in Mahan et al. (2021). If, however, compactness cannot be
+assumed, we find the minimum norm solution to the problem in the Sobolev space.
+The loss function in Definition 4 is defined over W k,p(D) using the Sobolev space norm. In practice, however,
+we can directly utilize samples corresponding to f or ˆf . For instance, this has been done in Son et al. (2021)
+in the context of physics-informed neural networks—a class of neural networks modeled by Definition 3. In
+particular, the Sobolev space norm is defined with k = 0 and p = 2 which gives the standard mean squared
+error loss function.
+Continual Learning in W k,p(D) : We extend Definition 4 to the case of CL with the goal of learning a
+series of tasks indexed by t. For each t, we must find a w∗ with respect to ℓ integrated over the interval [0, t]
+as in Eq. (Forgetting Loss) to obtain
+J(w(t), ψ(t), X (t)) =
+∫ t
+0
+(∫
+x∈X (τ )
+ℓ( ˆf (w(t), ψ(t))(x))
+)
+d τ.
+A traditional learning structure as in Pasunuru & Bansal (2019) seeks to minimize the cost J(t) through an
+optimizer (one such as Kingma & Ba (2017)) to drive J(t) → 0 with guaranteed convergence as in Kingma &
+Ba (2017). In practice, however, when consecutive tasks are very different from each other, we encounter the
+issue described in Fig. 1. In order to resolve this quandary, for each new task, the underlying optimization
+problem must be repeatedly resolved, leading to a series of optimization problems, altogether forming a
+dynamic program Bertsekas (2012). A standard practice in the optimal control literature is to solve such
+dynamic programs Bertsekas (2012) through a cumulative optimization problem over the interval [0, T ] as
+in
+V ∗(t, w(t)) = min
+w∈W(ψ∗(t)) V (t, w(t)) :=
+∫ T
+t
+J(w(τ ), ψ∗(t), X (τ ))d τ,
+5
+where W(ψ∗(t)) is the weights search space. A solution to this dynamic program was introduced in Raghavan
+& Balaprakash (2021); Chakraborty & Raghavan (2025) where a fixed architecture ψ∗(t) was employed. To
+incorporate architecture learning into this problem, we descriobe a bilevel- optimization problem where the
+outer problem is
+ψ∗(t) = arg min
+ψ∈Ψ J(w(t), ψ, X (t)), (Architecture search)
+with Ψ bein the architecture search space. Once the search is completed, we move to the lower problem to
+find the weights through solving
+V ∗(t, w(t)) = min
+w∈W(ψ∗(t)) V (t, w(t)). (Cumulative CL)
+In this paper we will devise an alternative approach to solving the bi-level problem. First, however, we must
+understand the dependence between the architecture, weights and the intersection space.
+
+
+
+To understand this behavior, let us reconsider the example from
+Section 2 and redraw Fig. 2. From Fig. 2, let Ft = { ˆf (w, ψ) ∈
+W k,p(D)} represent the search space for the set of all possible
+neural network solutions for learning task t (refer to Section 2
+for a similar construction). Since Ft is a subset of W k,p(D),
+the balls in Fig. 2 can be thought of as a level sets of the loss
+function ℓ defined in Definition 4. At t = 1 there is one ball,
+at task t = 2 there are two balls, and at task t = 3 there
+are three balls. In each of the balls, ✚ represents the neural
+network solution at t, and the , face represents the solution
+that performs well among tasks between 0 → t. Notably, ,
+must lie in the intersection of all the balls from 0 to t. Note
+that unless the tasks are equivalent, , and the ✚ will not
+coincide because no solution that is perfect for one task can be
+perfect for another.
+Furthermore, the more different the subsequent tasks are, the
+more likely the intersection space is to be empty, and the CL
+problem has no solution across all tasks from 0 to t. From a
+topological perspective, the non-emptiness of the intersection
+space implies that the union of all the balls is a connected set.
+A continuous function such as J, defined on this connected set,
+will have a gradient that is defined completely over the union
+of these balls. Therefore, if the intersection space is empty,
+the connectivity of the union of these balls is violated, and the
+gradient of J is undefined, which will lead to a solution that
+cannot be found. The best one can do in this circumstance is
+a minimum norm solution. Therefore, the notion of the inter-
+section space is closely related to the notion of continuity.
+To mathematically formalize this intuition, we need to define
+a measure of continuity that is proportional to the size of the
+intersection space. Towards this end, we define measure μ over
+the task probability space P and describe an ε, δ definition of
+continuity of a function w.r.t this measure.
+Definition 5 Let X = ⋃∞
+t=0 X (t) with the power set P(X ) as its topology. Set B(X ) to be the Borel sigma
+algebra on X equipped with a probability measure denoted μ. Then (X , B(X ), μ) forms a probability measure
+6
+space. Let g : X → R be a measurable function, and set F : B(X ) → R to be the function
+F (A) =
+∫
+x∈A
+g(x)dμ.
+Then we say that F is continuous with respect to the measure if for every ε > 0 there exists δ > 0 such that
+|F (A) − F (B)| < ε whenever A, B ∈ B(X ) such that μ(A △ B) < δ.
+A B
+Figure 3: Symmetric difference A △ B
+(green shading).
+Definition 5 can be deduced from basic measure theory results found
+in Weaver (2013). If the sets that are similar (with respect to the
+probability measure μ) close values of F (A) are observed. In partic-
+ular, μ(A △ B) is the Lebesgue measure μ applied over A △ B repre-
+senting a set symmetric difference, which describes the elements two
+sets do not share (see Fig. 3 for an illustration). Therefore, as the
+intersection space (i.e., μ(A ∩ B)) shrinks, μ(A △ B) gets larger, and
+|F (A) − F (B)| gets larger proportionally, thus providing a measure
+of continuity that is proportional to the number of common elements
+between the two sets. Succinctly, more common elements imply a
+smaller value of the measure, and less common elements imply a
+large value of the measure.
+
+
+
+To prove existence of the solution, it suffices to show that, at the onset of each task, the expected value
+function is continuous with respect to the measure μ defined in Definition 5 and that the function is absolutely
+continuous acoss all tasks in the interval [0, T ]. First, we prove that the expected value function, that is,∫
+x∈A ℓ( ˆf (w, ψ)(x))dμ, is continuous with respect to measure μ when μ(A△B) < δ, ∀A, B ∈ X .
+Lemma 6 Let (X , B(X ), μ) be the measure space as defined in Definition 5. Assume that the loss function
+ℓ is continuous and bounded across all tasks, that is, ∀t ∈ [0, T ]. Then the expected value function E(A) =∫
+x∈A ℓ( ˆf (w, ψ)(x))dμ is continuous with respect to measure μ.
+Proof 1 Suppose that the constant M0 > 0 is the value that bounds ℓ on every task. Let ε > 0, and set
+δ = ε/M0. Further, let A, B ∈ B(X ) such that μ(A△B) < δ. By disjoint additivity of μ and the triangle
+inequality, we have
+|E(A) − E(B)| =
+∣
+∣
+∣
+∣
+∫
+x∈A
+ℓ( ˆf (w, ψ)(x)) dμ −
+∫
+x∈B
+ℓ( ˆf (w, ψ)(x)) dμ
+∣
+∣
+∣
+∣
+=
+∣
+∣
+∣
+∣
+∫
+x∈A\B
+ℓ( ˆf (w, ψ)(x)) dμ +
+∫
+x∈A∩B
+ℓ( ˆf (w, ψ)(x)) dμ −
+∫
+x∈B\A
+ℓ( ˆf (w, ψ)(x)) dμ −
+∫
+x∈A∩B
+ℓ( ˆf (w, ψ)(x)) dμ
+∣
+∣
+∣
+∣
+=
+∣
+∣
+∣
+∣
+∫
+x∈A\B
+ℓ( ˆf (w, ψ)(x)) dμ −
+∫
+x∈B\A
+ℓ( ˆf (w, ψ)(x)) dμ
+∣
+∣
+∣
+∣ ≤
+∫
+x∈A\B
+|ℓ( ˆf (w, ψ)(x))| dμ +
+∫
+x∈B\A
+|ℓ( ˆf (w, ψ)(x))| dμ.
+Then, by the boundedness of ℓ, we have ∫
+x∈A\B |ℓ( ˆf (w, ψ)(x))|dμ + ∫
+x∈B\A|ℓ( ˆf (w, ψ)(x))|dμ ≤ M0μ(A \ B) +
+M0μ(B \ A). Therefore, M0μ(A \ B) + M0μ(B \ A) = M0μ(A△B) < M0δ = M0 ε
+M0 = ε as desired.
+Now, we show that if two tasks X (t), X (t + 1) are similar, then the corresponding loss values are similar.
+We prove this result in the following lemma.
+Lemma 7 Let (X , B(X ), μ) be the measure space as defined in Definition 5. Assume that the loss function
+ℓ is continuous and bounded across all tasks, that is, ∀t ∈ [0, T ]. Define J over a task X (t) as
+J(w(t), ψ(t), X (t)) =
+∫ t
+0
+(∫
+x∈X (τ )
+ℓ( ˆf (w(t), ψ(t))(x))
+)
+d τ =
+∫
+⋃t
+τ =0 X (τ )
+ℓ( ˆf (w(t), ψ(t))(x))dμ. (2)
+7
+Let ε > 0 and δ(ε) > 0 chosen such that
+(∫
+x∈X (τ ) ℓ( ˆf (w(t), ψ(t))(x))
+)
+is continuous w.r.t. measure μ.
+Then, μ(⋃t+1
+τ =0 X (τ )△ ⋃t
+τ =0 X (τ )) < δ and |J(w(t + 1), ψ(t + 1), X (t + 1)) − J(w(t), ψ(t), X (t))| ≤ ε.
+Proof 2 Suppose that the constant M0 > 0 bounds ℓ on every task. Let ε > 0, and set δ = ε/M0. By disjoint
+additivity of μ and triangle inequality, we have Denoting X s = ⋃s
+τ =0 X (τ ) and h = ℓ( ˆf (w, ψ)) for brevity,
+∣
+∣
+∣
+∣
+∫ t+∆t
+0
+(∫
+x∈X (τ )
+ℓ( ˆf (w(t), ψ(t))(x))
+)
+dμ dτ −
+∫ t
+0
+(∫
+x∈X (τ )
+ℓ( ˆf (w(t), ψ(t))(x))
+)
+dμ dτ
+∣
+∣
+∣
+∣
+=
+∣
+∣
+∣
+∣
+∣
+∫
+X t+∆t
+h dμ −
+∫
+X t
+h dμ
+∣
+∣
+∣
+∣
+∣ =
+∣
+∣
+∣
+∫
+X t+∆t\X t
+h dμ +
+∫
+X t∩X t+∆t
+h dμ −
+∫
+X t\X t+∆t
+h dμ −
+∫
+X t∩X t+∆t
+h dμ
+∣
+∣
+∣
+=
+∣
+∣
+∣
+∫
+X t+∆t\X t
+h dμ −
+∫
+X t\X t+∆t
+h dμ
+∣
+∣
+∣ ≤
+∫
+X t+∆t\X t
+|h| dμ +
+∫
+X t\X t+∆t
+|h| dμ.
+Then, by the boundedness of ℓ,
+∫
+⋃t+∆t
+τ =0 X (τ )\⋃t
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ+
+∫
+⋃t
+τ =0 X (τ )\⋃t+∆t
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ ≤
+M0μ
+(t+∆t⋃
+τ =0
+X (τ ) \
+t⋃
+τ =0
+X (τ )
+)
++ M0μ
+( t⋃
+τ =0
+X (τ ) \
+t+∆t⋃
+τ =0
+X (τ )
+)
+. Hence, M0μ
+(⋃t+∆t
+τ =0 X (τ ) \ ⋃t
+τ =0 X (τ )
+)
++
+M0μ
+(⋃t
+τ =0 X (τ ) \ ⋃t+∆t
+τ =0 X (τ )
+)
+= M0μ
+(⋃t+∆t
+τ =0 X (τ )△ ⋃t
+τ =0 X (τ )
+)
+< M0δ = M0 ε
+M0 = ε, as desired.
+Remark 4 It is reasonable to assume a constant M0 < ∞ with Mi ≤ M0 for all i ∈ N; otherwise, the
+unbounded loss renders the problem unsolvable, as the network learns nothing useful from the data. More-
+over, the equality ∫ t
+0
+(∫
+x∈X (τ ) ℓ( ˆf (w(t), ψ(t))(x))
+)
+d τ = ∫⋃t
+τ =0 X (τ ) ℓ( ˆf (w(t), ψ(t))(x))dμ is not always
+guaranteed as duplicates among all X (τ ), ∀τ are counted only once. However, we assume that within the
+construction of ℓ, there is an average between all duplications, and only one instance of these duplicates
+survives. This is reasonable because, in practice, a batch of data is uniformly sampled and averaged over.
+Lemma 7 solidifies the notion that similar tasks produce similar loss values and that if Lemma 7 is upheld
+for every t ∈ [0, T ], then the CL problem will have a solution for the whole interval [0, T ]. In the following
+theorem we prove that there exists a solution for the cumulative learning problem.
+Theorem 8 Let (X , B(X ), μ) be the measure space as defined in Definition 5. For every ε > 0 there exists
+δ > 0 such that if ∑T −1
+γ=t μ(⋃γ+1
+τ =0 X (τ )△ ⋃γ
+τ =0 X (τ )) < δ, then ∑T −1
+γ=t |J(w(γ + 1), ψ(γ + 1), X (γ + 1)) −
+J(w(γ), ψ(γ), X (γ))| < ε.
+Proof 3 Let ε > 0 and choose δ = ε/M0. Notice,
+T −1
+∑
+γ=t
+|J(w(γ + 1), ψ(γ + 1), X (γ + 1)) − J(w(γ), ψ(γ), X (γ))| =
+T −1
+∑
+γ=t
+∣
+∣
+∣
+∫ γ+1
+0
+( ∫
+x∈X (τ )
+ℓ( ˆf (w(γ), ψ(γ))(x))dμ
+)
+d τ
+−
+∫ γ
+0
+( ∫
+x∈X (τ )
+ℓ( ˆf (w(γ), ψ(γ))(x))dμ
+)
+.τ
+∣
+∣
+∣ =
+T −1
+∑
+γ=t
+∣
+∣
+∣
+∣
+∣
+∫
+⋃γ+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ −
+∫
+⋃γ
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ
+∣
+∣
+∣
+∣
+∣
+=
+T −1
+∑
+γ=t
+∣
+∣
+∣
+∫
+⋃γ+1
+τ =0 X (τ )\
+⋃γ
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ +
+∫
+⋃γ
+τ =0 X (τ )∩
+⋃γ+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ −
+∫
+⋃γ
+τ =0 X (τ )\
+⋃γ+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ
+−
+∫
+⋃γ
+τ =0 X (τ )∩
+⋃γ+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ
+∣
+∣
+∣
+T −1
+∑
+γ=t
+∣
+∣
+∣
+∫
+⋃γ+1
+τ =0 X (τ )\
+⋃γ
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ −
+∫
+⋃γ
+τ =0 X (τ )\
+⋃γ+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ
+∣
+∣
+∣
+≤
+T −1
+∑
+γ=t
+( ∫
+⋃γ+1
+τ =0 X (τ )\
+⋃γ
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ +
+∫
+⋃γ
+τ =0 X (τ )\
+⋃γ+1
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ
+)
+.
+8
+Then, by the boundedness of ℓ, ∑T −1
+γ=t
+∫
+⋃γ+1
+τ =0 X (τ )\
+⋃γ
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ +
+∫
+⋃γ
+τ =0 X (τ )\
+⋃γ+1
+τ =0 X (τ )
+|ℓ( ˆf (w, ψ))|dμ ≤
+T −1
+∑
+γ=t
+[
+M0μ
+(γ+1
+⋃
+τ =0
+X (τ ) \
+γ
+⋃
+τ =0
+X (τ )
+)
++ M0μ
+( γ
+⋃
+τ =0
+X (τ ) \
+γ+1
+⋃
+τ =0
+X (τ )
+) ]
+.
+Hence, ∑T −1
+γ=t M0μ (⋃γ+1
+τ =0 X (τ ) \ ⋃γ
+τ =0 X (τ )) + M0μ (⋃t
+τ =0 X (τ ) \ ⋃γ+1
+τ =0 X (τ )) =
+M0
+∑T −1
+γ=t μ (⋃γ+1
+τ =0 X (τ )△ ⋃γ
+τ =0 X (τ )) < M0δ = M0 ε
+M0 = ε as desired.
+Therefore, the existence of a solution to (Cumulative CL) depends on whether we can ensure a notion of
+absolute continuity of ∫ t
+0
+(∫
+x∈X (τ ) ℓ( ˆf (w(t), ψ(t))(x))
+)
+d τ or not in the presence of disimilar tasks.
+
+
+
+Theorem 8 establishes the existence condition for the CL solution of (Cumulative CL); its contrapositive
+states that dissimilar loss values imply dissimilar tasks. However, the converse need not hold: for tasks X (t)
+and X (t + ∆t) with μ(X (t) △ X (t + ∆t)) ≥ δ, the loss difference |J(w(t), ψ(t), X (t)) − J(w(t + 1), ψ(t +
+1), X (t + 1))| may or may not exceed ε. When dissimilar tasks do produce dissimilar losses, increasing the
+number of tasks drives |J(w(t), ψ(t), X (t)) − J(w(t + 1), ψ(t + 1), X (t + 1))| beyond ε, causing the model to
+progressively forget prior tasks and ultimately violating Theorem 8.
+In order to counteract this situation, the key condition for absolute continuity must be upheld; that is, for a
+series of tasks, the upper bound on ∑T
+t [|J(w(τ + ∆τ ), ψ(τ + ∆τ ), X (τ + ∆τ )) − J(w(t), ψ(t), X (t))|] must
+be guaranteed to be less than or equal to ε. The key here is to identify the knobs in the model that can be
+tuned to ensure that ε is small even in the presence of dissimilar tasks. In the typical neural network learning
+problem, the two knobs that can be tuned are the weights and architecture of the network. We will cement
+these ideas in the following and begin by elucidating the dependency of
+(∫
+x∈X (τ ) ℓ( ˆf (w(t), ψ(t))(x))
+)
+on the
+weights and the architecture.
+Lemma 9 Suppose X (t) and X (t + ∆T ) are two consecutive tasks in the measure space (X , B(X ), μ). Set
+M0 to be the upper bound on the loss function ℓ across all tasks. Then for μ(X (t) △ X (t + ∆t)) ≥ δ, the
+following holds:
+E
+(t+1
+⋃
+τ =0
+X (τ )
+)
+= E
+( t
+⋃
+τ =0
+X (τ )
+)
++ ∆t
+[
+μ
+( t
+⋃
+τ =0
+X (τ )∆
+t+1
+⋃
+τ =0
+X (τ )
+)
+·
+∫
+⋃t
+τ =0 X (τ )∆
+⋃t+1
+τ =0 X (τ )
+ℓ( ˆf (w, ψ))dμ
++
+∫
+⋃t
+τ =0 X (τ )
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ) · ∆w dμ +
+∫
+⋃t
+τ =0 X (τ )
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ) · ∆ψ dμ
+]
++ o(∆t).
+Proof 4 Note that the first-order Taylor series expansion of E(X (t + ∆t)) about t is given by
+E
+(t+1⋃
+τ =0
+X (τ )
+)
+= E
+( t⋃
+τ =0
+X (τ )
+)
++ ∆t
+[
+EX
+(t+1⋃
+τ =0
+X (τ )∆
+t⋃
+τ =0
+X (τ )
+)
++ Ew
+( t⋃
+τ =0
+X (τ )
+)
++ Eψ
+(t+1⋃
+τ =0
+X (τ )
+) ]
++ o(∆t), (3)
+where EX , Ew, and Eψ are the partial derivatives of the expected value function for the data, weights, and
+architecture, respectively. Now, we work on acquiring each partial derivative. Toward that end,
+EX
+(t+1⋃
+τ =0
+X (τ )∆
+t⋃
+τ =0
+X (τ )
+)
+= μ
+((t+1⋃
+τ =0
+X (τ )∆
+t⋃
+τ =0
+X (τ )
+))
+·
+∫
+(⋃t+1
+τ =0 X (τ )∆ ⋃t
+τ =0 X (τ )
+) ℓ( ˆf (w, ψ))dμ. (4)
+To determine the remaining two derivatives, we use the Sobolev function chain rule found in Evans
+(2022). We can do so because ℓ is real-valued and bounded and ℓ′ is continuously differen-
+tiable. Then, Ew
+(⋃t
+τ =0 X (τ )
+)
+=
+∫
+⋃t
+τ =0 X (τ )
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ) · ∆w dμ. and Eψ
+(⋃t
+τ =0 X (τ )
+)
+=
+9
+∫
+⋃t
+τ =0 X (τ )
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ) · ∆ψ dμ. and substitution into the Taylor series expansion (3), we have
+the desired result.
+Colloquially, in the CL problem only the weights are updated, but in this paper we argue that this is
+not enough. We show that with just the weights being updated, the J(w(t), ψ(t), X (t)) eventually violates
+Theorem 8. To prove this, we first derive a lower bound on
+(∫
+x∈X (τ ) ℓ( ˆf (w(t), ψ(t))(x))
+)
+. For the remaining
+analysis, we will set ∆t = 1.
+Lemma 10 Suppose X (t) and X (t + ∆t) are two consecutive tasks in the measure space (X , B(X ), μ). Let
+L1 > 0 and 0 ≤ δ ≤ 1 be constants. Set M0 to be the upper bound on the loss function ℓ across all tasks,
+and assume μ
+(⋃t
+τ =0 X (τ )∆ ⋃t+∆t
+τ =0 X (τ )
+)
+≥ δ for all t ∈ [0, T ]. Then for ∆t = 1 the following holds:
+T∑
+τ =t
+(J(X (τ )) − J(X (τ + 1)) ≤
+T∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ)
+)2
+dμ
+)
+for
+∫
+X (t)
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ) · ∆ψ dμ + o(∆t) = 0 as ψ(t) = ψ, ∀t. The proof is in Section B.1.
+A bound similar to the one in Lemma 10 can be attained for the architecture terms as well.
+Lemma 11 Suppose X (t) and X (t + ∆t) are two consecutive tasks in the measure space (X , B(X ), μ). Let
+L1 > 0 and 0 ≤ δ ≤ 1 be constants. Set M0 to be the upper bound on the loss function ℓ across all tasks,
+and assume μ
+(⋃t
+τ =0 X (τ )∆ ⋃t+∆t
+τ =0 X (τ )
+)
+≥ δ for all t ∈ [0, T ]. Then for ∆t = 1 the following holds:
+T∑
+τ =t
+(J(X (τ )) − J(X (τ + 1)) ≤
+T∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ)
+)2
+dμ
+−
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ)
+)2
+dμ
+)
+.The proof is in Section B.2.
+The following result tells us that in the case of dissimilar tasks and with dissimilar loss values
+(∑T
+τ =t (J(X (τ )) − J(X (τ + 1))) ≥ ε) for a fixed architecture across tasks, we can learn the architecture
+at each task such that we can acquire similar loss values tasks (∑T
+τ =t (J(X (τ )) − J(X (τ + 1))) < ε).
+Theorem 12 Suppose X (t) and X (t + ∆t) are two consecutive tasks in the measure
+space (X , B(X ), μ). Set M0 to be the upper bound on the loss function ℓ across all
+tasks. Moreover, let ε > 0 such that ∑T
+τ =t (J(X (τ )) − J(X (τ + 1))) ≥ ε and assume
+μ
+(⋃t
+τ =0 X (τ )∆ ⋃t+1
+τ =0 X (τ )
+)
+≥ δ for all t ∈ [0, T ]. If for a fixed architecture ψ∗ for all t ∈ [0, T ],
+∑T
+τ =t (J(w(τ ), ψ∗, X (τ )) − J(w(τ + 1), ψ∗, X (τ + 1))) ≥ ε, then we can choose a new architecture ψ(t) for
+[0, T ] such that we can have ∑T
+τ =t (J(w(τ ), ψ∗, X (τ )) − J(w(τ + 1), ψ(τ ), X (τ + 1))) < ε.
+Proof 5 Let ε > 0, and choose δ J to be absolutely continuous. As
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ)
+)2
+>
+0, notice that
+T∑
+τ =t
+(J(X (τ )) − J(X (τ + 1))) ≤
+T∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ))2
+dμ
+−
+∫
+⋃τ
+ν=0 X (ν)
+(ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ))2
+dμ
+)
+≤
+T
+∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ))2
+dμ
+)
+.
+10
+Thus, by changing the architecture we may be able to achieve
+T∑
+τ =t
+(J(X (τ )) − J(X (τ + 1))) ≤
+T∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ)
+)2
+dμ
+−
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+ψ ˆf (w, ψ)
+)2
+dμ
+)
+< ε
+≤
+T∑
+τ =t
+(
+M0 · δ −
+∫
+⋃τ
+ν=0 X (ν)
+(
+ℓ′( ˆf (w, ψ)) · ∂1
+w ˆf (w, ψ)
+)2
+dμ
+)
+.
+Thus, we have reduced the difference in loss values below the ε threshold to gain similar loss values when we
+began with dissimilar tasks.
+
+
+
+The implications of Theorem 12 indicate that it is
+possible to shrink the effect of the new task on the
+forgetting cost J by changing the architecture of the
+network by pushing ε closer to zero as seen in Fig. 4.
+The closer ε is to zero, the more the cardinality of
+the intersection space and the more the task sets are
+connected. Therefore, upholding the absolute conti-
+nuity of J is feasible. It is now of interest to identify
+how to change the architecture and efficiently learn
+over a series of tasks. In particular, we must ex-
+amine to what extent we can control the effect of
+architecture change on the CL problem.
+
+
+
+
+As we have established the importance of changing
+the architecture to uphold the absolute continuity
+of J and therefore ensure the existence of a solution
+to (Cumulative CL), we now turn to the question of
+how to change the architecture and efficiently learn
+over a series of tasks. We begin at task t = 1 and de-
+termine an optimal weight denoted w∗(1) = w∞(1).
+This gives us a neural network solution in F1 for the
+first task. Then, as the next task is observed, we
+perform a derivative-free hyperparameter search, in
+particular, the directional direct search method Lar-
+son et al. (2019), to obtain a new architecture for
+task one and two as in Fig. 4, right side at the bottom. Now, we seek to transfer information from the first
+task and the old architecture to the new one. However, since, the new architecure introduces a parameter
+space that may have a different size from the one used for the previous task, it is not feasible to trivially
+transfer information from the previous architecture to the new one. The state-of-the-art solution to this
+problem is to randomly re-initialize the parameters in the new architecture from retrain on all available
+tasks, which is resource heavy as well as impractical. To obviate this, we develop a low-rank transfer al-
+gorithm that seeks to transfer information between the previous architecture to the new architecture in an
+efficient way. Mathematically, our goal is to solve the following bi-level problem:
+V ∗(t, w(t)) = min
+w∈W(ψ∗(t)) V (t, w(t)), where ψ∗(t) = arg min
+ψ∈Ψ J(w(t), ψ, X (t)). (bi-level)
+Towards this end, we define two matrices A(t) and B(t) that are used to transfer information from the
+previous architecture to the new architecture. In particular, the weight w(t) at each t is transferred to
+11
+w(t + ∆ t) as
+w(t + ∆ t) = A∗(t)w(t)B(t)∗T , (5)
+where A∗, B∗ are the optimal values such that loss of information is minimal implying that, A(t) and B(t)
+are updated. To update these matrices, we need to identify how this change in the weight space effects the
+CL problem and preserve information to minimize this loss of information. The following result therefore
+provides the total variation (the dynamics) of architecture change on V ∗ as a function of tasks.
+Proposition 13 The total variation in V ∗(t) at any given task t is given by
+−∂1
+t V ∗(t) = min
+w∈W(ψ∗(t)) J(w(t), ψ∗(t), X (t)) + ∂1
+X dtX + ∂1
+wV ∗(t) [A∗(t)w(t)(B∗(t))T + u(t)] , (6)
+where A∗(t), B∗(t) are optimal A(t) and B(t) for task t and where u(t) represents the updates made to the
+each weights matrix of the new dimensions. The proof is in Section B.3.
+Observe that (6) is missing the term ∂1V ∗
+∂1ψ
+∂1ψ
+∂1t . This omission is intentional because the exact effects of
+architecture cannot be measured through derivatives in this partial differential equation (PDE). Instead, in
+this PDE the effect is absorbed through the change in tensors A(t) and B(t). Because of this absorption
+we can now define a lower bound on ∂1
+t V ∗(t). This lower bound, which is essentially a lower bound on the
+variation, is equivalent to the lower bound on ε in Theorem 12 with the distinction that the lower bound is
+derived on V ∗ instead of just the forgetting cost J. The idea covers the effects of the complete CL problem
+and thus guarantees that the loss of information is minimized.
+Theorem 14 Given Proposition 13, assume there exists a stochastic-gradient-based optimization proce-
+dure, and choose u(t) = − ∑I α(i)g(i), where I is the number of updates and α(i) is some learning rate
+and g(i) is the gradient. Choose α(i) such that ∥gMIN∥W k,p(D)
+∥
+∥
+∥∑I α(i)
+∥
+∥
+∥W k,p(D)
+→ 0 as I → ∞ and
+minw∈W(ψ∗(t)) J(w(t), ψ∗(t), X (t)) ≤ ε. Then, as long as the architecture is chosen such that ρ(x)
+MAXδ =[
+ρ(w)
+MIN ∥gMIN∥W k,p(D)
+∥
+∥
+∥∑I α(i)
+∥
+∥
+∥W k,p(D)
+− ρ(w)
+MAX
+∥
+∥A∗(t)w(t)(B∗(t))T ∥
+∥W k,p(D)
+]
+, the total variance in V ∗ is
+bounded by ε. The proof is in Section B.4.
+Therefore, when α(i) is chosen such that ∥gMIN∥W k,p(D)
+∥
+∥
+∥∑I α(i)
+∥
+∥
+∥W k,p(D)
+as I → ∞, ρ(x)
+MAXδ can be countered
+by ρ(w)
+MAX
+∥
+∥A∗(t)w(t)(B∗(t))T ∥
+∥W k,p(D) the total variance is bounded for all t and V ∗ is absolutely continuous
+as long as ε is small for all δ > 0. Theorem 14 is crucial because it shows that, in the presence of a perfect
+stochastic gradient algorithm, the change in the tasks can be countered by the choice of the architecture.
+By choosing a new architecture and introducing the A and B matrices such that within the CL problem
+the effect of varying data distribution can be mitigated, the CL problem can be acceptably solved. Given
+this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to
+ensure this bounded variance is satisfied.
+5.1 Algorithm
+In summary (refer to Fig. 5), for every new task, our algorithm comprises of three steps, first, we utilize
+an off-the-shelf algorithm to search for a new optimal architecture. Second, once a new architecture is
+found, we complete a low-rank transfer from the previous task’s optimal weights to the new task parameter
+space. Third, using an off-the-shelf continual learning algorithm, we train the new architecture for the new
+task while balancing memory on all the prior tasks. While step 3 is directly adapted from Chakraborty &
+Raghavan (2025); Raghavan & Balaprakash (2021), steps 1 and 2 are novel contributions for this work.
+5.1.1 Step 1: Architecture Search
+Although there are numerous architecture search methods that we could employ, we chose a derivative-free
+approach that completes a local search using finite difference approximations. This choice was made to
+12
+mimic the weak derivatives available to us from viewing neural networks as functions of Sobolev spaces.
+As was described evident in Proposition 13, a notion of the change in the architecture is needed in order
+to model the dynamics and solve the lower optimization. We call the search method used a neighborhood
+directional direct-search (NDDS). The standard directional direct-search method is described in the survey
+in Larson et al. (2019).
+F1
++
+w∗(1)
+F2
++
+w∗(2)
+Step 1: Derivative-Free
+Architecture Search
+ˆf (w0(2), ψ∞(2))
+Step 2: Low-Rank
+Transfer (V = AW B⊤)
+ˆf (wN(2), ψ∞(2)) new ψ∞(2)
+Step 3: CL Training
+Chakraborty & Raghavan (2025),
+Raghavan & Balaprakash (2021)
+transferred w
+F1 F2
++
+w∗(1)
++
+w∗(2)
+,
+w∞(2)
+ˆf (w∞(2), ψ∞(2)) ∈ F1 ∩ F2
+Figure 5: Three-step approach at each
+task boundary: (1) architecture search
+for ψ∞(2), (2) low-rank transfer via V =
+AW B⊤, and (3) CL training to obtain
+w∞(2) ∈ F1 ∩ F2.
+The intuition behind NDDS is that we check “neighboring"
+architectures and compare the current architecture with the
+expected value of the neural network when it trains on the
+neighboring architecture. If the neighboring architecture has
+a smaller expected value, then we “move" in that direction
+by selecting it as the new architecture. We then check the
+“neighbors" of this new architecture. Since the architecture is
+a discrete variable, this search method provides a notion of a
+“gradient."
+With this intuition, we now describe NDDS in depth. As we
+discuss this method, consult Algorithm 1. For task t ∈ T , we
+set X = Y to be our training data and J(w(t), ψ(t), Y) the
+expected value function. We set xs = ψ(t), and let Ds be a
+finite set of directions. Further, we choose a “step size" αs ∈ N.
+Now we generate the “neighboring" points for xs via Ds and
+αs. We call these points poll points and define them as follows:
+P ollP oints = {xs + αsdi : di ∈ Ds}.
+Using a randomly selected subset of our data, denoted Ys,
+we determine and compare the expected value of the neural
+network with randomly initialized weights according to each
+poll point architecture. If one of these poll points results in
+a smaller expected value than xs, we set xs equal to the poll
+point. We then repeat this process starting with this new ar-
+chitecture. This search terminates when the expected value
+is beneath a previously chosen threshold or after five times of
+repeating. In practice, we chose the threshold to be a percent-
+age lower than the expected value produced by the original
+architecture.
+Let us walk through an example. Suppose we would like to
+learn the optimal number of neurons per layer in our hidden
+layers for training a feedforward neural network (FNN) on a
+dataset. Because of the data, suppose the input layer is fixed
+at 784 neurons and the output layer is fixed at 10 neurons per
+layer. Let us fix the number of hidden layers at 2 beginning
+with 50 neurons in each hidden layer. We set Ys to be a randomly chosen appropriately sized subset of task t
+data and previous task data. Our direction set is Ds = D = {[0, 0, 10, 0], [0, 10, 0, 0]} and will be the same for
+every s. We start our search by setting the step size αs = 10. For the first round, we have xs = [784, 50, 50, 10],
+so our poll points are [784, 60, 50, 10], [784, 50, 60, 10], and [784, 60, 60, 10]. We then train an FNN of each
+size on the dataset Ys and determine the corresponding expected values. If the expected value of the FNN
+[784, 60, 50, 10] is smaller than that of the FNN [784, 50, 50, 10], for example, then xs = [784, 60, 50, 10]. We
+would then continue this process until the expected value of our network was less than our set threshold or
+we exhausted our neighborhood search.

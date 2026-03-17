@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: tmlr.aux
+The style file: tmlr.bst
+Database file #1: NNbib.bib
+Warning--empty journal in mahanNonclosednessSetsNeural2021a
+Warning--empty journal in petersenTopologicalPropertiesSet2021a
+You've used 42 entries,
+            2773 wiz_defined-function locations,
+            828 strings with 13518 characters,
+and the built_in function-call counts, 22084 in all, are:
+= -- 1860
+> -- 1698
+< -- 24
++ -- 570
+- -- 528
+* -- 1888
+:= -- 3483
+add.period$ -- 139
+call.type$ -- 42
+change.case$ -- 295
+chr.to.int$ -- 42
+cite$ -- 86
+duplicate$ -- 896
+empty$ -- 1547
+format.name$ -- 592
+if$ -- 4550
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 41
+newline$ -- 227
+num.names$ -- 168
+pop$ -- 605
+preamble$ -- 1
+purify$ -- 256
+quote$ -- 0
+skip$ -- 768
+stack$ -- 0
+substring$ -- 513
+swap$ -- 96
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 442
+warning$ -- 2
+while$ -- 161
+width$ -- 0
+write$ -- 553
+(There were 2 warnings)

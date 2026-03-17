@@ -1,0 +1,1409 @@
+% ------% % Uncomment and use as if needed
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{definition}[theorem]{Definition}
+% \newdefinition{remark}{Remark}
+% \newtheorem{corollary}[theorem]{Corollary}
+
+% %----------------New Commands---------------%
+% \newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
+% \newcommand{\abs}[1]{\lvert #1 \rvert}
+% \newcommand{\bigabs}[1]{\left \lvert #1 \right \rvert}
+
+% \newcommand{\sobkp}[1]{W^{k,p}(#1)}
+% \newcommand{\sob}{W^{k,p}}
+% \newcommand{\Lloc}[1]{L_1^{loc}(#1)}
+% \newcommand{\totalV}[1]{D_t^{\abs{#1}}V(t)}
+% \newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
+% \newcommand{\D}{\textbf{D}}
+% \newcommand{\fhat}{\hat{f}}
+
+% %minGW
+% \newcommand{\argminpsi}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
+
+% %minSmoothGW
+% \newcommand{\minSmoothGW}{\min\limits_{g(\textbf{w}(t),\delta(\psi(t)))\in \sob}}
+
+
+% \let\WriteBookmarks\relax
+% \def\floatpagepagefraction{1}
+% \def\textpagefraction{.001}
+
+% % Short title
+% \shorttitle{}    
+
+% % Short author
+% \shortauthors{}  
+
+% % Main title of the paper
+% \title [mode = title]{The Effect of Architechture on Learning Behavior of Deep Neural Networks}  
+
+% % Title footnote mark
+% % eg: \tnotemark[1]
+% %\tnotemark[1] 
+
+% % Title footnote 1.
+% % eg: \tnotetext[1]{Title footnote text}
+% \tnotetext[1]{} 
+
+% % First author
+% %
+% % Options: Use if required
+% % eg: \author[1,3]{Author Name}[type=editor,
+% %       style=chinese,
+% %       auid=000,
+% %       bioid=1,
+% %       prefix=Sir,
+% %       orcid=0000-0000-0000-0000,
+% %       facebook=<facebook id>,
+% %       twitter=<twitter id>,
+% %       linkedin=<linkedin id>,
+% %       gplus=<gplus id>]
+
+% \author[1]{Allyson Hahn}%[<options>]]
+
+% % Corresponding author indication
+% \cormark[1]
+
+% % Footnote of the first author
+% \fnmark[1]
+
+% % Email id of the first author
+% \ead{}
+
+% % URL of the first author
+% \ead[url]{}
+
+% % Credit authorship
+% % eg: \credit{Conceptualization of this study, Methodology, Software}
+% \credit{}
+
+% % Address/affiliation
+% \affiliation[1]{organization={Department of Mathematical Sciences, Northern Illinois University}}
+
+% \author[2]{Krishnan Raghavan}%[]
+
+% % Footnote of the second author
+% \fnmark[2]
+
+% % Email id of the second author
+% \ead{}
+
+% % URL of the second author
+% \ead[url]{}
+
+% % Credit authorship
+% \credit{}
+
+% % Address/affiliation
+% \affiliation[2]{organization={Mathematics and Computer Science Division, Argonne National Laboratory}}
+
+% % Footnote text
+% \fntext[1]{}
+
+% % For a title note without a number/mark
+% %\nonumnote{}
+
+% %-------------------Abstract-----------------------%
+% \begin{abstract}
+% We consider the effects of Neural Network architecture in the setting of continual learning. Using dynamic programming we complete a bilevel optimization to determine the optimal architecture for the current and previous task data followed by the optimal weights for the network. 
+% \end{abstract}
+
+% % Use if graphical abstract is present
+% %\begin{graphicalabstract}
+% %\includegraphics{}
+% %\end{graphicalabstract}
+
+% %-----------------Highlights------------------%
+% \begin{highlights}
+% \item The first quantification of NN architecture on the learning behavior
+% \item Demonstrate the conditions to ensure stability of neural networks.
+% \item A novel measure to efficiently perform neural architecture search and hyper-parameter search.
+% \end{highlights}
+% %-------------------Keywords-------------------%
+% \begin{keywords}
+%  Neural Network \sep Architecture Search\sep  \sep
+% \end{keywords}
+% \maketitle
+\section{Introduction}
+With the advent of large-scale AI models, the computational expense of training such models has increased drastically. In particular, training AI models efficiently often requires large-scale high-performance computing~(HPC) infrastructure. Despite such drastic expenditure, these models quickly become stale because in my real world applications, the data distribution shifts as new data gets generated due to regime change or changes in the scientific experimentation parameters.  In such scenarios, it is necesary to re-align the model to the new data, however, this necessity presents a quandary. Naive realignment leads to a phenomenon called catastrophic forgetting, where the model overwrites prior information. On the other hand, a complete retraining of the model would require significant resources, a solution that is extremely unattractive. 
+
+A more viable option is continual learning~(CL), where one seeks to control catastrophic forgetting. Several works in the literature have attempted to constrain the weights of the AI model to minimize forgettin, starting from early work on multilayer perceptrons~\cite{mccloskey1989catastrophic} to recent works on large language models such as \cite{luo2025empirical, lai2025reinforcement, biderman2024lora} and \cite{lin2025continual}. On the other hand, and more appropriately, many recent approaches have also sought a balance between catastrophic forgetting and the learning of new data~(generalization); see, for example, ~\cite{raghavan2021formalizing, lu2025rethinking,lin2023theory}. Despite demonstrated success, this is not the full story. In fact,  under mild assumptions, it has been proven that the capacity of the neural network~(its ability to represent tasks) eventually diverges if the data distribution keeps changing ~\cite{chakraborty2025understanding}. The intractability results from \cite{chakraborty2025understanding} highlight a conundrum:  if the capacity of the network eventually diverges, then should we still aim to continually train AI models? In this paper we demonstrate that the answer to this question is indeed ``yes"; in fact, \textit{the solution in the presence of diverging capacity is to reliably change the architecture of the AI model on the fly according to the needs of the data distribution.} 
+
+However, two key bottlenecks remain before attaining this goal. (i) Reliably changing the architecture requires a methodical understanding of ``how the tasks, the weights and the architecture of the model interact with each other." This understanding is dificult to observe with current optimization theory tools because architecture dependencies are not visible when the problem of continual learning is defined just over the weights as is done typically~\cite{chakraborty2025understanding, raghavan2021formalizing} or \cite{lu2025rethinking}. Recent works such as CLEAS~\cite{CLEASgao2022CLEAS} and SEAL~\cite{SEALgambella2025SEAL}     
+  dynamically expand model capacity by adding layers. However, none enables generic          
+  architecture changes such as modifying the number of parameters, activation functions, or    
+  layer structure. (ii) The key obstacle is that a generic change in architecture requires          
+  transferring information between parameter spaces of different dimensions, a problem that    
+  remains unsolved.
+
+\noindent\textbf{Contribution:}
+To address these bottlenecks, we develop a comprehensive approach to enhance the theoretical understanding of CL and facilitate practical implementations to allow for joint training of architecture and weights. Our specific contributions are as follows. 
+
+1. \textit{Theoretical Contributions:} To observe the interplay between tasks, weights and the architecture, we formulate the problem of continual learning in a Sobolev space where both the architecture and the weights are treated as learnable parameters, making the coupling between model capacity and distribution shift amenable to rigorous  
+analysis. Furthermore, we derive necessary conditions for the existence of a CL solution and prove that adapting weights alone is insufficient to mitigate catastrophic forgetting under distribution shift; in contrast, jointly adapting the architecture and weights yields strictly tighter error.
+
+2. \textit{Empirical Contributions:}  We develop a low-rank transfer mechanism that maps learned knowledge from a previous architecture to a new architecture of different dimensionality via learned transformation matrices, enabling generic architecture changes without discarding prior knowledge. We validate our approach empirically across regression and classification problems using feedforward, convolutional, and graph neural networks, demonstrating up to two orders of magnitude improvement in training loss, reduced forgetting,
+  and enhanced robustness to noise compared with static-architecture baselines.
+
+
+% In such a case,  To obviate this situation, we theoretically model the problem of CL over a sequence of tasks in a Sobolev space. Using this theoretical framework, we describe how, in the Sobolev space of AI models parameterized by architecture choices and  weights, weights alone cannot capture the change in the distribution:  the architecture must be changed. We then employ a derivative-free architecture search  to determine the new architecture by searching for an appropriate number of neurons. Although we focus on changing the number of parameters in the AI model, our work is general enough to extend to other architecture choices as well. Once the new architecture is chosen, we develop a new algorithm that can efficiently transfer information from the previous architecture to a new architecture across parameter spaces of different sizes with minimal loss of performance on the previous tasks.
+
+% We  empirically demonstrate that changing the architecture indeed results in better training loss compared with when the architecture is not changed. We also show that our algorithm achieves substantial improvements in terms of training loss when training over large numbers of tasks; it is robust to noise and scales from feedforward neural networks to graph neural networks seamlessly across regression and classification problems. We encvision that jointly training the architecture and the weights in the continual learning paradigm is the best path forward in the field of continual learning, and we develop the basic theoretical and empirical infrastructure to allow for such training. 
+
+
+\noindent\textbf{Organization:}
+\cref{sec:motivation} motivates the problem of continual learning and the necessity for function space modeling. \cref{sec:sobolev} formulates neural networks as members of a Sobolev space. \cref{sec:existence} derives the necessary conditions for the existence of a CL solution and demonstrates that adapting weights alone is insufficient. \cref{sec:clsolution} presents our algorithm for architecture search and low-rank transfer across architectures. \cref{sec:related} reviews related work, and \cref{sec: experiments} provides empirical validation.
+
+
+\noindent\textbf{Notation:}
+The notation follows \cite{kolda2009tensor}. We use $\mathbb{N}$ for natural numbers and $\mathbb{R}$ for real numbers. An $m^{th}$-order tensor is a multidimensional array in $\mathbb{R}^{I_1 \times I_2 \times \cdots \times I_{m}}$, where the order denotes the number of dimensions. We are concerned mostly with tensors of order $0, 1, 2,$ and $3$, corresponding to scalars, vectors, matrices, and lists of matrices, respectively. Scalars are denoted by lowercase letters $\sx$; vectors by lowercase bold letters $\vx$; matrices by uppercase bold letters $\mx$; and higher-order tensors by Euler script letters $\tx$. We use $\|.\|$ for the Euclidean norm (vectors), Frobenius norm (matrices), or an appropriate tensor norm, and $\innerprod{\cdot,\cdot}$ for an appropriate dot product. Learnable or user-defined parameters (architecture, learning rate, etc.) are denoted by Greek letters. The $i^{th}$ element of $\vx$ is $\sx_{[i]}$, the $(i,j)^{th}$ element of $\mx$ is $\sx_{[ij]}.$ Indices run from 1 to their capital letter counterparts, e.g., $i = 1, \ldots, I.$
+
+\section{Continual Learning -- Background and Motivation}~\label{sec:motivation}
+We will denote the AI model as $\hat{f}(\weight, \psi)$, where  $f$ denotes the composition of the weights$-\weight$ and the architecture$-\psi.$ Notably, each task is represented by a data set $\tx(t)$ obtained at a task instance $t \in \tT, \tT = \{0,1,\ldots, T\}.$ We will assume that the dataset~(a list of matrices, vectors, graphs) is sampled according to the distribution $\mathbb{P}$ and $\tx(t) \subset \domain \subset \mathbb{R}^n$ such that $\domain$  is a measurable set with a non-empty interior. Moreover, $(\domain, \mathcal{B}(\domain), \mathbb{P})$ forms a probability triplet with $\mathcal{B}(\domain)$ being the Borel sigma algebra over the domain $\domain$. 
+\begin{figure}[t]
+    \centering
+    \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]
+    % --- Left panel: CL timeline ---
+    % Axes
+    \draw[->, thick, black!60] (-0.3,0) -- (9.5,0);
+    \draw[->, thick, black!60] (0,-0.3) -- (0,3.8);
+    % Task data boxes (light blue = matrixB)
+    \foreach \i/\lab in {1/1, 2/2, 3/3} {
+        \pgfmathsetmacro{\xpos}{(\i-1)*3.2 + 1.0}
+        \node[draw, fill=matrixB!40, minimum width=1.4cm, minimum height=0.7cm]
+            (task\i) at (\xpos, 0.6) {$\tx(\lab)$};
+    }
+    % Upward arrows (black!50)
+    \foreach \i in {1,2,3} {
+        \pgfmathsetmacro{\xpos}{(\i-1)*3.2 + 1.0}
+        \draw[->, thick, black!50] (\xpos, 1.05) -- (\xpos, 1.65);
+    }
+    % Model boxes (light purple = matrixV)
+    \foreach \i/\lab in {1/1, 2/2, 3/3} {
+        \pgfmathsetmacro{\xpos}{(\i-1)*3.2 + 1.0}
+        \node[draw, fill=matrixV!50, minimum width=2.2cm, minimum height=0.7cm, rounded corners=2pt]
+            (model\i) at (\xpos, 2.1) {$\hat{f}(\weight(\lab), \psi(1))$};
+    }
+    % Transfer arrows
+    \draw[->, thick, black!60, bend left=30] (model1.north) to node[above, font=\scriptsize] {Transfer to $\tx(2)$} (model2.north);
+    \draw[->, thick, black!60, bend left=30] (model2.north) to node[above, font=\scriptsize] {Transfer to $\tx(3)$} (model3.north);
+    % Ellipsis
+    \node at (9.2, 2.1) {$\cdots$};
+    \node at (9.2, 0.6) {$\cdots$};
+    \end{tikzpicture}%
+    \hfill%
+    \begin{tikzpicture}[scale=0.85, every node/.style={scale=0.85}]
+    % --- Right panel: Parameter space intersection ---
+    % Weight space circles (light orange fill = matrixW)
+    \draw[thick, fill=matrixW!15] (0,0) circle (2.2cm);
+    \draw[thick, fill=matrixW!15] (2.4,0) circle (2.2cm);
+    % Intersection highlight (light green = matrixA)
+    \begin{scope}
+        \clip (0,0) circle (2.2cm);
+        \fill[matrixA!30] (2.4,0) circle (2.2cm);
+    \end{scope}
+    % Labels for weight spaces
+    \node[font=\small] at (-0.8, 1.6) {$\mathcal{W}_1$};
+    \node[font=\small] at (3.2, 1.6) {$\mathcal{W}_2$};
+    % Optimal weight points (colored plus signs)
+    \node[font=\large, matrixV!80!black] (w1) at (-0.4, 0) {$\boldsymbol{+}$};
+    \node[font=\scriptsize, below=1pt of w1] {$\weight^*(1)$};
+    \node[font=\large, matrixV!80!black] (w2) at (2.8, 0) {$\boldsymbol{+}$};
+    \node[font=\scriptsize, below=1pt of w2] {$\weight^*(2)$};
+    % Dashed path between optima
+    \draw[thick, dashed, matrixV!80!black] (w1) -- (w2);
+    % CL solution in intersection (green plus sign)
+    \node[font=\Large, matrixA!80!black] (wcl) at (1.2, 0) {$\boldsymbol{+}$};
+    \node[font=\scriptsize, above=1pt of wcl] {$\weight(2)$};
+    % Task arrow
+    \draw[->, thick, black!60] (-3.2, 0.8) -- (-2.4, 0.3);
+    \node[draw, fill=matrixB!40, minimum width=0.8cm, minimum height=0.5cm, font=\scriptsize] at (-3.6, 1.1) {$\tx(2)$};
+    % Bottom label
+    \node[font=\small] at (1.2, -2.8) {$\weight(2) \in \mathcal{W}_1 \cap \mathcal{W}_2$};
+    \end{tikzpicture}
+    \caption{The basic problem of continual learning. \textbf{Left:} A sequence of tasks is presented to the model, which must transfer knowledge across tasks while retaining a fixed architecture $\psi(1)$. \textbf{Right:} The CL solution $\weight(2)$ must lie in the intersection of the weight spaces $\mathcal{W}_1$ and $\mathcal{W}_2$ that are acceptable for both tasks.}
+    \label{fig:CL1}
+\end{figure}
+The problem of interest to us is to understand the behavior of the AI model when it is learning tasks $\tx(t)$ for every task instance $t.$ Task instances can belong to $\mathbb{N}$ and $\mathbb{R}$ depending on the application at hand, but the key goal is to understand how the tasks are assimilated by the AI model. The basic notion of continual learning is described in the left of \cref{fig:CL1}, where there are three tasks at $t=1, 2$, and $3$. For each of these three tasks, an architecture $\psi(1)$ is chosen, and the three tasks are provided to the model in series. At $t=1$, the model $\hat{f}$ learns from the first tas by solving 
+$min_{\weight(1)} \ell(\hat{f}(\weight(1), \psi(1)), \tx(1)),$
+where $\ell$ is some loss function that summarizes the model's performance on the task at $t=1.$ Then, at $t=2,$ the model transfers to learn information from the second task such that the first task is not forgotten. Implicitly, the optimization problem is rewritten as $min_{\weight(2)} \left[ \ell(\hat{f}(\weight(2), \psi(1)), \tx(1)) + \ell(\hat{f}(\weight(2), \psi(1)), \tx(2)) \right].$ Similarly, at $t=3,$ the model transfers to learn information from the third task, but both tasks 1 and 2 must not be forgotten. This implies that 
+$min_{\weight(3)} \left[ \ell(\hat{f}(\weight(3), \psi(1)), \tx(1)) + \ell(\hat{f}(\weight(3), \psi(1)), \tx(2)) + \ell(\hat{f}(\weight(3), \psi(1)), \tx(3))\right]$
+As shown, the objective function of the CL problem is a sum that grows with every new task. More generically, at any $t,$ the CL objective also known as forgetting loss can be written as
+\begin{align}~\label{eq:CL_for}\tag{Forgetting Loss}
+    min_{\weight(t)} \sum_{i=1}^t \left[\ell(\hat{f}(\weight(i), \psi), \tx(i)) \right], 
+\end{align}
+where we have removed the index from $\psi$ to indicate that the architecture is fixed. In the CL literature, \eqref{eq:CL_for} is typically optimized at the onset of every new task at $t.$  
+
+For illustration, assume $\ell(\hat{f}(\weight(i), \psi, \tx(i)))$ is strongly convex. The right side of \cref{fig:CL1} depicts level sets in the parameter space, where each ball represents $\ell(\hat{f}(\weight(i), \psi, \tx(i))) \leq \eta$ and the plus signs denote the minima for $i=1$ and $i=2$. For example, on MNIST, the two balls may correspond to digits 0 and 1: the boundary of each ball represents all parameters achieving cross-entropy loss below $\eta=1$, with the plus sign at zero loss. Now consider an AI model that trains on digit 0 and achieves the minimum. When digit 1 arrives, the model begins from this minimum, inheriting a bias from the previous task. It must then converge to a solution that performs well on both tasks, which lies in the intersection of the two balls. Since the size of this intersection depends on the dissimilarity between tasks, the following theorem is observed.
+
+\begin{theorem} 
+\label{thm:task_nonstationary_weights}
+ Fix the number of weight updates required to obtain the optimal value at each task. Assume that each subsequent task introduces a value of change into the model with the change described in some appropriate metric. Let $\ell$ be the Lipschitz continuous function, and choose a small learning rate. Then, capacity diverges as a function of the number of tasks.
+ \textbf{Please see \cite{chakraborty2025understanding} for a full statement and its proof.}
+\end{theorem}
+
+The theorem implies that the AI model's ability to successfully represent tasks will deteriorate as more tasks are introduced when the new tasks are different from the previous one. In such a case, continually training the AI model is bound to fail if we just update the weights of the network. An intuitive side effect of this theorem is that, the intersection of the two balls in the right of \cref{fig:CL1} will shrink as the tasks become more different, and eventually, the intersection will be empty. In such a case, there is no solution.
+
+In this paper we hypothesize and prove that the size of the intersection space in \cref{fig:CL1} can be increased by modifying the architecture of the AI model, that is, by increasing the number of parameters in the model. Doing so, however, would require us to model the interplay between the weights, data, and the architecture. An idea impossible to imagine with the intuition laid out until now because the size of the intersection space is fixed by the size of the ball and the size of the ball, that is the capacity  of the model, is fixed due to the choice of the architecture. Since the size of the weight space cannot be influenced by looking just at the weight space and the movement of weights within the weight space, we need alternate mathematical machinery. 
+
+\section{Neural Networks --  Members of a Class of Sobolev Space Functions}\label{sec:sobolev}
+We will prescribe the AI model $\hat{f}(\weight, \psi)$ to belong to a class of functions contained in a Sobolev space with $k$-bounded weak derivatives. Formally defined as follows.
+\begin{definition}\label{defn:sobo}
+    Let $k \in \mathbb{N},$ the domain-$\domain \subset \mathbb{R}^n$ a measurable set with non-empty interior, and $1< p < \infty.$ Then the Sobolev space $\sobolev$ consists of all functions $f$ on $\domain$ such that for all multi-indices $\alpha$ with $|\alpha| \leq k,$ the mixed partial derivative $\partial^{(\alpha)} f$ exists in the weak sense and belongs to $L^p(\domain)$. That is, 
+    \[ \sobolev  = \{ f \in L^p(\domain) : \partial^{|\alpha|} h \in L^{p}(\domain) \forall |\alpha| \leq k \}.\]
+    The number $k$ is the order of the Sobolev space, and the Sobolev space norm is defined as 
+    \[ \|f\|_{\sobolev} := \sum_{ |\alpha| \leq k } \| \partial^{|\alpha|} f \|_{L^{p}(\domain)}.\]
+\end{definition}
+% \Ally{Need to revisit first half of this paragraph. Heine-Borel gives compact if and only if closed and bounded. The makes it sound like "because it's a subset it's automatically compact," which is not true. I think want to assume the set is closed and bounded because the data set will always be finite in practice. Then, we get that the set is compact as a result of Heine-Borel.}
+In \cref{defn:sobo}, $\domain$ is our data space. For any standard AI application, we can assume that $\domain$ is a finite subset of $\mathbb{R}^n.$ This is an important practical consideration as, for AI model training to be efficient, one needs the numerical values of the data to be bounded, typically achieved through normalization as in \cite{huang2023normalization}. As $\domain$ is a finite subset of $\mathbb{R}^n,$ it is a closed subset. Thus, by Heine--Borel, $\domain$ is also compact, see ~\cite{rudin1976principles}.
+%GAIL - Here and throughout, this way of referencing seems a bit odd -- having the author name followed by parens and the date but not separation from the text -- usually one has (Author year) or "as discussed by author (year), not just "fails to converge Huang et al. (2023)" -- as if Huang et al. wee failing to converge!
+
+The next assumption we note is the presence of weak derivatives. In a standard neural network, derivatives are assumed to exist since twice differentiability is necessary for training and typical training involves gradient-based methods such as \cite{kingmaAdamMethodStochastic2017}. In the Sobolev space, the existence of weak derivatives is a more general condition than the existence of classical derivatives. In particular, weak derivatiuves allow for functions that may not be differentiable in the classical sense but still have well-defined derivatives in the weak sense. This is important for the architecture choices as, many of these choices may not be differentiably in the classical sense, but they are differentiable in the weak sense. For example, the ReLU activation function is not differentiable at zero, but it has a well-defined weak derivative as discussed in \cite{petersenTopologicalPropertiesSet2021a}  and \cite{adegokeHigherDerivativesInverse2016}.
+% \begin{table}[!tb]
+% \adjustbox{width=\linewidth}{
+% \begin{tabular}{cccc}
+% \toprule
+%        Name  &  $\rho(\vx)$ &  Smoothness & Corresponding $W^{k,p}$\\
+%         &   & /Boundedness & \\
+%        \hline  \hline
+% Rectified Linear  & $sup\{0,\vx\}$ & absolutely  & $W^{0,p}(\domain)$ \\
+%  Unit (ReLU) &  &  continuous, $\rho' \in L^{p}(\domain)$ & 
+% \\ & &  &\\ 
+%  Exponential Linear  & $ \vx. \chi_{\vx\geq 0}$ & $C^1(\mathbb{R})$, absolutely  & $W^{1,p}(\domain)$ \\
+%  Unit (eLU) & $+ (e^{\vx}-1) \chi_{\vx<0} $  & continuous $\rho'' \in L^{p}(\domain)$ & 
+% \\ & & &  \\ 
+% Softsign & $\frac{\vx}{1+ |\vx|}$ & $C^1(\mathbb{R})$, $\rho'$ absolutely  & $W^{2,p}$  \\
+% & &  continuous, $\rho'' \in L^{p}(\domain)$ &  
+% \\ & & &  \\ 
+% Inverse Square  & $ \vx \chi_{\vx \geq 0}  $ & $C^2(\mathbb{R})$, $\rho''$ absolutely  & $W^{3,p}$  \\ 
+% Root Linear Unit & $ + \frac{\vx}{\sqrt{1+a\vx^2}} \chi_{\vx<0} $ & continuous, $\rho''' \in L^{p}(\domain)$ & 
+% \\ & & &  \\ 
+% Inverse Square Root Unit & $ \frac{\vx}{\sqrt{1+a\vx^2}} $ & real analytic,  & $W^{k,p} \forall k $ \\
+% &  & real, all derivatives bounded &  
+% \\ & & &  \\ 
+% Sigmoid & $ \frac{1}{1+ e^{\vx} } $ & real analytic,  & $W^{k,p} \forall k $ \\
+% &  & real, all derivatives bounded &  
+% \\ & & &  \\ 
+% tanh & $ \frac{e^{\vx} - e^{-\vx}}{e^{\vx} + e^{-\vx}} $ & real, analytic,  & $W^{k,p} \forall k $ \\
+% &  & real, all derivatives bounded &  \\
+% \bottomrule
+% \end{tabular}
+% }
+% \caption{Different activation functions and the corresponding Sobolev spaces. Many of these results are described in 
+% \cite{petersenTopologicalPropertiesSet2021a}  and \cite{adegokeHigherDerivativesInverse2016} . $\chi$ is an indicator function.}
+% \label{tab:Sobolev_acti}
+% \end{table}
+
+To represent the class of functions described in \cref{defn:sobo}, we define a neural network as a function  $\fhat(\weight(t),  \psi(t) )$ with $d \in \mathbb{N}$ layers. In this notation, $\weight(t)$ is a long $\mathbb{R}^{m}$ vector that concatenates the weight parameters from the $d$ layers, and $\psi(t)$  comprises  the architecture and other user-defined parameters in the neural network.  Formally, we have
+\begin{definition} \label{defn:NN}
+A $d$-layered neural network is given by an operator~(essentially a function) 
+$\fhat(\weight(t), \psi(t) )\in \sobolev$ with $\sobolev$ being a Sobolev space. Furthermore, 
+\begin{align}
+  \fhat(\weight(t), \psi(t)) \big( . \big) & = \fhat_{d}(\mathrm{w}_{d}(t), \psi_{d}(t))\circ \fhat_{d-1}(\mathrm{w}_{d-1}(t), \psi_{d-1}(t))\circ \cdots \circ \fhat_{2}(\mathrm{w}_{2}(t), \psi_{2}(t))\circ \fhat_{1}(\mathrm{w}_{1}(t), \psi_{1}(t)) \big( . \big)
+\end{align}
+describes the layer-wise compositions, and $\big( . \big)$ represents the input tensor to which the operator is applied.
+\end{definition}
+\begin{remark}
+    We indicate approximate quantities with $\hat{.}$ and true~(target) quantities without the hat. For instance, the target function $f$ in \cref{defn:sobo} is indicated without the hat, and the approximate function $\fhat$ in \cref{defn:NN} is indicated with a hat.
+\end{remark}
+\begin{remark}
+    In \cref{defn:NN} we describe the operation across different layers using the composition; in terms of notation, we hide this complexity through the definition of the operator. Therefore, \cref{defn:NN} is generic and  can be used to define feedforward, recurrent, convolutional, and graph  neural networks and even a large language model. This prescription naturally aligns with practical implementation through Jax pytrees~\cite{jax} and equinox~\cite{kidger2021equinox} where tunable parameters are representated through static and dynamic entities.
+\end{remark}
+Typically, the user-defined parameters are a combination of integer, categorical, and floating-point values and since the architecture varies with task instances. Therefore, $\psi,$ denoting the architecture, is assumed to be a function of $t.$ Since we cannot determine derivatives with respect to discrete parameters in the classical sense (i.e., derivative of $\psi(t)$), we define weak derivative with respect to these quantities such that the derivatives~(with respect to or of $\psi$) can be approximated. The loss function on $\sobolev$ with this construction is defined in \cref{defn:NN,defn:sobo}. 
+\begin{definition}\label{defn:NN_learning}
+        Let $f(t)\in \sobolev$ for all $t\in \{0,\ldots, T\}$ denote the \textit{target function} that is to be approximated, and let $\hat{f}(\weight(t),\psi(t))$ denote a neural network determined to approximate $f(t)$ at task $t.$ Then the \textit{loss function} (or error of approximation) for $\vx \in \tx(t) \subseteq \domain$ is given by 
+        \begin{align*}
+            \ell(\fhat(\weight(t),\psi(t)), \vx) & = \| \fhat(\weight(t),\psi(t))(\vx)-f(t)(\vx)\|_{\sobolev}.
+        \end{align*} 
+\end{definition}
+The function $f$ in the context of machine learning is an ideal forecasting model that can forecast temperature perfectly or an ideal classification model that performs some classification problem.
+\begin{remark}
+    In applications, we  assume $\domain$ is compact to guarantee that the target function $f(t)$ exists in a Sobolev space $\sobolev,$ by Corollary 3.5 in \cite{mahanNonclosednessSetsNeural2021a}. If, however,  compactness cannot be assumed, we find the minimum norm solution to the problem in the Sobolev space.
+\end{remark}
+The loss function in \cref{defn:NN_learning} is defined over $\sobolev$ using the Sobolev space norm. In practice, however, we can directly utilize samples corresponding to $f$ or $\hat{f}.$ For instance, this has been done in \cite{son2021sobolev} in the context of  physics-informed neural networks---a class of neural networks  modeled by \cref{defn:NN}. In particular, the Sobolev space norm is defined with $k=0$ and $p=2$ which gives the standard mean squared error loss function.
+\paragraph{Continual Learning in $\sobolev:$}
+We  extend \cref{defn:NN_learning} to the case of CL  with the goal of learning a series of tasks indexed by $t.$ For each $t,$ we must find a $\weight^*$  with respect to $\ell$ integrated over the interval $[0,t]$ as in \cref{eq:CL_for} to obtain
+\begin{align*}
+    \clcost & = \int_0^t \ea \;  d~\tau.
+\end{align*}
+A traditional learning structure as in \cite{CASpasunuru2019continual} seeks to minimize the cost $J(t)$ through an  optimizer~(one such as \cite{kingmaAdamMethodStochastic2017}) to drive $J(t) \rightarrow 0$ with guaranteed convergence as in \cite{kingmaAdamMethodStochastic2017}. In practice, however, when consecutive tasks are very different from each other, we encounter the issue described in \cref{fig:CL1}.  In order to resolve this quandary, for each new task, the underlying optimization problem must be repeatedly resolved, leading to a  series of optimization problems, altogether forming a dynamic program~\cite{bertsekas2012dynamic}. A standard practice in the optimal control literature is to solve such dynamic programs~\cite{bertsekas2012dynamic} through a cumulative optimization problem over the interval $[0,T]$ as in 
+\begin{align*}
+    V^*(t,\weight(t)) & = \min_{\weight \in \mathcal{W}(\psi^*(t))} V(t, \weight(t) ):= \int_t^T J(\weight(\tau),\psi^*(t), \tx(\tau)) d~\tau,
+\end{align*}
+where $\mathcal{W}(\psi^*(t))$ is the weights search space. A solution to this dynamic program was introduced in~\cite{raghavan2021formalizing, chakraborty2025understanding} where a fixed architecture~$\psi^*(t)$ was employed.  To incorporate architecture learning into this problem, we descriobe a bilevel- optimization problem where the outer problem is  
+\begin{align}\label{eq:arch} \tag{Architecture search}
+    \psi^*(t) & = \mathrm{arg }\min_{\psi\in \Psi} J(\weight(t),\psi,\tx(t)),
+\end{align}
+with $\Psi$ bein the architecture search space. Once the search is completed, we move to the lower problem to find the weights through solving 
+\begin{align}\label{eq:clcum} \tag{Cumulative CL}
+     V^*(t,\weight(t)) & = \min_{\weight \in \mathcal{W}(\psi^*(t))} V(t,\weight(t)).
+\end{align}
+In this paper we will devise an alternative approach to solving the bi-level problem. First, however,  we must understand the dependence between the architecture, weights and the intersection space.
+
+\section{Understanding the Existence of the CL Solution}\label{sec:existence}
+
+% Within this new paradigm, three tasks are shown to the model in order  and the architecture is fixed as $\psi(1).$ We now seek to solve the problem in \eqref{eq:clcum} at each $t$ such that 
+% $\weight^*$ can be determined which is highly dependent on each task's data. Intuitively, 
+% if $\tx(t) = \tx(t+1), \forall \; t \in [0,T],$ 
+% we can find a NN $\hat{f}$ which learns the new task $\tx(t+1)$
+% and performs on both $\tx(t)$ and $\tx(t+1)$ perfectly. 
+% But, if $\tx(t) \ne \tx(t+1), \forall \; t \in [0,T],$ 
+% we may or may not be able to find a common solution 
+\begin{wrapfigure}{r}{0.40\textwidth}
+    \centering
+    \vspace{-10pt}
+    \begin{tikzpicture}[scale=1.0, every node/.style={scale=1.0}]
+    % --- Stage 1: Single circle F1 ---
+    \begin{scope}[shift={(0.0, 6.0)}]
+        \node[font=\scriptsize, black!60] at (-2.0, 0) {$t=1$};
+        \draw[thick, fill=matrixW!12] (0,0) circle (1.3cm);
+        \node[font=\small] at (0, 1.6) {$\mathcal{F}_1$};
+        \node[font=\normalsize, matrixV!80!black] (ws1) at (-0.3, -0.2) {$\boldsymbol{+}$};
+        \node[font=\scriptsize, below=0pt of ws1] {$\weight^*(1)$};
+        \node[font=\normalsize, matrixA!80!black] (wi1) at (0.4, 0.2) {\smiley{}};
+        \node[font=\scriptsize, above=0pt of wi1] {$\weight^\infty\!(1)$};
+    \end{scope}
+    %
+    % Downward arrow
+    \draw[->, thick, black!50] (0, 4.55) -- (0, 4.35);
+    %
+    % --- Stage 2: Two overlapping circles F1, F2 ---
+    \begin{scope}[shift={(0.0, 2.8)}]
+        \node[font=\scriptsize, black!60] at (-2.5, 0) {$t=2$};
+        \draw[thick, fill=matrixW!12] (-0.7,0) circle (1.4cm);
+        \draw[thick, fill=matrixW!12] (0.7,0) circle (1.4cm);
+        \begin{scope}
+            \clip (-0.7,0) circle (1.4cm);
+            \fill[matrixA!25] (0.7,0) circle (1.4cm);
+        \end{scope}
+        \node[font=\small] at (-1.8, 1.2) {$\mathcal{F}_1$};
+        \node[font=\small] at (1.8, 1.2) {$\mathcal{F}_2$};
+        \node[font=\normalsize, matrixV!80!black] (ws1b) at (-0.9, -0.2) {$\boldsymbol{+}$};
+        \node[font=\scriptsize, below=0pt of ws1b] {$\weight^*(1)$};
+        \node[font=\normalsize, matrixV!80!black] (ws2b) at (0.9, -0.2) {$\boldsymbol{+}$};
+        \node[font=\scriptsize, below=0pt of ws2b] {$\weight^*(2)$};
+        \node[font=\normalsize, matrixA!80!black] (wi2) at (0.0, 0.0) {\smiley{}};
+        \node[font=\scriptsize, above=0pt of wi2] {$\weight^\infty\!(2)$};
+    \end{scope}
+    %
+    % Downward arrow
+    \draw[->, thick, black!50] (0, 1.25) -- (0, 1.05);
+    %
+    % --- Stage 3: Three overlapping circles F1, F2, F3 ---
+    \begin{scope}[shift={(0.0, -1.5)}]
+        \node[font=\scriptsize, black!60] at (-3.0, 0) {$t=3$};
+        \draw[thick, fill=matrixW!12] (-1.0,-0.5) circle (1.5cm);
+        \draw[thick, fill=matrixW!12] (1.0,-0.5) circle (1.5cm);
+        \draw[thick, fill=matrixW!12] (0.0,0.9) circle (1.5cm);
+        \begin{scope}
+            \clip (-1.0,-0.5) circle (1.5cm);
+            \clip (1.0,-0.5) circle (1.5cm);
+            \fill[matrixA!35] (0.0,0.9) circle (1.5cm);
+        \end{scope}
+        \node[font=\scriptsize] at (-2.0, -1.8) {$\mathcal{F}_1$};
+        \node[font=\scriptsize] at (2.0, -1.8) {$\mathcal{F}_2$};
+        \node[font=\scriptsize] at (1.2, 2.0) {$\mathcal{F}_3$};
+        \node[font=\small, matrixV!80!black] (ws1c) at (-1.0, -0.7) {$\boldsymbol{+}$};
+        \node[font=\tiny, left=1pt of ws1c] {$\weight^*(1)$};
+        \node[font=\small, matrixV!80!black] (ws2c) at (1.0, -0.7) {$\boldsymbol{+}$};
+        \node[font=\tiny, right=1pt of ws2c] {$\weight^*(2)$};
+        \node[font=\small, matrixV!80!black] (ws3c) at (0.0, 1.4) {$\boldsymbol{+}$};
+        \node[font=\tiny, left=1pt of ws3c] {$\weight^*(3)$};
+        \node[font=\normalsize, matrixA!80!black] (wi3) at (0.0, 0.05) {\smiley{}};
+        \node[font=\scriptsize, right=1pt of wi3] {$\weight^\infty\!(3)$};
+    \end{scope}
+    \end{tikzpicture}
+    \caption{Neural network spaces $\mathcal{F}_t$ with fixed $\psi^*$. The CL solution $\weight^\infty(t)$ (\smiley{}) lies in the intersection; per-task optima $\weight^*(t)$ (\ding{58}) lie within individual spaces.}
+    \label{fig:challenge}
+    \vspace{-12pt}
+\end{wrapfigure}
+
+To understand this behavior, let us reconsider the example from 
+\cref{sec:motivation} and redraw \cref{fig:challenge}. 
+From \cref{fig:challenge}, let $\mathcal{F}_t = \{\fhat(\weight,\psi)\in \sobolev\}$ represent the search space for the set of  all possible neural network solutions for learning task 
+$t$~(refer to \cref{sec:motivation} for a similar construction). 
+Since $\mathcal{F}_t$ is a subset of $\sobolev,$ the balls in \cref{fig:challenge} 
+can be thought  of as a level sets of the loss function $\ell$ defined in \cref{defn:NN_learning}. At $t=1$ there is one ball, at task $t=2$ there are two balls, 
+and at task $t=3$ there are three balls. In each of the balls, \ding{58} represents the neural network solution at $t$, and the $\smiley{}$ face 
+represents the solution that performs well among tasks 
+between $0 \rightarrow t.$  Notably,  $\smiley{}$ must lie in 
+the intersection of all the balls from $0$ to $t$. 
+Note that unless the tasks are equivalent,  $\smiley{}$ 
+and the \ding{58} will not coincide because no solution 
+that is perfect for one task can be perfect for another. 
+
+Furthermore, the more different the subsequent tasks are, the more likely
+the intersection space is to be empty, and the CL problem has no solution 
+across all tasks from $0$ to $t$.  From a topological perspective, the non-emptiness of the intersection space implies 
+that the union of all the balls is a connected set. A continuous 
+function such as $J$, defined on this 
+connected set, will have a gradient that is 
+defined completely over the union of these balls. Therefore, 
+if the intersection space is empty, the connectivity of the union
+of these balls is violated, and the gradient of $J$ is undefined, which will lead to  a solution that cannot be found. The best one can do in this circumstance is a 
+minimum norm solution. Therefore, the notion of the intersection space is closely related to the notion of continuity. 
+
+To mathematically formalize this intuition, we need to define a measure of continuity that is proportional to the size of the intersection space. Towards this end, we define measure $\mu$ over the task probability space ~$\mathbb{P}$ and describe an $\varepsilon, \delta$ definition of 
+continuity of a function w.r.t this measure.
+\begin{definition} \label{defn:intersect}
+     Let $\overline{\tx} = \bigcup_{t=0}^\infty \tx(t)$ with the power set $\mathcal{P(\overline{\tx})}$ as its topology. Set $\mathcal{B(\overline{\tx})}$ to be the Borel sigma algebra on $\overline{\tx}$ equipped with a probability measure denoted $\mu.$ Then $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ forms a probability measure space. Let $g: \overline{\tx}\rightarrow \mathbb{R}$ be a measurable function, and set $F:\mathcal{B}(\overline{\tx})\rightarrow \mathbb{R}$ to be the function
+     \begin{align*}
+         F(A) & = \int_{\vx \in A} g(\vx) d\mu.
+     \end{align*}
+     Then we say that $F$ is \textit{continuous with respect to the measure} if for every $\varepsilon>0$ there exists $\delta >0$ such that $\abs{F(A)-F(B)} < \varepsilon$
+     whenever $A,B\in \mathcal{B(\overline{\tx})}$ such that $\mu(A\bigtriangleup B)<\delta.$
+ \end{definition}
+ 
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+    \centering
+    \vspace{-10pt}
+    \begin{tikzpicture}[scale=0.7]
+        \def\firstcircle{(-.5,0) circle (2.0cm)}
+        \def\secondcircle{(2.0,0) circle (2.0cm)}
+        % Fill each circle (weight spaces = matrixW, orange)
+        \fill[matrixW!12] \firstcircle;
+        \fill[matrixW!12] \secondcircle;
+        % Fill the symmetric difference (intersection color = matrixA, green)
+        \fill[even odd rule, matrixA!35] \firstcircle \secondcircle;
+        % Draw the circle outlines
+        \draw[draw=black, line width=.6mm] \firstcircle;
+        \draw[draw=black, line width=.6mm] \secondcircle;
+        % Labels
+        \node at (-2.6,1.5) {\large$A$};
+        \node at (4.1,1.5) {\large$B$};
+    \end{tikzpicture}
+    \vspace{-5pt}
+    \caption{Symmetric difference $A\bigtriangleup B$ (green shading).}
+    \label{fig:setsim}
+\end{wrapfigure}
+\cref{defn:intersect} can be deduced from basic measure 
+theory results found in \cite{weaver2013measure}. If the
+sets that are similar~(with respect to the probability measure $\mu$) 
+close values of $F(A)$ are observed. In particular, $\mu(A\bigtriangleup B)$ is the Lebesgue measure $\mu$
+applied over $A\bigtriangleup B$ representing a set 
+symmetric difference, which describes the elements 
+two sets do not share~(see \cref{fig:setsim} 
+for an illustration). Therefore, as the intersection space (i.e., $\mu(A\cap B)$) shrinks, $\mu(A\bigtriangleup B)$ gets larger, and $\abs{F(A)-F(B)}$ gets larger proportionally, thus providing a measure of continuity 
+that is proportional to the number of common elements between the two sets. Succinctly, more common elements imply a smaller value of the measure, and less common elements imply a large value of the measure. 
+
+
+\subsection{Necessary Condition for the Existence of CL Solution}
+To prove existence of the solution, it suffices to show that, at the onset of each task, the expected value function is continuous with respect to the measure $\mu$ defined in \cref{defn:intersect} and that the function is absolutely continuous acoss all tasks in the interval $[0,T].$ First, we prove that the expected value function, that is, $\int_{\vx\in A}
+       \ell(\fhat(\weight,\psi
+       )( \vx ) )d\mu$, is continuous with respect to measure $\mu$ when $\mu(A\triangle B)<\delta, \forall A, B \in \overline{\tx}.$ 
+\begin{lemma}\label{lem:contMeasure}
+    Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as 
+    defined in \cref{defn:intersect}. 
+    Assume that the loss function $\ell$ is continuous 
+    and bounded across all tasks, that is, $\forall t \in [0,T].$ 
+    Then the expected value function $  E(A) = \int_{\vx\in A}
+       \ell(\fhat(\weight,\psi)( \vx ) )d\mu$ is continuous with respect to measure $\mu$.
+\end{lemma}
+
+\begin{proof}
+    Suppose that the constant $M_0>0$ is the value that bounds $\ell$ on every task. Let $\varepsilon>0$, and set $\delta = \varepsilon/M_0.$ Further, let $A,B\in \mathcal{B}(\tx)$ such that $\mu(A\triangle B)<\delta.$ By disjoint additivity of $\mu$ and the triangle inequality, we have
+    {\small\begin{align*}
+        & \abs{E(A)-E(B)} = \left\vert \int_{\vx\in A}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu - \int_{\vx\in B}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu\right\vert \\ &= \left\vert \int_{\vx\in A\setminus B}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu + \int_{\vx\in A\cap B}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu - \int_{\vx\in B\setminus A}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu - \int_{\vx\in A\cap B}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu \right\vert \\
+       & = \left\vert \int_{\vx\in A\setminus B}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu - \int_{\vx\in B\setminus A}
+       \ell(\fhat(\weight,\psi)( \vx ))\,d\mu\right\vert  \leq \int_{\vx\in A\setminus B}
+       \abs{\ell(\fhat(\weight,\psi)( \vx ))}\,d\mu + \int_{\vx \in B\setminus A}
+       \abs{\ell(\fhat(\weight,\psi)( \vx ))}\,d\mu.
+    \end{align*}}
+    Then, by the boundedness of $\ell,$ we have {\small$\int_{\vx\in A\setminus B} \abs{\ell(\fhat(\weight,\psi
+       )( \vx ) )}d\mu + \int_{\vx\in B\setminus A}
+       \abs{\ell(\fhat(\weight,\psi
+       )( \vx ) )}d\mu \leq M_0\mu(A\setminus B)+M_0\mu(B\setminus A).$} Therefore, $  M_0\mu(A\setminus B)+M_0\mu(B\setminus A) = M_0 \mu(A\triangle B)<M_0\delta= M_0\frac{\varepsilon}{M_0}  = \varepsilon$
+    as desired.
+\end{proof}
+Now, we show that if two tasks $\tx(t), \tx(t+1)$  are similar, then the corresponding loss values are similar. We prove this result in the following lemma. 
+\begin{lemma}\label{lem:simtaskssimloss}
+    Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as defined in \cref{defn:intersect}. 
+    Assume that the loss function $\ell$ is continuous 
+    and bounded across all tasks, that is, $\forall t \in [0,T].$ 
+    Define $J$ over a task $\tx(t)$ as
+    \begin{align}
+        \clcost & =\int_0^t \ea \;  d~\tau  = \int_{ \bigcup_{\tau=0}^t\tx(\tau)}       \ell(\fhat(\weight(t),\psi(t))( \vx ) )d\mu . 
+    \end{align}
+    Let $\varepsilon >0$ and $\delta(\varepsilon)>0$ chosen such that $\ea$ is continuous w.r.t. measure $\mu$.
+    Then, 
+    $\mu(\bigcup_{\tau = 0}^{t+1} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau))<\delta$ and 
+    $\abs{\clcostt- \clcost} \leq \varepsilon.$
+\end{lemma}
+
+\begin{proof}
+    Suppose that the constant $M_0>0$ bounds $\ell$ on every task. 
+    Let $\varepsilon>0$, and  set $\delta = \varepsilon/M_0.$  By disjoint additivity of $\mu$ and triangle inequality, we have
+    Denoting $\tx_{s} = \bigcup_{\tau=0}^{s}\tx(\tau)$ and $h = \ell(\hat{f}(\weight,\psi))$ for brevity,
+    {\small\begin{align*}
+       & \left\vert
+       \int_0^{t+\Delta t} \ea d\mu\; d\tau -
+       \int_0^t \ea d\mu\; d\tau\right\vert \\
+        & = \left\vert \int_{\tx_{t+\Delta t}} h\,d\mu - \int_{\tx_{t}} h\,d\mu\right\vert  = \Big\vert \int_{\tx_{t+\Delta t}\setminus \tx_{t}} h\,d\mu + \int_{\tx_{t}\cap\tx_{t+\Delta t}} h\,d\mu
+        - \int_{\tx_{t}\setminus \tx_{t+\Delta t}} h\,d\mu - \int_{\tx_{t}\cap \tx_{t+\Delta t}} h\,d\mu\Big\vert\\
+        & = \Big\vert \int_{\tx_{t+\Delta t}\setminus \tx_{t}} h\,d\mu - \int_{\tx_{t}\setminus \tx_{t+\Delta t}} h\,d\mu\Big\vert  \leq \int_{\tx_{t+\Delta t}\setminus \tx_{t}} \abs{h}\,d\mu + \int_{\tx_{t}\setminus \tx_{t+\Delta t}} \abs{h}\,d\mu.
+    \end{align*}}
+    Then, by the boundedness of $\ell,$ $\displaystyle\int_{\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu+\displaystyle\int_{\bigcup_{\tau = 0}^{t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu \leq M_0 \mu\left(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t} \tx(\tau)\right) + M_0\mu\left(\bigcup_{\tau = 0}^{t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\right).$
+    Hence, $ M_0 \mu\left(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t} \tx(\tau)\right) + M_0\mu\left(\bigcup_{\tau = 0}^{t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\right) 
+    = M_0\mu\left(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau)\right) < M_0\delta= M_0 \frac{\varepsilon}{M_0}
+         = \varepsilon,$ as desired.
+\end{proof}
+
+%remark justifying loss bounded on all tasks
+\begin{remark}\label{boundedremark}
+    It is reasonable to assume a constant $M_0<\infty$ with $M_i\leq M_0$ for all $i\in \mathbb{N}$; otherwise, the unbounded loss renders the problem unsolvable, as the network learns nothing useful from the data. Moreover,
+    the equality  $\int_0^t \ea \;  d~\tau  = \int_{ \bigcup_{\tau=0}^t\tx(\tau)} \ell(\fhat(\weight(t),\psi(t))( \vx ) )d\mu$ is not always guaranteed as duplicates among all $\tx(\tau), \forall \tau$  are counted only once. However, we assume that within the construction of $\ell,$ there is an average between all duplications, and only one instance of these duplicates survives. This is reasonable because, in practice, a batch of data is uniformly sampled and averaged over.
+\end{remark}
+
+\cref{lem:simtaskssimloss} solidifies the notion that similar 
+tasks produce similar loss values and that if \cref{lem:simtaskssimloss} is upheld for every $t \in [0,T],$ then the CL problem will have a solution for the whole interval $[0,T].$ In the following theorem we prove that there exists a solution for the cumulative learning problem. 
+
+% \begin{remark}
+%     We can view \cref{thm:contMeasure} result as showing that the function $J$ satisfies a notion of $\textit{absolute continuity},$ as we see the condition relies on a partition of the interval $[0,T].$
+% \end{remark}
+
+\begin{theorem}\label{thm:contMeasure}
+    Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as defined  in \cref{defn:intersect}. For every $\varepsilon>0$ there exists $\delta >0$ such that if $\sum_{\gamma = t}^{T-1} \mu(\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\triangle \bigcup_{\tau = 0}^{\gamma} \tx(\tau))<\delta,$ then $\sum_{\gamma = t}^{T-1} \abs{J(\weight(\gamma+1), \psi(\gamma+1), \tx(\gamma+1))-J(\weight(\gamma), \psi(\gamma), \tx(\gamma))} <\varepsilon.$
+\end{theorem}
+
+\begin{proof}
+    Let $\varepsilon>0$ and choose $\delta = \varepsilon/M_0.$ Notice,
+   {\small \begin{align*}
+       & \sum_{\gamma = t}^{T-1} \abs{J(\weight(\gamma+1), \psi(\gamma+1), \tx(\gamma+1))-J(\weight(\gamma), \psi(\gamma), \tx(\gamma))}  = \sum_{\gamma = t}^{T-1} \Big\vert   
+       \int_0^{\gamma + 1} \Big(\int_{\vx\in \tx(\tau)} \ell(\fhat(\weight(\gamma),\psi(\gamma))(\vx))d\mu\Big) d~\tau\\
+       & - 
+       \int_0^\gamma \Big(\int_{\vx\in \tx(\tau)} \ell(\fhat(\weight(\gamma),\psi(\gamma))(\vx))d\mu\Big) \d~\tau\Big\vert  =  \sum_{\gamma = t}^{T-1} \left\vert \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma + 1} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu- \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu\right\vert \\
+       & = \sum_{\gamma = t}^{T-1} \Big\vert \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu + \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\cap\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu -\displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma + 1} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu\\
+        & - \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\cap \bigcup_{\tau = 0}^{\gamma +1} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu\Big\vert \sum_{\gamma = t}^{T-1} \Big\vert \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma + 1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu -\displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma +1} \tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu\Big\vert\\
+        & \leq \sum_{\gamma = t}^{T-1} \Big(\displaystyle\int_{\bigcup_{\tau = 0}^{\gamma + 1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu +\displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma + 1} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu\Big).
+    \end{align*} }
+    Then, by the boundedness of $\ell,$
+   {\small $ \sum_{\gamma = t}^{T-1} \displaystyle\int_{\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu+\displaystyle\int_{\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)} \abs{\ell(\hat{f}(\weight,\psi))}d\mu
+         \leq \sum_{\gamma = t}^{T-1}\Big[M_0 \mu\left(\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)\right) \hspace{10mm }+ M_0\mu\left(\bigcup_{\tau = 0}^{\gamma} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\right)\Big].$ }
+    Hence, {\small$ \sum_{\gamma = t}^{T-1} M_0 \mu\left(\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma} \tx(\tau)\right) + M_0\mu\left(\bigcup_{\tau = 0}^{t} \tx(\tau)\setminus \bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\right) = M_0\sum_{\gamma = t}^{T-1} \mu\left(\bigcup_{\tau = 0}^{\gamma+1} \tx(\tau)\triangle \bigcup_{\tau = 0}^{\gamma} \tx(\tau)\right)
+     < M_0\delta = M_0 \frac{\varepsilon}{M_0} = \varepsilon$}
+    as desired.
+\end{proof}
+
+% \begin{definition}
+%     \label{defabsolutely_continuous}
+%      Consider the interval $[0,T]$ and  $\overline{\tx} = \bigcup_{t=0}^T \tx(t)$ with the power set $\mathcal{P(\overline{\tx})}$ as its topology. Set $\mathcal{B(\overline{\tx})}$ to be the Borel sigma algebra on $\overline{\tx}$ equipped with a probability measure  $\mu.$ Then, $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ forms a probability measure space. Decompose the interval $[0,T]$ into the following pairwise disjoin intervals $[0,T] = [0,1] \cup  (1, 2]\cup \cdots \cup(t, t+1]\cup \cdots \cup (T-1, T].$  Let $\hat{f}: \overline{\tx}\rightarrow \mathbb{R}$ be a measurable function and for any 
+%      $t \in [0,T],$ define $F(t):\mathcal{B}(\overline{\tx}) \rightarrow \mathbb{R}$ such that  $F(t) = \int_0^t \ea \;  d~\tau$. If  $\sum_{\gamma = t}^{T} \mu(\bigcup_{\tau = 0}^{\gamma+\Delta \gamma} \tx(\tau)\triangle \bigcup_{\tau = 0}^{\gamma} \tx(\tau))<\delta$ implies $\sum_{\gamma = t}^{T} \left\vert F(\gamma)-F(\gamma+1) \right\vert \leq \varepsilon,$ then $F$ is absolutely continuous over the interval $[t,T].$
+%  \end{definition}
+% With this definition and the notation that $E(\tx(\tau)) = \ea$ we have the following theorem.
+
+
+% \begin{theorem}\label{thm:contMeasure}
+%     Let $(\overline{\tx},\mathcal{B}(\overline{\tx}), \mu)$ be the measure space as 
+%     defined  in \cref{defn:intersect} and requirements for absolute continuity defined as in \cref{defabsolutely_continuous}. Assume that the loss function $\ell$ is continuous 
+%     and bounded for all tasks, that is, $\forall t \in [0,T].$ 
+%     Define $J$ over a task $\tx(\tau)$ as
+%     \begin{align}
+%    \clcost & = \int_0^t  E(\tx(\tau)) \;  d~\tau .
+%     \end{align}
+%     Then $ \clcost$ is absolutely continuous with respect to the measure for all $\{ \tx(\tau) \in \mathcal{B}(\overline{\tx}), \tau =0,1, \cdots, t \}.$
+% \end{theorem}
+% \begin{proof}
+%     Suppose that the constant $M_0>0$ bounds $\ell$ on every task. 
+%     Let $\varepsilon>0$, and  set $\delta = \varepsilon/TM_0.$ 
+%     Furthermore, let $\tx(t+1),\tx(t) \in \mathcal{\mathcal{B}}(\overline{\tx})$ 
+%     such that $\mu(\bigcup_{\tau = 0}^{\gamma+\Delta \gamma} \tx(\tau)\triangle \bigcup_{\tau = 0}^{\gamma} \tx(\tau))< \delta.$  Then, by the boundedness of $\ell$ and from \cref{lem:contMeasure} and \cref{thm:contMeasure} with the choice of $\delta = \frac{\varepsilon}{2(T-t) M_0},$ we have
+%     \begin{align*}
+%         & \sum_{t}^T \left[ \left\vert J(\weight(\tau+\Delta \tau),\psi(\tau+\Delta \tau),\tx(\tau+\Delta \tau)) - \clcost \right\vert \right] \\ 
+%         & \leq \sum_{t}^T \left\vert M_0 \mu\left(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau)\right) \right\vert 
+%         + \left\vert M_0  \mu\left(\bigcup_{\tau = 0}^{t+\Delta t} \tx(\tau)\triangle \bigcup_{\tau = 0}^{t} \tx(\tau)) \right) \right\vert \\
+%         & \leq \sum_{t}^T M_0\left( \frac{\varepsilon}{ (T-t) 2M_0} + \frac{\varepsilon}{2(T-t) M_0}\right),
+%     \end{align*}
+%     which gives the result according to \cref{defabsolutely_continuous}.
+% \end{proof}
+Therefore, the existence of a solution to \eqref{eq:clcum} depends on whether we can ensure a notion of absolute continuity of $\int_0^t \ea \;  d~\tau$ or not in the presence of disimilar tasks.
+
+\subsection{Reachability to a Solution in the Presence of Dissimilar Tasks}
+\cref{thm:contMeasure} establishes the existence condition for the CL solution of \eqref{eq:clcum}; its contrapositive states that dissimilar loss values imply dissimilar tasks. However, the converse need not hold: for tasks $\tx(t)$ and $\tx(t+\Delta t)$ with $\mu(\tx(t)\bigtriangleup \tx(t+\Delta t)) \geq \delta$, the loss difference $\abs{\clcost-\clcostt}$ may or may not exceed $\varepsilon$. When dissimilar tasks do produce dissimilar losses, increasing the number of tasks drives $\abs{\clcost-\clcostt}$ beyond $\varepsilon$, causing the model to progressively forget prior tasks and ultimately violating \cref{thm:contMeasure}.
+
+In order to counteract this situation, the key condition for absolute continuity must be upheld; that is, for a series of tasks, the upper bound on 
+$ \sum_{t}^T \left[ \left\vert J(\weight(\tau+\Delta \tau),\psi(\tau+\Delta \tau),\tx(\tau+\Delta \tau)) - \clcost \right\vert \right]$ must be guaranteed to be less than or equal to $\varepsilon$. The key here is to identify the knobs in the model that can be tuned to ensure that $\varepsilon$ is small even in the presence of dissimilar tasks. In the typical neural network learning problem, the two knobs that can be tuned are the weights and architecture of the network. We will cement these ideas in the following and begin by elucidating the dependency of $\ea$ on the weights and the architecture.
+
+% \Ally{I don't know that we can find a lower bound which we can guarantee is nonnegative. This is because we can't estimate inside the bigger absolute values introduced by the reverse triangle inequality. Yes, we can remove the outer set of absolute values, but this is where we gain the issue having a negative lowerbound. Beyond the concern of the lower bound not being negative, I don't think we will be able to show the lower bound pushes up (goes to infinity) because $\mu(\tx(t)\triangle \tx(t+1))\geq \delta$ does not guarantee that we don't have similar loss values (as you note in the paragraph above). I believe this is why I can't get this to work. Below is the lower bound I can get, but cannot guarantee nonnegative. \newline However, I don't know that an upperbound doesn't make equal amount of sense. We find an upperbound $C$ on $|J-J|$ when we change only the weights.  We can then find a smaller upper bound $C'$ on $|J-J|$ when we change architecture and weights. Thus, if $|J-J|\geq \varepsilon$ (i.e. dissimilar loss value), then, we know $C\geq |J-J|\geq \varepsilon,$ but by also changing the architecture we have $C\geq C'\geq |J-J|.$ This can result in $|J-J|< \varepsilon$ (i.e. similar loss value) since we can have $|J-J|\leq C'<\varepsilon<C.$\newline I am hesitant to frame this section through the lens of "absolutely continuous" or "not absolutely continuous" because $\mu(\tx(t)\triangle \tx(t+1))\geq \delta.$ We can't shrink $\mu(\tx(t)\triangle \tx(t+1))$ because the data is fixed. So, we can't say by changing the architecture and the weights that it is now "absolutely continuous." Yes, perhaps "shrinking" $\varepsilon$ could lead to a new (bigger) $\delta$ choice, but we don't know that. We only have that for every epsilon there is a delta.}
+
+%=============Taylor Theorem weights and arch=========%
+\begin{lemma}\label{lem:taylor}
+    Suppose $\tx(t)$ and $\tx(t+\Delta T)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$  Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Then for $\mu(\tx(t)\bigtriangleup \tx(t+\Delta t))\geq \delta,$ the following holds:
+    {\small\begin{align}
+        E\left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\right) & = E\left(\bigcup_{\tau = 0}^{t}\tx(\tau)\right) + \Delta t\Big[\mu\left( \bigcup_{\tau = 0}^{t}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t+1}\tx(\tau)\right)\cdot \displaystyle\int_{\bigcup_{\tau = 0}^{t}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t+1}\tx(\tau)} \ell(\hat{f}(\weight,\psi))d\mu \nonumber \\
+        & + \displaystyle\int_{\bigcup_{\tau = 0}^{t}\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm} d\mu \nonumber  +\displaystyle\int_{\bigcup_{\tau = 0}^{t}\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu\Big]+ o(\Delta t).
+    \end{align}}
+\end{lemma}
+\begin{proof}
+    Note that the first-order Taylor series expansion of $E(\tx(t+\Delta t))$ about  $t$ is given by
+    \begin{align}
+        E\left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\right) & = E\left(\bigcup_{\tau = 0}^{t}\tx(\tau)\right) + \Delta t\Big[ E_{\tx} \left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t}\tx(\tau)\right) \nonumber \\
+        & + E_{\weight}\left(\bigcup_{\tau = 0}^{t}\tx(\tau)\right) + E_\psi\left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\right)\Big] + o(\Delta t),\label{taylorexparch}
+    \end{align}
+    where $E_{\tx} , E_{\weight},$ and $E_\psi$ are the partial derivatives of the expected value function for the data, weights, and architecture, respectively. Now, we work on acquiring each partial derivative. Toward that end, 
+    \begin{align}
+        E_{\tx} \left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t}\tx(\tau)\right) & =\mu\left( \left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t}\tx(\tau)\right)\right)\cdot \displaystyle\int_{\left(\bigcup_{\tau = 0}^{t+1}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t}\tx(\tau)\right)} \ell(\hat{f}(\weight,\psi))d\mu.\label{E_X1}
+    \end{align}
+    To determine the remaining two derivatives, we use the Sobolev function chain rule found in \cite{evans2022partial}. We can do so because $\ell$ is real-valued and bounded and $\ell'$ is continuously differentiable. Then, $E_{\weight}\left(\bigcup_{\tau = 0}^{t}\tx(\tau)\right) = \displaystyle\int_{\bigcup_{\tau = 0}^{t}\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\cdot \Delta w \hspace{1mm}  d\mu.\label{E_w}$ and $E_{\psi}\left(\bigcup_{\tau = 0}^{t}\tx(\tau)\right) = \displaystyle\int_{\bigcup_{\tau = 0}^{t}\tx(\tau)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \hspace{1mm}  d\mu.\label{E_psi}$ and
+    substitution into the Taylor series expansion \eqref{taylorexparch}, we have the desired result.
+\end{proof}
+
+Colloquially, in the CL problem only the weights are updated, but in this paper we argue that this is not enough. We show that  with just the weights being updated, the $\clcost$ eventually violates \cref{thm:contMeasure}. To prove this, we first derive a lower bound on $\ea.$ For the remaining analysis, we will set  $ \Delta t = 1.$
+
+%--------------New upperbound weights -------------------%
+\begin{lemma}\label{lem:upper_weight}
+    Suppose $\tx(t)$ and $\tx(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$  be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks, and assume $\mu\left( \bigcup_{\tau = 0}^{t}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t+\Delta t}\tx(\tau)\right)\geq \delta$ for all $t\in [0,T].$ Then for $\Delta t = 1$ the following holds:
+    \begin{align*}
+        \sum_{\tau = t}^{T} \left(J(\tx(\tau))-J(\tx(\tau+1)\right)
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big)
+    \end{align*}
+    for $\displaystyle\int_{\tx(t)} \ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\cdot \Delta \psi \; \;  d\mu+ o(\Delta t) = 0$ as $\psi(t) = \psi, \forall t.$ \textbf{
+    The proof is in \cref{sec:upper_weight}.}
+\end{lemma}
+A bound similar to the one in \cref{lem:upper_weight} can be attained for the architecture terms as well. 
+%--------------New upperbound weights and arch -------------------%
+\begin{lemma}\label{lem:upper_arch}
+    Suppose $\tx(t)$ and $\tx(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Let $L_1>0$ and $0\leq \delta\leq 1$  be constants. Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks, and assume $\mu\left( \bigcup_{\tau = 0}^{t}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t+\Delta t}\tx(\tau)\right)\geq \delta$ for all $t\in [0,T].$ Then for $\Delta t = 1$ the following holds:
+    \begin{align*}
+        \sum_{\tau = t}^{T} \left(J(\tx(\tau))-J(\tx(\tau+1)\right)
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu\\
+        & -\displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_\psi^1 \hat{f}(\weight,\psi)\right)^2\hspace{1mm}  d\mu\Big). \textbf{The proof is  in \cref{sec:upper_arch}.}
+    \end{align*}
+\end{lemma}
+
+The following result tells us that in the case of dissimilar tasks and with dissimilar loss values ($\sum_{\tau = t}^{T} \left(J(\tx(\tau)) - J(\tx(\tau+1))\right)\geq \varepsilon)$ for a fixed architecture across tasks, we can learn the architecture at each task such that we can acquire similar loss values tasks ($\sum_{\tau = t}^{T} \left(J(\tx(\tau)) - J(\tx(\tau+1))\right) < \varepsilon).$ 
+\begin{theorem}\label{thm:intersection}
+    Suppose $\tx(t)$ and $\tx(t+\Delta t)$ are two consecutive tasks in the measure space $(\overline{\tx}, \mathcal{B}(\overline{\tx}),\mu).$ Set $M_0$ to be the upper bound on the loss function $\ell$ across all tasks. Moreover, let $\varepsilon>0$ such that
+    $\sum_{\tau = t}^{T} \left(J(\tx(\tau)) - J(\tx(\tau+1))\right) \geq \varepsilon$ and assume $\mu\left( \bigcup_{\tau = 0}^{t}\tx(\tau)\Delta \bigcup_{\tau = 0}^{t+1}\tx(\tau)\right)\geq \delta$ for all $t\in [0,T].$ If for a fixed architecture $\psi^*$ for all $t\in [0,T],$  {\small $\sum_{\tau = t}^{T} \left(J(\weight(\tau), \psi^*, \tx(\tau)) - J(\weight(\tau+1), \psi^*, \tx(\tau+1))\right) \geq \varepsilon,$}
+    then we can choose a new architecture $\psi(t)$ for $[0,T]$ such that we can have {\small$\sum_{\tau = t}^{T} \left(J(\weight(\tau), \psi^*, \tx(\tau)) - J(\weight(\tau+1), \psi(\tau), \tx(\tau+1))\right)  < \varepsilon.$}
+\end{theorem}
+
+\begin{proof}
+    Let $\varepsilon >0$, and choose $\delta$ $J$ to be absolutely continuous. As  $\displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\psi}^1 \hat{f}(\weight,\psi)\right)^2  >0,$
+    notice that
+    {\small \begin{align*}
+         & \sum_{\tau = t}^{T} \left(J(\tx(\tau)) - J(\tx(\tau+1))\right)
+         \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu\\
+        & -\displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\psi}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big) \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big).
+    \end{align*} }
+    Thus, by changing the architecture we may be able to achieve
+    \begin{align*}
+         \sum_{\tau = t}^{T} \left(J(\tx(\tau)) - J(\tx(\tau+1))\right)
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu\\
+        & -\displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\psi}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big)\\
+        & <\varepsilon\\
+        & \leq \sum_{\tau =t}^{T} \Big( M_0\cdot \delta - \displaystyle\int_{\bigcup_{\nu = 0}^\tau\tx(\nu)} \left(\ell'(\hat{f}(\weight,\psi))\cdot \partial_{\weight}^1 \hat{f}(\weight,\psi)\right)^2 \hspace{1mm}  d\mu \Big).
+        \end{align*}
+    Thus, we have reduced the difference in loss values below the $\varepsilon$ threshold to gain similar loss values when we began with dissimilar tasks.
+\end{proof}
+
+\begin{wrapfigure}{r}{0.50\textwidth}
+    \centering
+    \vspace{-10pt}
+    \begin{tikzpicture}[scale=0.95, every node/.style={scale=0.95}]
+    % --- Row 1: t=1 (single circle, centered) ---
+    \node[font=\scriptsize, black!60] at (-2.5, 9.0) {$t\!=\!1$};
+    \begin{scope}[shift={(0.0, 9.0)}]
+        \draw[thick, fill=matrixW!12] (0,0) circle (1.0cm);
+        \node[font=\scriptsize] at (0, 1.3) {$\mathcal{F}_1$};
+        \node[font=\small, matrixV!80!black] at (-0.25,-0.15) {$\boldsymbol{+}$};
+        \node[font=\tiny] at (-0.25,-0.45) {$\weight^*(1)$};
+        \node[font=\small, matrixA!80!black] at (0.25,0.15) {\smiley{}};
+        \node[font=\tiny] at (0.25,0.45) {$\weight^\infty\!(1)$};
+    \end{scope}
+    %
+    % Downward arrow (circle bottom 9.0-1.0=8.0, next top 6.5+1.0=7.5)
+    \draw[->, thick, black!50] (0, 7.85) -- (0, 7.65);
+    %
+    % --- Row 2: t=2 (single shared diagram, centered) ---
+    \node[font=\scriptsize, black!60] at (-2.5, 6.5) {$t\!=\!2$};
+    \begin{scope}[shift={(0.0, 6.5)}]
+        \draw[thick, fill=matrixW!12] (-0.5,0) circle (1.0cm);
+        \draw[thick, fill=matrixW!12] (0.5,0) circle (1.0cm);
+        \begin{scope}
+            \clip (-0.5,0) circle (1.0cm);
+            \fill[matrixA!25] (0.5,0) circle (1.0cm);
+        \end{scope}
+        \node[font=\scriptsize] at (-1.3, 0.9) {$\mathcal{F}_1$};
+        \node[font=\scriptsize] at (1.3, 0.9) {$\mathcal{F}_2$};
+        \node[font=\small, matrixV!80!black] at (-0.65,-0.15) {$\boldsymbol{+}$};
+        \node[font=\small, matrixV!80!black] at (0.65,-0.15) {$\boldsymbol{+}$};
+        \node[font=\small, matrixA!80!black] at (0.0,0.0) {\smiley{}};
+        \node[font=\tiny] at (0.0,0.35) {$\weight^\infty\!(2)$};
+    \end{scope}
+    %
+    % Column headers for Row 3
+    \node[font=\small, matrixW!80!black] at (-2.3, 4.8) {\textbf{Fixed $\psi$}};
+    \node[font=\small, matrixA!80!black] at (2.3, 4.8) {\textbf{Adapt $\psi$}};
+    %
+    % Diagonal arrows (start below circle bottom 6.5-1.0=5.5, end above headers)
+    \draw[->, thick, black!50] (-0.3, 5.3) -- (-2.0, 5.0);
+    \draw[->, thick, black!50] (0.3, 5.3) -- (2.0, 5.0);
+    %
+    % --- Row 3: t=3, two columns ---
+    \node[font=\scriptsize, black!60] at (-4.0, 2.2) {$t\!=\!3$};
+    % Left: fixed arch - F1 and F2 overlap, F3 separate → DNE
+    \begin{scope}[shift={(-2.3, 2.2)}]
+        \draw[thick, fill=matrixW!12] (-0.45,-0.3) circle (0.85cm);
+        \draw[thick, fill=matrixW!12] (0.45,-0.3) circle (0.85cm);
+        \begin{scope}
+            \clip (-0.45,-0.3) circle (0.85cm);
+            \fill[matrixA!25] (0.45,-0.3) circle (0.85cm);
+        \end{scope}
+        \draw[thick, fill=matrixW!12] (0.0,1.1) circle (0.75cm);
+        \node[font=\scriptsize] at (-1.1, -1.3) {$\mathcal{F}_1$};
+        \node[font=\scriptsize] at (1.1, -1.3) {$\mathcal{F}_2$};
+        \node[font=\scriptsize] at (0.0, 2.1) {$\mathcal{F}_3$};
+        \node[font=\small, matrixV!80!black] at (-0.45,-0.3) {$\boldsymbol{+}$};
+        \node[font=\small, matrixV!80!black] at (0.45,-0.3) {$\boldsymbol{+}$};
+        \node[font=\small, matrixV!80!black] at (0.0,1.1) {$\boldsymbol{+}$};
+        \node[font=\tiny, red!70!black] at (0.0,-1.7) {$\weight^\infty\!(3)$ \textbf{DNE}};
+    \end{scope}
+    % Right: adapted arch - all three overlap
+    \begin{scope}[shift={(2.3, 2.2)}]
+        \draw[thick, fill=matrixW!12] (-0.6,-0.3) circle (1.2cm);
+        \draw[thick, fill=matrixW!12] (0.6,-0.3) circle (1.2cm);
+        \draw[thick, fill=matrixW!12] (0.0,0.6) circle (1.2cm);
+        \begin{scope}
+            \clip (-0.6,-0.3) circle (1.2cm);
+            \clip (0.6,-0.3) circle (1.2cm);
+            \fill[matrixA!35] (0.0,0.6) circle (1.2cm);
+        \end{scope}
+        \node[font=\scriptsize] at (-1.6, -1.5) {$\mathcal{F}_1$};
+        \node[font=\scriptsize] at (1.6, -1.5) {$\mathcal{F}_2$};
+        \node[font=\scriptsize] at (0.0, 2.1) {$\mathcal{F}_3$};
+        \node[font=\small, matrixV!80!black] at (-0.8,-0.6) {$\boldsymbol{+}$};
+        \node[font=\small, matrixV!80!black] at (0.8,-0.6) {$\boldsymbol{+}$};
+        \node[font=\small, matrixV!80!black] at (0.0,1.2) {$\boldsymbol{+}$};
+        \node[font=\small, matrixA!80!black] at (0.0,0.0) {\smiley{}};
+        \node[font=\tiny] at (0.0,-0.35) {$\weight^\infty\!(3)$};
+    \end{scope}
+    %
+    % Dashed vertical separator (only in Row 3 area)
+    \draw[dashed, black!40] (0, 4.6) -- (0, 0.3);
+    \end{tikzpicture}
+    \vspace{-5pt}
+    \caption{At $t\!=\!3$, fixed $\psi$ (left) leaves $\mathcal{F}_3$ disjoint, so $\weight^\infty\!(3)$ DNE. Adapting $\psi$ (right) enlarges function spaces, preserving the intersection.}
+    \label{fig:solution}
+    \vspace{-40pt}
+\end{wrapfigure}
+The implications of \cref{thm:intersection} indicate that it is possible to shrink the effect of the new task on the forgetting cost $J$ by changing the architecture of the network by pushing $\varepsilon$ closer to zero as seen in \cref{fig:solution}. The closer $\varepsilon$ is to zero, the more the cardinality of the intersection space and the more the task sets are connected. Therefore, upholding the absolute continuity of $J$ is feasible. It is now of interest to identify how to change the architecture and efficiently learn over a series of tasks. In particular, we must examine to what extent we can control the effect of architecture change on the CL problem. 
+
+\section{CL Solution}\label{sec:clsolution}
+As we have established the importance of changing the architecture to uphold the absolute continuity of $J$ and therefore ensure the existence of a solution to \eqref{eq:clcum}, we now turn to the question of how to change the architecture and efficiently learn over a series of tasks. We begin at task $t = 1$ and determine an optimal weight denoted $w^*(1) = w^\infty(1).$ This gives us a neural network solution in $\mathcal{F}_1$ for the first task. Then, as the next task is observed, we perform a derivative-free hyperparameter search, in particular, the directional direct search method~\cite{larson2019derivative}, to obtain a new architecture for task one and two as in \cref{fig:solution}, right side at the bottom. Now, we seek to transfer information from the first task and the old architecture to the new one. However, since, the new architecure introduces a parameter space that may have a different size from the one used for the previous task, it is not feasible to trivially transfer information from the previous architecture to the new one.  The state-of-the-art solution to this problem is to randomly re-initialize the parameters in the new architecture from retrain on all available tasks, which is resource heavy as well as impractical. To obviate this, we develop a low-rank transfer algorithm that seeks to transfer information between the previous architecture to the new architecture in an efficient way. Mathematically, our goal is to solve the following bi-level problem:
+\begin{align}\label{eq:bilevel} \tag{bi-level}
+      V^*(t,\weight(t))  = \min_{\weight \in \mathcal{W}(\psi^*(t))} V(t,\weight(t)),\quad \text{ where}\; \;  \psi^*(t)  = \mathrm{arg}\min_{\psi\in \Psi} J(\weight(t),\psi,\tx(t)).
+\end{align}
+Towards this end, we define two matrices $\mathrm{A}(t)$ and $\mathrm{B}(t)$ that are used to transfer information from the previous architecture to the new architecture. In particular, the weight $\weight(t)$ at each $t$ is transferred to $\weight(t+\Delta~t)$ as 
+\begin{align}
+    \weight(t+\Delta~t) = \mathrm{A}^*(t) \weight(t) \mathrm{B}(t)^{*T},
+\end{align}
+ where $\mathrm{A}^*, \mathrm{B}^*$ are the optimal values such that loss of information is minimal implying that, $\mathrm{A}(t)$ and $\mathrm{B}(t)$  are updated. To update these matrices, we need to identify how this change in the weight space effects the CL problem and preserve information to minimize this loss of information. The following result therefore provides the total variation~(the dynamics) of architecture change on $V^*$ as a function of tasks.
+\begin{proposition}\label{HJB}
+    The total variation in $V^*(t)$ at any given task $t$ is given by
+    \begin{align}\label{eq:HJB}
+        -\partials_t V^*(t)& = \min_{\weight \in \mathcal{W}(\psi^*(t))} J(\weight(t),\psi^*(t),\tx(t)) + \partials_{\tx}d_{t} \tx+ \partials_{\weight} V^*(t) \left[\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T + u(t)\right],
+    \end{align}
+    where $\mathrm{A}^*(t),B^*(t)$ are optimal $\mathrm{A}(t)$ and $\mathrm{B}(t)$ for task $t$ and where $u(t)$ represents the updates made to the each weights matrix of the new dimensions. \textbf{The proof is in \cref{sec:HJB}}.
+\end{proposition}
+Observe that \eqref{eq:HJB} is missing the term $\frac{\partials V^*}{\partials \psi}\frac{\partials \psi}{\partials t}.$ This omission is intentional because the exact effects of architecture cannot be measured through derivatives in this partial differential equation (PDE). Instead, in this PDE the effect is absorbed through the change in tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$.
+Because of this absorption we can now define a lower bound on $\partials_{t} V^*(t).$ This lower bound, which is essentially a lower bound on the variation, is equivalent to the lower bound on $\varepsilon$ in \cref{thm:intersection} with the distinction that the lower bound is derived on $V^*$ instead of just the forgetting cost $J.$ The idea covers the effects of the complete CL problem and thus guarantees that the loss of information is minimized.
+\begin{theorem}\label{thm:lower_HJB}
+Given \cref{HJB}, assume there exists a stochastic-gradient-based optimization procedure,  and choose $ u(t) =- \sum^{I} \alpha(i) \mathrm{g}^{(i)},$ where $I$ is the number of updates and $\alpha(i)$ is some learning rate and $\mathrm{g}^{(i)}$ is the gradient. Choose $\alpha(i)$ such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } \rightarrow 0$ as $I \rightarrow \infty$ and $\min_{\weight \in \mathcal{W}(\psi^*(t))} J(\weight(t),\psi^*(t),\tx(t)) \leq \varepsilon.$ Then, as long as the architecture is chosen such that $   \sing \delta = \left[ \singmin \norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } - \singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T} \right],$  the total variance in $V^*$ is bounded by $\varepsilon.$ \textbf{The proof is in \cref{sec:lower_HJB}.}
+\end{theorem}
+Therefore, when $\alpha(i)$ is chosen such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } $ as $I \rightarrow \infty,$ $\sing \delta$ can be countered by 
+$\singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T}$ the total variance is bounded for all $t$ and $V^*$ is absolutely continuous as long as $\varepsilon$ is small for all $\delta >0.$ \cref{thm:lower_HJB} is crucial because it shows that, in the presence of a perfect stochastic gradient algorithm, the change in the tasks can be countered by the choice of the architecture. By choosing a new architecture and introducing the $A$ and $B$ matrices such that within the CL problem the effect of varying data distribution can be mitigated,  the CL problem can be acceptably solved. Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. 
+
+\subsection{Algorithm}
+In summary~(refer to \cref{fig:method}), for every new task, our algorithm comprises of three steps, first, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Second, once a new architecture is found, we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Third, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
+
+% \\
+% \Ally{In the previous sentence, what function/parameter we taking the partial derivative of? Additionally, what is $\eta?$ Previously, it appears on page 4 that it denotes "The threshold to identify acceptable loss values." Maybe we remind the reader of this since we are now on page 17.}
+
+
+\subsubsection{\underline{Step 1:}  Architecture Search}\label{archsearch}
+Notably, there are numerous architecture search methods that we could employ. To incorporate the idea of weak derivatives into the architecture, we develop a derivative free approach modified from \cite{larson2019derivative} which utilized an approximate weak derivative using finite difference approximations. 
+
+
+\begin{wrapfigure}{r}{0.40\textwidth}
+    \centering
+    \vspace{-10pt}
+    \begin{tikzpicture}[scale=0.95, every node/.style={scale=0.95},
+        box/.style={draw, rounded corners, thick, minimum height=1.0cm, minimum width=3.2cm, align=center, font=\normalsize},
+        arr/.style={->, thick, black!70}]
+    %
+    % === Top: Two small non-overlapping circles (task 1 & task 2) ===
+    \begin{scope}[shift={(0, 10.5)}]
+        % F1 circle (left)
+        \draw[thick, fill=matrixW!12] (-1.1,0) circle (0.8cm);
+        \node[font=\normalsize] at (-1.1, 1.1) {$\mathcal{F}_1$};
+        \node[font=\normalsize, matrixV!80!black] at (-1.1,-0.1) {$\boldsymbol{+}$};
+        \node[font=\scriptsize] at (-1.1,-0.5) {$\weight^*(1)$};
+        % F2 circle (right)
+        \draw[thick, fill=matrixW!12] (1.1,0) circle (0.8cm);
+        \node[font=\normalsize] at (1.1, 1.1) {$\mathcal{F}_2$};
+        \node[font=\normalsize, matrixV!80!black] at (1.1,-0.1) {$\boldsymbol{+}$};
+        \node[font=\scriptsize] at (1.1,-0.5) {$\weight^*(2)$};
+    \end{scope}
+    %
+    % === Step 1: Architecture Search ===
+    \node[box, fill=matrixB!15] (step1) at (0, 7.8)
+        {\textbf{Step 1:} Derivative-Free\\Architecture Search};
+    \draw[arr] (0, 9.0) -- node[left, font=\scriptsize] {$\hat{f}(\weight^0\!(2),\psi^\infty\!(2))$} (step1.north);
+    %
+    % === Step 2: Low-Rank Transfer ===
+    \node[box, fill=matrixA!15] (step2) at (0, 5.5)
+        {\textbf{Step 2:} Low-Rank\\Transfer ($V\!=\!AWB^\top$)};
+    \draw[arr] (step1.south) -- node[left, font=\scriptsize] {$\hat{f}(\weight^N\!(2),\psi^\infty\!(2))$} node[right, font=\scriptsize] {new $\psi^\infty\!(2)$} (step2.north);
+    %
+    % === Step 3: CL Training ===
+    \node[box, fill=matrixV!15] (step3) at (0, 3.2)
+        {\textbf{Step 3:} CL Training\\\cite{chakraborty2025understanding},\\\cite{raghavan2021formalizing}};
+    \draw[arr] (step2.south) -- node[right, font=\scriptsize] {transferred $\weight$} (step3.north);
+    %
+    % === Bottom: F1 ∩ F2 (result) ===
+    \begin{scope}[shift={(0, 0.5)}]
+        \draw[thick, fill=matrixW!12] (-0.7,0) circle (1.2cm);
+        \draw[thick, fill=matrixW!12] (0.7,0) circle (1.2cm);
+        \begin{scope}
+            \clip (-0.7,0) circle (1.2cm);
+            \fill[matrixA!25] (0.7,0) circle (1.2cm);
+        \end{scope}
+        \node[font=\normalsize] at (-1.6, 1.1) {$\mathcal{F}_1$};
+        \node[font=\normalsize] at (1.6, 1.1) {$\mathcal{F}_2$};
+        \node[font=\normalsize, matrixV!80!black] at (-1.0,-0.2) {$\boldsymbol{+}$};
+        \node[font=\scriptsize] at (-1.0,-0.6) {$\weight^*(1)$};
+        \node[font=\normalsize, matrixV!80!black] at (1.0,-0.2) {$\boldsymbol{+}$};
+        \node[font=\scriptsize] at (1.0,-0.6) {$\weight^*(2)$};
+        \node[font=\normalsize, matrixA!80!black] at (0.0,0.0) {\smiley{}};
+        \node[font=\scriptsize] at (0.0,0.45) {$\weight^\infty\!(2)$};
+        \node[font=\scriptsize, black!60] at (0,-1.6) {$\hat{f}(\weight^\infty\!(2),\psi^\infty\!(2)) \in \mathcal{F}_1 \cap \mathcal{F}_2$};
+    \end{scope}
+    %
+    % === Arrow from Step 3 down to result ===
+    \draw[arr] (step3.south) -- (0, 2.0);
+    \end{tikzpicture}
+    \caption{Three-step approach at each task boundary: (1) architecture search for $\psi^\infty\!(2)$, (2) low-rank transfer via $V\!=\!AWB^\top$, and (3) CL training to obtain $\weight^\infty\!(2) \in \mathcal{F}_1 \cap \mathcal{F}_2$.}
+    \label{fig:method}
+    \vspace{-25pt}
+\end{wrapfigure}
+The intuition behind this proposed method~(neighborhood derivative free direct search ~(NDDS)) is that we check ``neighboring" architectures and compare the current architecture with the expected value of the neural network when it trains on the neighboring architecture. If the neighboring architecture has a smaller expected value, then we ``move" in that direction by selecting it as the new architecture. We then check the ``neighbors" of this new architecture. Since the architecture is a discrete variable, this search method provides a notion of a ``weak derivative" as a sum of finite differences over all possible neighboring architectures.
+
+
+For a full description of the NDDS algorithm, consult \cref{DDSalg}. In particular, for task $t\in \tT,$ we choose a ``step size" $\alpha_s\in \mathbb{N}.$ In this paper, we focus on changing the number of neurons in each hidden layer, however, the method can work on all hyperparameter within the architecture. Using a step size for the number of neurons, we generate the ``neighboring" points, called \textit{poll points} and define them as follows:
+$Poll Points = \{x_s + \alpha_s d_i: d_i\in D_s\}.$
+for some parameters $x_s$ and some direction set $D_s.$ Next, using a randomly selected subset of our data, we determine the expected value of $V$ approximated by the forgetting cost for each poll points.To evaluate the cost value, we perform a training loop for each poll point architecture. Using these cost values, we identify the poll point corresponding to the 
+smallest value of $V$ and this new poll point becomes the new architecture. We repeat this process until the expected value of $V$ is beneath a previously chosen threshold or after five times of repeating. In practice, we chose the threshold to be a percentage lower than the expected value produced by the original architecture.
+
+% We identify, the smallest point at which the smallest value of the cost is achieved, with randomly initialized weights according to each poll point architecture. If one of these poll points results in a smaller expected value than $x_s,$ we set $x_s$ equal to the poll point. We then repeat this process starting with this new architecture. This search terminates when the expected value is beneath a previously chosen threshold or after five times of repeating. In practice, we chose the threshold to be a percentage lower than the expected value produced by the original architecture.
+% \KR{Allyson, wasnt there a nice diagram you had to illustrate this?}
+
+\begin{wrapfigure}{r}{0.45\textwidth}
+    \centering
+    \vspace{-10pt}
+    \begin{tikzpicture}[scale=0.90, every node/.style={scale=0.90},
+        archbox/.style={draw, rounded corners, thick, minimum height=0.65cm, minimum width=2.6cm, align=center, font=\scriptsize},
+        arr/.style={->, thick, black!70}]
+    %
+    % === Current architecture (center bottom) ===
+    \node[archbox, fill=matrixB!15] (xs) at (0, 0)
+        {$x_s\!=\![784,50,50,10]$};
+    \node[font=\scriptsize, black!60] at (0, -0.55) {$J = 0.42$};
+    %
+    % === Poll point 1 (left) — winner ===
+    \node[archbox, fill=matrixA!20] (p1) at (-2.0, 2.6)
+        {$[784,\mathbf{60},50,10]$};
+    \node[font=\scriptsize, matrixA!80!black] at (-2.0, 2.0) {$J = 0.31$ \ding{51}};
+    %
+    % === Poll point 2 (right) ===
+    \node[archbox, fill=matrixW!8, dashed] (p2) at (2.0, 2.6)
+        {$[784,50,\mathbf{60},10]$};
+    \node[font=\scriptsize, red!60!black] at (2.0, 2.0) {$J = 0.48$ \ding{55}};
+    %
+    % === Poll point 3 (top center) ===
+    \node[archbox, fill=matrixW!8, dashed] (p3) at (0, 4.4)
+        {$[784,\mathbf{60},\mathbf{60},10]$};
+    \node[font=\scriptsize, red!60!black] at (0, 3.8) {$J = 0.45$ \ding{55}};
+    %
+    % === Dashed arrows from center to poll points ===
+    \draw[arr, dashed, black!40] (xs.north west) -- node[left, font=\tiny] {$\alpha_s d_1$} (p1.south);
+    \draw[arr, dashed, black!40] (xs.north east) -- node[right, font=\tiny] {$\alpha_s d_2$} (p2.south);
+    \draw[arr, dashed, black!40] (xs.north) -- node[right, font=\tiny] {$\alpha_s(d_1\!+\!d_2)$} (p3.south);
+    %
+    % === Bold move arrow to winner ===
+    \draw[->, very thick, matrixA!80!black] ([xshift=-3pt]xs.west) to[bend left=35] node[left, font=\scriptsize, matrixA!80!black] {\textbf{move}} ([xshift=-3pt]p1.west);
+    %
+    % === Repeat arrow from winner ===
+    \draw[->, thick, matrixV!80!black, dashed] (p1.north) to[bend left=25] node[above, font=\tiny, matrixV!80!black] {repeat} ++(1.2, 0.5);
+    \end{tikzpicture}
+    \caption{NDDS explores neighboring architectures (poll points) by perturbing $x_s$ along directions $d_i$ with step size $\alpha_s$. The poll point with the smallest loss is selected and the search repeats.}
+    \label{fig:ndds}
+    \vspace{-15pt}
+\end{wrapfigure}
+
+\textbf{Example:} Suppose we would like to learn the optimal number of neurons per layer in our hidden layers for training a feedforward neural network (FNN) on a dataset. Because of the data, suppose the input layer is fixed at $784$ neurons and the output layer is fixed at $10$ neurons per layer. Let us fix the number of hidden layers at $2$ beginning with $50$ neurons in each hidden layer. We set $\mathcal{Y}_s$  to be a randomly chosen appropriately sized subset of task $t$ data and previous task data. Our direction set is $D_s = D = \{[0,0,10,0],[0,10,0,0]\}$ and will be the same for every $s.$ We start our search by setting the step size $\alpha_s = 10.$ For the first round, we have $x_s = [784,50,50,10],$ so our poll points are $[784,60,50,10],[784,50,60,10],$ and $[784,60,60,10].$ We then train an FNN of each size on the dataset $Y_s$ and determine the corresponding expected values. If the expected value of the FNN $[784,60,50,10]$ is smaller than that of the FNN $[784,50,50,10],$ for example, then $x_s = [784,60,50,10].$ We would then continue this process until the expected value of our network was less than our set threshold or we exhausted our neighborhood search. 
+
+
+% \begin{algorithm}\label{DDSalg}
+% \caption{Neighborhood Direct-Directional Search (NDDS)}
+% Choose architecture initial point $x_s,$ and step size $\alpha_0\in \mathbb{N}$\\
+% Set step parameters
+% $\mathrm{threshold}\in \mathbb{R}$\\
+% j = 0\\
+%  loss $\gets \texttt{training\_loop}(x_s,Y_s)$\\
+%  \While{$\mathrm{loss}>\mathrm{threshold}$ or $j<5$}
+%     {pollPoints = $\{x_s+\alpha_sd_i:d_i\in D_s\}$\\
+%         \For{ $\mathrm{poll\, in\, pollPoints}$}{
+%         loss_s $\gets$ \texttt{training\_loop} $(\mathrm{poll},\mathcal{Y}_s)$\\
+%       \eIf{$\mathrm{loss}\leq \mathrm{loss}_s$}{
+%        $x_{s} = x_s$\;
+%        }{
+%        $x_{s} = \mathrm{poll}$\;
+%        $\mathrm{loss} = \mathrm{loss}_s$\\
+%       }
+      
+%       } $j= j+1;$ }
+% \end{algorithm}
+
+\begin{algorithm}[t]
+\caption{Neighborhood Directional Direct Search (NDDS)} \label{DDSalg}
+% \textbf{GAIL - Please decide here and throughout whether you are talking about a neighborhood direct-directional search, a direct-directional neighborhood search, or neighborhood directional direct search}
+\KwIn{Initial architecture $x_s$, step size $\alpha_0 \in \mathbb{N}$}
+\KwIn{Threshold parameter $\mathrm{threshold} \in \mathbb{R}$}
+\KwOut{Updated architecture $x_s$}
+
+$j \gets 0$\;
+$\mathrm{loss} \gets \texttt{training\_loop}(x_s, \mathcal{Y}_s)$\;
+\While{$\mathrm{loss} > \mathrm{threshold}$ \textbf{or} $j < 5$}{
+    $\mathrm{pollPoints} \gets \{x_s + \alpha_s d_i : d_i \in D_s\}$\;
+    \ForEach{$\mathrm{poll} \in \mathrm{pollPoints}$}{
+        $\mathrm{loss}_s \gets \texttt{training\_loop}(\mathrm{poll}, \mathcal{Y}_s)$\;
+        \eIf{$\mathrm{loss} \leq \mathrm{loss}_s$}{
+            $x_s \gets x_s$\;
+        }{
+            $x_s \gets \mathrm{poll}$\;
+            $\mathrm{loss} \gets \mathrm{loss}_s$\;
+        }
+    }
+    $j \gets j + 1$\;
+}
+\end{algorithm}
+
+
+
+\subsubsection{\underline{Step 2:}  Low-Rank Transfer}\label{LRTsec}
+
+Now that the optimal architecture (i.e., number of neurons per layer) has been determined for the current task, it is immediately obvious that  the size of the weights tensor will not match with the new architecture. Thus, we seek a method to determine a weights tensor corresponding to the new optimal architecture that retains previously learned information and transfers it. We propose a method we call low-rank transfer. 
+
+Before we dive into the steps of this method, let us set some assumptions and notation. Recall that the only component of the architecture we seek to learn is the number of neurons per layer in our neural network. Thus, we assume our network has $d$ layers, and we fix all other architecture parameters except for the number of neurons in our hidden layers. From  \cref{defn:NN},  $\psi_i(t)$  provides the dimensions for the corresponding weights matrix in each layer of our network.
+
+In order of appearance, we assign the values of $\psi(t)$ to the values $r_i,s_i$ for each $i$ such that $1\leq i\leq d.$ If $\psi^*(t)$ represents the optimal architecture returned from the NDDS completed for task $t,$ then similarly we can assign the values of the dimensions of the weights matrices of each layer of $\psi_i^*(t)$ to be $a_i,b_i$ for $1\leq i\leq d.$ Our goal is to utilize the original weights matrices to project into the weights matrix space for the new architecture.
+
+To begin, we initialize dimension $3$ tensors $\mathrm{A}(t),\mathrm{B}(t),$ which  each comprise  $d$ matrices. Let each matrix $\mathrm{A}_i(t)$ in $\mathrm{A}(t)$ be randomly generated with dimensions $a_i\times r_i$ for $1\leq i\leq d.$ Similarly, let each matrix $\mathrm{B}_i $ in $\mathrm{B}(t)$ be randomly generated with size $b_i\times s_i$ for $1\leq i\leq d.$ Then, set $C(t) = \mathrm{A}(t)\weight(t)\mathrm{B}^T(t).$ More specifically $C(t)$  comprises $d$ matrices such that $C_i(t) = \mathrm{A}_i(t)\weight_i(t)B^T_i(t)$ for all $1\leq i\leq d.$ Notice that the dimensions of each $C_i(t)$ are $a_i\times b_i.$ These are the dimensions of the weights matrices for a neural network with the new optimal architecture $\psi^*(t).$ See \cref{LRT} to understand the construction of $C(t)$ more explicitly.
+    \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{paperFigures/CLsolution1.png}
+        \caption{Method of low-rank transfer at a single layer} \label{LRT}
+    \end{figure}
+
+ To prevent loss of information from $\weight(t),$ when we make the transfer to $C(t),$ we  train only the $\mathrm{A}(t)$ and $\mathrm{B}(t)$ portions of the new weights tensor $C(t)$ on the task data for a chosen number of epochs, while freezing the $\weight(t)$ tensor. This additional training ensures a transfer of learning to the new weights corresponding to the new optimal architecture. If $C^*(t)$ represents $C(t)$ after this training on just tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$ and $\psi(t+1) = \psi^*(t),$ then we conclude our process by letting $w(t+1) = C^*(t)$ and completing the standard training of our neural network $\hat{f}(w(t+1),\psi(t+1))$ on task data. In \cref{alg:three} we summarize each step of our method described in the preceding subsections.
+ 
+\begin{algorithm}
+\caption{Main Training Loop}\label{alg:three}
+Choose $\weight(t)$ and $\psi(t)$ to begin\\
+Set \texttt{epoch hyper-parameter}\\
+\For{$t = 0,1,\ldots, T$}{
+ \textbf{Step 1:} Standard Training of $\weight(t)$\\
+    $\weight(t) \gets $\texttt{training\_loop}($\weight(t),\psi(t),$ $\tx(t)$, \texttt{epochs})\\
+
+ \textbf{Step 2:} Architecture Search\\
+    $\psi^*(t) \gets$ \texttt{NDDS}$(\psi(t),$ $\tx(t)$)\\
+    
+\textbf{Step 3:} Initialize $\mathrm{A}(t), \mathrm{B}(t)$\\
+\For{$i = 1,...,d$}{
+    $\mathrm{A}_i(t), \mathrm{B}_i  \gets$\texttt{init\_AB}($a_i,b_i,r_i,s_i)$}
+
+ \textbf{Step 4:} Set $C(t)$\\
+    \For{$i = 1,...,d$}{$C_i(t) = \mathrm{A}_i(t)\weight_i(t)B_i^T(t)$}
+
+ \textbf{Step 5:} Fix $\weight(t),$ Train $\mathrm{A}(t),\mathrm{B}(t)$ for $\hat{f}(C(t),\psi(t+1))$\\
+    $C^*(t) \gets$ \texttt{train\_AB}($C(t), \psi(t+1),$ $\tx(t)$, \texttt{epochs})\\
+
+ \textbf{Step 6:} Set New Weights and Architecture\\
+    $w(t+1) = C^*(t)$\\
+    $\psi(t+1) = \psi^*(t)$\\
+
+ \textbf{Step 7:} Standard Training on New NN
+    \texttt{training\_loop}\\($\weight(t+1),\psi(t+1),$ $\tx(t)$, \texttt{epochs})
+}
+\end{algorithm}
+
+
+\section{Related Works}\label{sec:related}
+As noted in the introduction, theoretical and empirical results have proven that even in traditional machine learning, training weights of the network alone is not enough. By utilizing tools such as NAS (Neural Architecture Search), LoRA (Low-Rank Adaptation), and PEFT (Parameter-Efficient Fine Tuning), the accuracy of a trained model can readily be increased (\cite{liu2021survey}, \cite{LORAhu2022lora},  \cite{han2024parameter}). In the context of CL, however, learning optimal hyperparameters or architecture for each task poses a challenge: 
+%Not only is it necessary to determine what the optimal hyperparameters are at each task, but 
+ learning of previous tasks be transferred.
+
+Toward this end, networks with dynamic structures, such as progressive neural networks (PNGs) and dynamically expandable networks (DENs) were introduced in \cite{rusu2016progressive} and \cite{yoon2017lifelong}. 
+%\textbf{GAIL - do you mean progressive generative networks (PGNs) or progressive neural networks )PNNs) ? I kept to PNN since the reference is to that, buy you need to check here)}
+PNNs add a layer to the neural network at each observed task \cite{rusu2016progressive}. While the model's accuracy did improve with such structure, extensive compute time is unavoidable as more tasks, and hence layers, are observed. DENs attempted to remedy the computing issues of PNNs. DENs first determine a subcollection of neurons to train on for a given task (via a metric) and then add a layer of neurons to the network where appropriate \cite{yoon2017lifelong}. This method also completes sparse regularization at each task to prune the network in an attempt to reduce compute time compared with PNNs. The use of a DEN did improve the model's accuracy. However, drawbacks such as compute time, overfitting, and transfer of learning still remained. Learning from previous tasks was not fully transferred, since the weights corresponding to the newly added network layers were randomly initialized. 
+
+In more recent years researchers have built on the idea of DENs by developing methods that optimally choose how and when to adjust network architecture. CLEAS (Continual Learning with Efficient Architecture Search) is the first integration of NAS into the CL framework \cite{CLEASgao2022CLEAS}. This method  changes architecture only  when deemed necessary by utilizing a neuron-level NAS, rather than adding an entire layer to the neural network. Moreover, the network is pruned at each step to remove unnecessary layers and/or neurons. The algorithm touts its smaller, purposely learned network structure, which allows for reduced network complexity and hence reduced computation time. In particular, CLEAS improves model accuracy by up to $6.70\%$ and reduces network complexity by up to $51.0\%$ on the three benchmark datasets. A strategy similar to CLEAS is CAS (Continual Architecture Search)  \cite{CASpasunuru2019continual}. The premise of  adding and removing to the architecture only when deemed optimal for a given task remains the same. Rather than using NAS, however, they use what they call Efficient Neural Architecture Search, which incorporates a weight-sharing strategy. SEAL (Searching Expandable Architectures for Incremental Learning) again seeks to change  the hyperparameters and architecture of the neural network only when necessary, but the method differs from CLEAS in how it determines when to alter the network \cite{SEALgambella2025SEAL}. In particular, SEAL uses a capacity estimation metric to make such a decision.
+
+The previous methods all sought to expand the network in some fashion to increase the accuracy of the network. Now we shift to how parameter-efficient fine-tuning methods have been utilized in CL. In particular, we investigate the use of LoRA (Low-Rank Adaptation) \cite{LORAhu2022lora}. The two methods we will discuss here are intended for pretrained transformers that are now attempting to learn tasks. The CoLoRA method utilizes a new LoRA adapter for each new task to train a task expert model \cite{wistuba2023continual}. The expert model is then used to train the transformer. At the time, this method produced state-of-the-art results, but at a high computational cost. Since then, the CLoRA method has been introduced \cite{CLORAmuralidhara2025}. The key difference between these two strategies is the number of LoRA adapters. Rather than reinitializing and training a new LoRA adapter for each task, a single-adapter approach is used. This reduces the compute time, while maintaining accuracy and transferring learning.
+
+In this paper we attempt to combine the most profitable aspects of methods such as CLEAS and CLoRA. In other words, our goal is to learn the optimal architecture for each task and utilize a low-rank transfer method to optimally transfer learning to the new architecture. The use of a LoRA-like method to easily guarantee transfer of learning from one architecture to another in standard CL has not been accomplished. Moreover, no previous algorithm has provided a theoretical mathematics framework to support the empirical data. 
+
+% \KR{start this}
+\section{Experimental Results}\label{sec: experiments}
+In this section we evaluate the algorithm in \cref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in \cref{sec:motivation}? Does changing the architecture actually help with learning over consecutive tasks~(\cref{sec:upper_weight})? Does changing the architecture improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? We examine these questions for three continual learning problems: regression, image classification, and graph classification.
+
+%========datasets and Metrics============%
+\subsection{Datasets and Metrics}
+
+\textbf{Datasets and Task Splits:} We utilize three data sets, one for each learning problem.
+
+\begin{itemize}
+    \item \textbf{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
+
+    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale.
+
+    \item \textbf{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
+\end{itemize}
+
+\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy.
+
+
+% , and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
+
+\begin{itemize}
+    \item \textbf{Average Performance:} The mean performance across all tasks after training:
+    \[
+    \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i}
+    \]
+
+    \item \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient}.
+    \[
+    \text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right)
+    \]
+    Note that for MSE, positive BWT indicates improvement.
+
+    \item \textbf{Forgetting (Forward Transfer FWT):} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}:
+    \[
+    \text{FWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right)
+    \]
+    % \item \Ally{In some of the tables there is a "FWT" (forward transfer) metric. Should this be included here? }
+\end{itemize}
+
+For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
+
+\subsection{Experimental Conditions}
+To explore and thoroughly evaluate the theoretical work we have developed, we consider four experimental conditions. Each condition allows us to test a particular aspect of our theory by isolating the effects of learning architecture and transferring knowledge. Specific implementation details about each condition is included in \cref{sec:implementdetails}, but we provide an overview of each condition below for quick reference.
+
+
+%All the algorithms metioned below are in Appedix J
+\begin{itemize}
+    \item \textbf{C1 (Baseline):} Standard continual learning with fixed architecture. The network architecture $\psi$ remains constant across all tasks as well as the learning rate. For this baseline comparison, we use a replay-driven continual learning approach which seeks to balance forgetting and generalization \cite{raghavan2021formalizing}, ~\cite{raghavan2023learningcontinuallysequencegraphs}. See \cref{fig:alg_conditions}(a) for a description of the algorithm.
+
+
+    \item \textbf{C2 (Heuristics):} Fixed architecture with training heuristics. The architecture $\psi$ remains fixed, but we add cosine learning rate decay, task warm-up epochs (\cref{alg:warmup}), and adaptive gradient weights $[\alpha, \beta, \gamma]$ (\cref{alg:adaptive}). This condition tests whether empirical smoothing techniques alone can improve performance. See \cref{fig:alg_conditions}(b) for a full description of the algorithm.
+
+    \item \textbf{C3 (Architecture Search Only):} Architecture search without knowledge transfer. At each task, we search for a new architecture $\psi(t+1)$ using the NDDS method (\cref{DDSalg}). However, once the new architecture is determined, the weights are randomly re-initialized to the corresponding sizes rather than introducing transfer matrices $A$ and $B.$ The purpose of this method is to isolate the impact of architecture change from that of knowledge transfer. See \cref{fig:alg_conditions}(c) for an algorithm description.
+
+    \item \textbf{C4 (Knowledge Transfer via $AWB$):} This is our full approach, which combines architecture search with low-rank knowledge transfer via the  $V = A \weight B^T$. When the architecture changes, we train $A$ and $B$ matrices (\cref{alg:train_ab}) to transfer knowledge from the old parameter space to the new one, as described in \cref{thm:lower_HJB}. See \cref{fig:alg_conditions}(d) for an algorithm description.
+\end{itemize}
+
+The comparison of conditions C3 and C4 are crucial. Although both of the conditions change (learn) an optimal architecture, only C4 transfers knowledge. This isolates the contribution of the knowledge transfer from architecture search alone. 
+
+
+%========Implemnting details on device & conditions===%
+%references appendices
+
+\subsection{Implementation Details}\label{sec:implementdetails}
+
+\subsubsection{Experimental Infrastructure}  
+All experiments were conducted on a 14-inch MacBook Pro (2024) with Apple M4 Pro chip (14-core CPU, 20-core GPU, 24 GB unified memory) and the system ran macOS (Sequoia 15.6.1). The codebase uses JAX~\cite{jax} and Equinox~\cite{kidger2021equinox}. Experimental outputs were logged and visualized using TensorBoard. All runs used fixed random seeds for reproducibility. Code is available at \url{https://github.com/krm9c/ContLearn.git}.
+
+\subsubsection{Experimental Conditions Implementation Details}
+All conditions use a replay-driven continual learning approach, which seeks to balance forgetting and generalization demonstrated in ~\cite{raghavan2021formalizing} for regression and image classification experiments. For graph experiments, we use the similar approach outlined in ~\cite{raghavan2023learningcontinuallysequencegraphs} Note that we use an experience replay buffer size for all experiments and conditions.
+
+\paragraph{Conditions C1 and C2: Baseline Training }
+
+For C1, training uses constant learning rate $\eta = 10^{-4}$ with AdamW optimizer. No warm-up or adaptive mechanisms are applied.
+
+For C2, we add three heuristics to the baseline training conditions:
+\begin{itemize}
+    \item \textit{Heuristic 1:} Cosine learning rate decay from $10^{-4}$ to $10^{-6}.$
+    
+    \item \textit{Heuristic 2:} Task warm-up for $25$ epochs at the start of each new task. The purpose of the task warm-up is train on the next task for a select number of epochs prior to adjustments in other conditions. See \cref{alg:warmup} for implementation.
+
+    \item \textit{Heuristic 3:} Adaptive gradient weights $[\alpha, \beta, \gamma].$ Such weights adjust based on task transition difficulty, and are for current task, experience replay, and regularization, respectively. See \cref{alg:adaptive} for implementation.
+\end{itemize}
+
+\paragraph{Condition C3: Architecture Search }
+At each task, we use a neighborhood direct-directional search (NDDS) method to find an optimal architecture. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Below, we provide implementation examples of NDDS in the feedforward, CNN, and GCN settings, but see \cref{archsearch} and \cref{DDSalg} for specific details.
+\begin{itemize}
+    \item \textit{Feedforward Networks:} Suppose we begin with an architecture of $[10,40,40,10]$ and our step size of our search is $4.$ Our candidates to be evaluated would be:  $[10, 45, 40, 10]$, $[10, 40, 45, 10]$, and $[10, 45, 45, 10].$ After training each candidate for $100$ epochs, the best-performing architecture (smallest loss value) will be chosen for the next round.
+
+    \item \textit{CNNs and GCNs:} To jointly search for optimal filter size and hidden layers, a nested loop is used. For each filter size, multiple rounds of step-wise candidate evaluations are completed, akin to the feedforward network setting.
+\end{itemize}
+
+
+After determining the new (optimal) architecture for the given task, we must adjust the weights matrices, as the current weights will not longer match the new architecture. In C3, we choose to randomly reinitialized using Glorot uniform~\cite{GlorotB10}. The random reinitialization allows us to evaluate the effect of architecture optimization alone, without transferring previously learned information.
+
+\paragraph{Condition C4: Knowledge Transfer via AWB }
+We again use NDDS method to find optimal architecture for our given task. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Once an optimal architecture is chosen, we must again adjust the weights matrices. In C4, we choose to transfer learned knowledge from $\weight(t)$ to $\weight(t+1)$ through the $A$ and $B$ matrices. The transformation $V = A \weight B^T$ maps parameters between architectures of different sizes, see \cref{LRTsec}. 
+
+A key component of C4 is that we allowing training of the matrices $A$ and $B,$ while freezing the matrix $\weight,$ prior to set the new weights matrix to $V = A \weight B^T.$ This is crucial as it provides tuning of the matrices $A$ and $B$ before transferring the learning in $\weight.$
+To complete this process in practice, we perform the following steps:
+\begin{itemize}
+    \item[(1)] \textit{Freeze the weights matrix $\weight$ and initialize $A$ and $B$ matrices}: The appropriate sizes for the $A$ and $B$ matrices are chosen based on the new (optimal) architecture and the previous architecture. The goal is for $V = A \weight B^T$ to be the correct size for the new architecture. In \cref{app: MLP AB}, we walk through an example of determining the correct sizes of $A$ and $B$ for each layer of a feedforward neural network, which is transitioning from an architecture of  $[64,128,128,10]$ to an architecture of $[64,256,256,10].$ In \cref{app: CNN AB}, we complete an example similar example but for the CNN setting (i.e. accounting for filter and FFN transfer).
+    
+    \item[(2)]\textit{Train $A$ and $B$ Matrices:} Training is completed for a fixed number of iterations using Adam. See \cref{alg:train_ab} for implementation details.\\
+
+    \item[(3)] \textit{Set $V = A\weight B^T$ and Train: } The weights are set to $V = A\weight B^T,$ which now corresponds to the new architecture of the network. We then the train the new weights and record necessary information. 
+\end{itemize}
+
+The transfer and training process ensures continuity of the loss function across architecture changes, as established in \cref{thm:lower_HJB}. For a succinct description of C4, see \cref{alg:c4}.
+
+%=======Reg Experiments==============%
+\subsection{Regression Experiments}~\label{sec:reg}
+In this section, we complete and analyze  three regression experiments: learning two tasks, learning ten tasks, and learning five tasks with the introduction of noise into each task. In each experiment, we compare the four experimental conditions previously discussed.
+
+\subsubsection{Overview of Experiments}
+Below, we specify the details of data, task splits, and hyperparameter choices for such experiments.
+
+\textbf{Dataset and Task Splits:} As stated in the beginning of \cref{sec: experiments}, we will be utilizing a randomly generated sine dataset for our regression experiments, as it is a standard benchmark for continual learning in regression settings. Recall that each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ This controlled variation across tasks provides a simple, yet nontrivial, setting to evaluate a model’s ability to learn sequentially and resist catastrophic forgetting.
+
+\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2,C3, and C4 we use a cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in \cref{tab:hyperparameters,tab:sine_hyperparams} of \cref{app:standard_cl}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/sine_2task_results.pdf}
+    \caption{Sine regression (2 tasks): Comparison of conditions C1--C4. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Average MSE showing C4 achieves 33\% improvement over baseline.}
+    \label{fig:sine_2task_comprehensive}
+\end{figure}
+
+\subsubsection{Experiment 1}
+ For the first experiment, we learn two tasks and train $500$ epochs on each task. \cref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions for this two task experiment. In \cref{fig:sine_2task_comprehensive} (b), with introduction of a new task, we observe that the model's Hamiltonian loss does not reduce under baseline CL condition (C1) or Heuristic condition (C2). This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in \cref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. 
+ 
+To obviate this behavior, we seek to change the architecture on the fly. The architecture is changed with random reinitialization of weights in C3, and in C4 the architecture is changed with knowledge transfer of weights via transfer matrices $A$ and $B.$ In \cref{fig:sine_2task_comprehensive} (b) and (c), we observe that while the architecture search alone (C3) reduces the Hamiltonian loss compared to the baseline (C1) or Heuristics (C2) by 7\%, 
+with the addition of the $AWB$ transfer (C4), we achieve a 33\% improvement over the baseline (C1). 
+
+We note that the transfer between parameter spaces completed in C4 not only counters the effect of changing tasks, as proved in \cref{thm:lower_HJB}, but also intuitively provides a better starting point for learning the new tasks. The difference is that learning behavior between the baseline (C1) and $AWB$ Full (C4) implies that the conclusions from \cref{lem:upper_arch,lem:upper_weight} are indeed valid, where change in the architecture lowers the upper bound indicated by the lower loss values. All conclusions from \cref{fig:sine_2task_comprehensive} (b) extend to \cref{fig:sine_2task_comprehensive} (c), where the test MSE values are graphed.
+
+
+\subsubsection{Experiment 2}
+For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of tasks. In this process, we learn $10$ tasks of data and train $500$ epochs on each task. To ensure statistical reliability we run this $10$ task experiment with three random seeds. The results and an extensive comparison of the four conditions is provided in \cref{fig:sine_10task_comprehensive} and \cref{tab:sine_cl_metrics}. In \cref{tab:sine_cl_metrics}, we observe that AWB Full (C4) achieves a 39\% reduction in average MSE compared to the baseline (C1). Additionally, we see a 37\% reduction in forgetting over the baseline (0.0144 vs. 0.0227) and an increase in backwards transfer. More importantly though, AWB Full (C4) achieves a 37\% improvement in average MSE and 35\% improvement in forgetting in comparison to architecture search alone without knowledge transfer (C3). This is crucial, as we again observe the significant impact of transferring knowledge over architecture search alone, and we validate the theory we developed. These concludes are also reflected in the test MSE displayed in \cref{fig:sine_10task_comprehensive} (a), and the gradient norm evolution in (c) indicates training stability.
+
+In \cref{fig:sine_10task_comprehensive} (d), (e), and (f), error bands ($\pm$ 1 std) across the three seeds. We observe a large error bound in the AWB Full (C4) condition across panels (d), (e), and (f). This is due to the inherent instability of architecture search methods and is expected. We again note that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}.
+
+
+\begin{table}[!htb]
+\centering
+\caption{Continual learning metrics for sine regression (10 tasks, 3 seeds). Values reported as mean $\pm$ std. Best values are highlighted in \textbf{bold}. Improvement equates to reduced Avg MSE and Forgetting values and increased BWT and FWT.}
+\label{tab:sine_cl_metrics}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Condition} & \textbf{Avg MSE ($\downarrow$)} & \textbf{BWT ($\uparrow$)} & \textbf{FWT ($\uparrow$)} & \textbf{Forgetting ($\downarrow$)} \\
+\midrule
+C1: Baseline         & $0.0256 \pm 0.0000$ & $0.0014 \pm 0.0000$ & $0.0000 \pm 0.0000$ & $0.0227 \pm 0.0000$ \\
+C2: Heuristics       & $0.0255 \pm 0.0001$ & $0.0012 \pm 0.0000$ & $0.0000 \pm 0.0000$ & $0.0226 \pm 0.0000$ \\
+C3: Arch Search      & $0.0251 \pm 0.0001$ & $0.0014 \pm 0.0001$ & $0.0000 \pm 0.0000$ & $0.0223 \pm 0.0000$ \\
+C4: AWB Full         & $\mathbf{0.0156 \pm 0.0027}$ & $\mathbf{0.0005 \pm 0.0018}$ & $\mathbf{0.0000 \pm 0.0000}$ & $\mathbf{0.0144 \pm 0.0026}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/sine_10task_3seed_results.pdf}
+    \caption{Sine regression (10 tasks, 3 seeds): Comparison of conditions C1--C4. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting.}
+    \label{fig:sine_10task_comprehensive}
+\end{figure}
+
+
+\subsubsection{Experiment 3}
+For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of \cref{lem:upper_arch,lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior.
+
+In \cref{fig:sine_noise_comprehensive}, we provide a comprehensive comparison across the four conditions on the noisy data with three random seeds. We note that panels (a), (b), and (c) are on a logarithmic scale.  We observe a continual decrease in the Hamiltonian loss of the baseline (C1) and heuristic (C2) conditions, which contrasts results of experiments 1 and 2. Additionally, we achieve consistently lower error throughout training on C4. In panels (d), (e), and (f), we see that C4 provides a 4\% improvement in average MSE over C1. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data, and supports the conclusions from \cref{thm:contMeasure} and \cref{lem:upper_arch,lem:upper_weight},
+
+ 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/sine_noise_5task_3seed_results.pdf}
+    \caption{Noisy sine regression (5 tasks, 3 seeds): Comparison of conditions C1--C4 with noise introduced at each task. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting. C4 (AWB Full) achieves 4\% lower MSE than the baseline while maintaining positive backward transfer.}
+    \label{fig:sine_noise_comprehensive}
+\end{figure}
+
+\textbf{Architecture Evolution:} \cref{fig:arch_evolution} visualizes the Hamiltonian loss alongside the change in architecture at each task. Under architecture search alone (C3), such search occurs without previous task knowledge since we randomly reinitialize weights. This results in the spikes in loss values at each task transition. In C4, we observe that transferring the learning via the AWB method, allows for the knowledge of previous tasks upon searching. This leads not only to smoother transitions between tasks, but consistent reduction in Hamiltonian loss. This visualization provides direct evidence that architecture adaptation combined with low-rank transfer (C4) outperforms architecture adaptation alone (C3).
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/hamiltonian_arch_evolution_c3c4.pdf}
+    \caption{Hamiltonian loss evolution with architecture changes marked at task boundaries. Top: C3 (architecture search without transfer). Bottom: C4 (AWB full with transfer). Labels show network architecture at each task transition. C4 demonstrates smoother transitions and lower overall loss due to the AWB transfer mechanism.}
+    \label{fig:arch_evolution}
+\end{figure}
+
+\subsection{Image Classification Experiments}
+To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We perform two classification experiments: learning two tasks and learning 10 tasks.
+
+\subsubsection{Overview of Experiments}
+
+\textbf{Dataset and Task Splits:} As stated above, we will be utilizing the $28 \times 28$ grayscale images in the MNIST dataset for our experiments. We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For our first experiment, we group digits $0$ through $4$ in Task $0$ and digits $5$ through $9$ in Task $1.$ For our second experiment (where we seek to learn $10$ tasks), each task consists of images of a different digit.
+
+\textbf{Hyperparameter Choices:} We use a convolutional neural network with two convolutional layers (filter size 3, 3 output channels each) followed by $2 \times 2$ max-pooling and ReLU activations. The flattened features pass through a feedforward network with hidden layers of size 512 and 64. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, for 200 epochs per task. For C2--C4, we use cosine learning rate scheduling with 25 warm-up epochs. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$.
+
+
+\subsubsection{Experiment 1}
+
+In the first experiment, we learn two tasks and train for $500$ epochs on each task. Full hyperparameter details for this experiment are in \cref{app:standard_cl}. Below we see that \cref{fig:mnist_comprehensive} compares the four conditions (C1--C4) for this experiment. In panel (a), we see the test accuracy on the experience replay data, which exhibits that condition C4 (AWB Full) achieves the highest accuracy throughout training. In panel (b), we have the Hamiltonian loss evolution, where C4 shows fastest convergence. Finally, in panel (c), we summarize the average accuracy, showing that C4 achieves 94.5\% accuracy compared to 92.8\% for the baseline (C1).
+
+Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while C4 shows zero forgetting. This demonstrates that random re-initialization after architecture changes leads to catastrophic forgetting, while the AWB transfer mechanism preserves learned knowledge. These results validate the conclusions from \cref{thm:lower_HJB} for classification tasks.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_2task_results.pdf}
+    \caption{MNIST classification (2 tasks): Comparison of conditions C1--C4. (a) Test accuracy on experience replay. (b) Hamiltonian loss. (c) Average accuracy showing C4 achieves 94.5\% vs 92.8\% for baseline.}
+    \label{fig:mnist_comprehensive}
+\end{figure}
+
+\subsubsection{Experiment 2}
+As an extension to \cref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in \cref{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. It is observed from \cref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the task data, which leads to the model performing poorly. Our proposed A/B training is expected to smooth over this change, but this expected behavior is not observed in \cref{fig:mnist_comprehensive}. Upon careful investigation, it was observed that the smoothing behavior is proportional to how many epochs are utilized for A/B training. To understand the effect of A/B training epochs, we perform the following experiment in the next section. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
+    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the MNIST dataset}
+    \label{cnn}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
+    \caption{Classification experiment: More insight into the jump observed in the MNIST data set experiment}
+    \label{fig:diagnostics}
+\end{figure}
+
+\subsubsection{Analysis of Reduced Accuracy in Experiment 2}
+\label{sec:transform_analysis}
+To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. Each task applies a random rotation and shear transform to MNIST digits, creating distribution shift between tasks. \cref{fig:transform_heatmap} shows how task difficulty varies with transform angle. At Task 3, we see a $92^\circ$ angle was applied. As an example, this would result in attempting to classify that an image showing a ``figure-eight" is the digit $8.$
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}
+    \caption{Task difficulty varies with transform angle. Top: transformed digit samples for each task. Task 3 (coral highlight) falls in a difficult region where combined rotation and shear severely distort digit shapes, resulting in lower accuracy.}
+    \label{fig:transform_heatmap}
+\end{figure}
+
+As discussed in theory, that the prime way of handling such cases is to smoothen out the effect using A/B matrices which we use in this work. The key find is that the quality of smoothing is proportional to the number of epochs A/B matrices are trained for. A study of using different A/B matrices and their effect on the jump introduced by a rotation angle of 92 deg is shown in \cref{fig:AB_ablation}.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_awb_recovery.png}
+    \caption{Comparison of how different number of epochs effect the performance of the smoothing.}
+    \label{fig:AB_ablation}
+\end{figure}
+
+It is clear from \cref{fig:AB_ablation} that, with an increase in the number of epochs for AB training, the test accuracy improves and forgetting reduces. This increase in the number of AB training epochs improves the smoothing of the forgetting costs over tasks and thus improves forgetting. 
+% \subsection{Omniglot Classification}
+
+
+% \textbf{Dataset and Task Splits:} The Omniglot dataset~\cite{Lake_2015} is a cornerstone benchmark for few-shot and meta-learning, designed to test how well models can learn new concepts from extremely limited data. Comprising $1,623$ handwritten characters from $50$ diverse alphabets, each rendered $20$ times by different individuals, it captures rich variation in writing style and structure. Its $105 \times 105$ grayscale images provide clean, simple inputs while still offering enough complexity to challenge learning algorithms. We split the Omniglot dataset into multiple tasks by randomly selecting three classes and applying rotational transformations on them to generate a task.
+
+% \textbf{Hyperparameter Choices:} For the classification experiment, we use a convolutional neural network with one feedforward layer. The convolutional layers are followed by max-pooling and a $ReLU$ activation function, which extract spatial features from the input. Flattened convolutional outputs are passed through a small feedforward network with fully connected layers. We initialize the architecture with a convolutional filter size of $3$ and hidden layers sizes of $512$ and $64.$  We learn $5$ tasks of data based on the Omniglot dataset and train $500$ epochs on each task. We use AdamW~\cite{loshchilov2017fixing}  with a learning rate of $1\times 10^{-4}$ in the training regime. 
+
+
+% \textbf{Results:} 
+%  \cref{cnn} shows the loss function values as the CNN trains~(on the training data) with respect to different methods as discussed in \cref{sec:reg} on the five tasks. The red graph is the standard continual learning method used in \cite{raghavan2021formalizing}, where no change is made to the architecture across tasks; this  serves as our baseline for comparison. The blue graph shows the progression of loss values when our proposed method is used. 
+
+% For the regression experiment, we learned the number of neurons per layer through our architecture search. With this experiment, however, we determine the optimal filter size for the convolutional layers and the optimal number of neurons in the feedforward neural network. Thus, the low-rank transfer is performed for the filters, and the weights matrices are determined by the feedforward neural network. In particular, this highlights the flexibility of our method, where we can perform transfer of information between convolutional filters as well as standard weight matrices. 
+
+% With the first 500 epochs of training, we observe from \cref{cnn} that both the blue curve and the red curve coincide. After the first task is introduced, however, the red curve has a large jump. This jump is common in classification problem because, unlike regression, classification problems do not have task-to-task dependency:  each task is sampled independently, by virtue of iid sampling. This leads to a lot of jumps in the loss function and its gradients and incurs large forgetting. We note, however, that our approach counters this jump significantly with increased performance for each subsequent task. Notably, the jump in some tasks is larger compared with other tasks. We note that some of the jumps pertain to how well $A$ and $B$ matrices transfer information between tasks. 
+
+% It was shown in \cref{thm:lower_HJB} that the eigenvalues of the Jacobian induced by the change in the data must be countered by the singular values of $A$ and $B$ matrices. However, this is hard to ensure in practice, especially when the tasks are independently sampled as in the Omniglot dataset case. Although it is feasible to devise a method that exactly establishes the conditions outlined in \cref{thm:lower_HJB},  such an approach requires careful engineering and has been relegated to future work. Despite this, the conclusions from \cref{sec:reg} carry forward to this case with the key difference that the jumps between tasks are large.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1\linewidth]{paperFigures/cnn5tasks1.png}
+%     \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture}
+%     \label{cnn}
+
+
+\subsection{Graph Classification}
+To further evaluate the AWB framework under controlled domain shift, we investigate the graph classfication problem.
+
+\textbf{Dataset and Task Split:} As stated at the beginning of \cref{sec: experiments}, generate random graphs using PyTorch Geometric's FakeDataset. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
+
+
+\textbf{Hyperparameter Choices:} We utilize a Graph Convolutional Network (GCN) consisting of two graph convolution layers with hidden dimensions $[10 \rightarrow 32 \rightarrow 32]$, followed by max pooling and a 3-layer feedforward classifier with dimensions $[32 \rightarrow 32 \rightarrow 16 \rightarrow 5]$. All layers use LeakyReLU activations except the final classification layer. The model is trained using the Adam optimizer with learning rate $\eta = 10^{-4}$, batch size 128, and gradient clipping at norm 1.0. The Hamiltonian gradient is computed with weights $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task loss, experience replay loss, and regularization respectively. Each task is trained for 200 epochs with task warm-up enabled (20 epochs at 10\% learning rate). For the AWB Full condition (Condition 4), architecture search is performed with the following settings: 5 preliminary training epochs, 150 A/B matrix training epochs, 50 warmup epochs, and modified Adam betas $(0.5, 0.999)$ for V-training to enable faster adaptation after the warmup-to-main transition.
+
+
+\textbf{Results:} \cref{fig:synthetic_graph_results} presents the comprehensive results across three experimental conditions: Baseline (fixed architecture, constant learning rate), Heuristics (task warmup, adaptive learning rate), and AWB Full (architecture search with A/B transfer). The top row shows training dynamics: (a) test accuracy on experience replay, (b) Hamiltonian loss, and (c) gradient norm over the 10-task sequence. The bottom row presents summary metrics: (d) average accuracy, (e) backward transfer (BWT), and (f) forgetting.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1\linewidth]{paperFigures/synthetic_graph_10task_3seed_results.pdf}
+    \caption{Synthetic graph classification with domain shift (10 tasks, 3 seeds). Top row: (a) Test accuracy on experience replay shows AWB Full maintaining high accuracy throughout training; (b) Hamiltonian loss; (c) Gradient norm. Bottom row: (d) AWB Full achieves 89.3\% average accuracy vs 79.4\% for Baseline; (e) Backward transfer; (f) Forgetting measure.}
+    \label{fig:synthetic_graph_results}
+\end{figure}
+
+\cref{fig:task_accuracy_noise} provides deeper insight into the accuracy-forgetting trade-off by showing per-task final accuracy alongside the increasing noise level. Despite the linearly increasing perturbation (dashed line), AWB Full maintains consistently high accuracy (87--92\%) across all tasks, while baseline exhibits flat but lower accuracy (74--81\%).
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.95\linewidth]{paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf}
+    \caption{Per-task accuracy vs domain shift. Grouped bars show final accuracy on each task after training all 10 tasks. The dashed line indicates increasing feature noise ($\sigma$). AWB Full maintains high accuracy despite increasing perturbation, while baseline shows flat but lower performance.}
+    \label{fig:task_accuracy_noise}
+\end{figure}
+
+\begin{table}[!htb]
+\centering
+\caption{Accuracy range summary for synthetic graph experiments. AWB Full achieves significantly higher mean accuracy with a tighter range, indicating consistent performance despite domain shift.}
+\label{tab:accuracy_range}
+\begin{tabular}{lccccl}
+\toprule
+\textbf{Method} & \textbf{Min Acc} & \textbf{Max Acc} & \textbf{Range} & \textbf{Mean $\pm$ Std} & \textbf{Interpretation} \\
+\midrule
+Baseline   & 0.74 & 0.81 & 0.07 & $0.794 \pm 0.020$ & Flat accuracy, limited learning \\
+Heuristics & 0.67 & 0.75 & 0.08 & $0.709 \pm 0.025$ & Variable performance \\
+AWB Full   & 0.87 & 0.92 & \textbf{0.05} & $\mathbf{0.893 \pm 0.015}$ & High accuracy, marginal forgetting \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\caption{Forgetting statistics for synthetic graph experiments. While AWB Full shows forgetting on more tasks, the absolute magnitude remains small (3.6\% average), representing a favorable trade-off for the 12.5\% accuracy improvement.}
+\label{tab:forgetting_stats}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Method} & \textbf{Avg Forgetting} & \textbf{Max Forgetting} & \textbf{Tasks w/ Forgetting} \\
+\midrule
+Baseline   & \textbf{0.005} & 0.03 & 2/10 \\
+Heuristics & 0.013 & 0.04 & 5/10 \\
+AWB Full   & 0.036 & 0.07 & 8/10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These results reveal a favorable accuracy-forgetting trade-off for the AWB approach. The baseline model displays accuracy of 74--81\% and range of 7\% across all domain shifts. Thus, it neither learns effectively from new domains nor does it forget significantly. On the other hand, the AWB Full condition (C4) achieves 12.5\% higher average accuracy (89.3\% vs 79.4\%) while maintaining a tighter accuracy range (5\% vs 7\%). This demonstrates a consistent high performance despite the increased perturbation.
+
+The forgetting analysis shown in (\cref{tab:forgetting_stats}) exhibits that AWB Full has marginal forgetting (3.6\% average) on 8 out of 10 tasks, compared to near-zero forgetting for the baseline C1 condition (0.5\% average on 2 tasks). However, this small forgetting cost is offset by dramatically superior learning capacity, as AWB Full (C4) starts at higher accuracy and remains above baseline (C1) even after forgetting. Thus, the low-rank transfer mechanism preserves learning while also adapting to new domains.
+
+\section{Conclusion}\label{sec:conclusion}
+In this paper we elucidated the dependency between the architecture, weights, and  loss function through a Sobolev space design. We derive the necessary condition for the existence of the continual learning problem and show that it requires the forgetting cost to be absolutely continuous. We show both theoretically and with experimentation that just changing the weights of the network is not enough to satisfy the necessary condition, and we devise an approach to change the architecture of the model on the fly. We show  that  our approach  substantially improvement the training and test performance even in the presence of noise in the tasks. We  also  show that, for a series of neural network architectures, we have better performance when changing architectures while learning continually on the series of tasks. 
+
+% \textbf{GAIL - throughout, are you talking about necessary condition or conditions?}
+% ---------------------
+\section*{Acknowledgments:} 
+The first author AH was supported by the SWARM project, supported by the Department of Energy Award DE-SC0024387. The second author, KR, was supported by the U.S. Department of Energy, Office of Science (SC), Advanced Scientific Computing Research (ASCR), Competitive Portfolios Project on Energy Efficient Computing: A Holistic Methodology, under Contract DE-AC02-06CH11357. We also acknowledge the support by the U.S. Department of Energy for the SciDAC 6 RAPIDS institute. This research used resources of the Argonne Leadership Computing Facility, which is a DOE Office of Science User Facility supported under Contract DE-AC02- 06CH11357. We also thank the initial conversation with Dr. Stefan Wild, Lawrence Berkeley National Laboratory, which led to all of this work. We have utilized generative AI, particularly, claude-code from Anthropic to generate the plots, tables in the experiment. Some of the graphics and text in the appendix has been generated, \emph{claude-code}. Rest of the paper is the original product of the authors.

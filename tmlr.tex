@@ -1,0 +1,195 @@
+\documentclass[10pt]{article} % For LaTeX2e
+\usepackage{wasysym}  % you need this, fine
+\let\iint\relax
+\let\iiint\relax
+\usepackage[preprint]{tmlr}
+\usepackage[toc,page]{appendix} 
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pifont}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{cancel}
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{amsfonts,bm, amssymb}
+
+
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,patterns}
+
+% Define colors
+\definecolor{matrixA}{RGB}{144,238,144}  % Light green
+\definecolor{matrixW}{RGB}{255,160,122}  % Light orange
+\definecolor{matrixB}{RGB}{173,216,230}  % Light blue
+\definecolor{matrixV}{RGB}{221,160,221}  % Light purple
+
+
+% % ===> Fix the conflict AFTER tmlr loaded ===
+% \makeatletter
+% \@ifpackageloaded{amsmath}{\let\iint\relax}{}
+% \makeatother
+% \DeclareMathOperator*{\iint}{\int\!\!\!\int}
+% % ============================================
+
+
+% % \let\iint\relax
+% % \usepackage{wasysym}
+% \usepackage{tmlr}
+
+% % If accepted, instead use the following line for the camera-ready submission:
+% %\usepackage[accepted]{tmlr}
+% % To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
+% %\usepackage[preprint]{tmlr}
+% \usepackage[toc,page]{appendix} 
+% % \usepackage{booktabs}
+% % \usepackage{caption}
+% % \usepackage{lineno,hyperref}
+% % \usepackage{dirtytalk}
+% % \usepackage{multirow}
+% % \usepackage[outdir=./]{epstopdf}
+\usepackage[export]{adjustbox}
+% % \usepackage{subfig}
+% % \usepackage{array}
+% % \usepackage{color, colortbl}
+% % \usepackage{newunicodechar}
+% % \usepackage[utf8]{inputenc}
+% % \usepackage{textcomp}
+% \usepackage{xcolor}
+% \usepackage{algorithmic}
+% % \usepackage{pdfpages}
+% \usepackage{tikz}
+% \usepackage{pifont}
+% % For Math
+\usepackage{fancyhdr}	% For fancy header/footer
+\usepackage{graphicx}	% For including figure/image
+\usepackage{cancel}		% To use the slash to cancel 
+\usepackage[mathscr]{eucal}
+\usepackage{mathtools}
+\usepackage{latexsym}
+\usepackage{booktabs}
+%\usepackage{bigints}
+% \usepackage{eucal}
+\usepackage{algorithm2e}
+\RestyleAlgo{ruled}
+\SetKwProg{Fn}{Function}{:}{}
+\SetKw{KwReturn}{return}
+\usepackage{multicol}
+% %------------------------Bibliography things--
+% % \usepackage[backend=biber, style=authoryear]{biblatex}
+% % \addbibresource{NNbib.bib}
+% % \bibliography{NNbib.bib}
+% % \usepackage[authoryear,longnamesfirst]{natbib}
+% %------------------------
+% \input{math_commands.tex}
+\input{new_commands.tex}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{aliascnt}
+\usepackage[capitalise]{cleveref}
+\usepackage{wrapfig}
+
+% -----------------------------------------------------------
+\title{The Effect of Architecture During Continual Learning}
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the tmlr package is used without the [accepted] or [preprint] options.
+% Non-anonymous submissions will be rejected without review.
+\author{\name Allyson Hahn \email ahahn2813@gmail.com\\
+      \addr Mathematics and Computer Science \\
+      Argonne National Laboratory
+      \AND
+      \name Krishnan Raghavan\footnote{Corresponding Author} \email kraghavan@anl.gov \\
+      \addr Mathematics and Computer Science \\
+      Argonne National Laboratory }
+
+      
+%----------------New Commands---------------%
+% Theorem-like environments with alias counters for cleveref
+\newtheorem{theorem}{Theorem}
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\crefname{lemma}{Lemma}{Lemmas}
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\crefname{proposition}{Proposition}{Propositions}
+
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\crefname{definition}{Definition}{Definitions}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\crefname{corollary}{Corollary}{Corollaries}
+
+\newtheorem{remark}{Remark}
+\newtheorem{proof}{Proof}
+\newtheorem{pot}{Proof of Theorem \ref{thm}}
+
+\crefname{algocf}{Algorithm}{Algorithms}
+
+
+%----------------New Commands---------------%
+\newcommand{\innerprod}[1]{\left\langle #1 \right\rangle}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\bigabs}[1]{\left \lvert #1 \right \rvert}
+\newcommand{\sobkp}[1]{W^{k,p}(#1)}
+\newcommand{\sob}{W^{k,p}}
+\newcommand{\Lloc}[1]{L_1^{loc}(#1)}
+\newcommand{\totalV}[1]{D_t^{\abs{#1}}V(t)}
+\newcommand{\totalJ}[1]{D_t^{\abs{#1}}J(t)}
+\newcommand{\D}{\textbf{D}}
+\newcommand{\fhat}{\hat{f}}
+
+
+%minGW
+\newcommand{\argminpsi}{\min\limits_{g(\textbf{w}(t),\psi(t))\in \sob}}
+%minSmoothGW
+\newcommand{\minSmoothGW}{\min\limits_{g(\textbf{w}(t),\delta(\psi(t)))\in \sob}}
+% The \author macro works with any number of authors. Use \AND 
+% to separate the names and addresses of multiple authors.
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+\def\month{MM}  % Insert correct month for camera-ready version
+\def\year{YYYY} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
+
+% -----------------------------------------------------------
+\begin{document}
+\maketitle
+\begin{abstract}
+Continual learning~(CL) is the problem of learning a sequence of tasks while retaining knowledge from previous tasks. However, typical CL methods involve prefixed architectures leading to limited model capacity when data distribution shifts significantly across tasks. We introduce a mathematical framework  enabling a rigorous investigation into the interplay between model capacity and effective CL. We derive the necessary conditions for CL solution and prove that learning only the model weights is insufficient to mitigate catastrophic forgetting under distribution shifts. Consequently, we prove that by learning the architecture and the weights simultaneously at each task, rather than the weights alone, we can reduce catastrophic forgetting. However, changing architectures on the fly requires a principled approach to knowledge transfer between weight spaces of different dimensions. We develop a low-rank transfer mechanism to map knowledge across architectures of mismatched dimensions. Empirical studies across regression and classification problems, including feedforward, convolutional, and graph neural networks, demonstrate that our approach of learning the optimal architecture and weights simultaneously yields substantially improved performance~(up to two orders of magnitude), reduced forgetting, and enhanced robustness in the presence of noise compared with static architecture approaches. 
+\end{abstract}
+\input{texts/main_text}
+
+\newpage
+\bibliography{NNbib.bib}
+\bibliographystyle{tmlr}
+\appendix
+\section{Appendix}
+\input{texts/supp}
+\input{texts/appendix_standard_cl}
+
+
+\begin{flushright}
+  \scriptsize
+
+  \framebox{\parbox{0.9\textwidth}{
+  The submitted manuscript has been created by UChicago Argonne, LLC, Operator of Argonne National Laboratory (“Argonne”).
+  Argonne, a U.S. Department of Energy Office of Science laboratory, is operated under Contract No. DE-AC02-06CH11357.
+  The U.S. Government retains for itself, and others acting on its behalf, a paid-up nonexclusive, irrevocable worldwide
+  license in said article to reproduce, prepare derivative works, distribute copies to the public, and perform publicly
+  and display publicly, by or on behalf of the Government.  The Department of Energy will provide public access to these
+  results of federally sponsored research in accordance with the DOE Public Access Plan.
+  \url{http://energy.gov/downloads/doe-public-access-plan}
+  }}
+  \end{flushright}
+\end{document}
+% -----------------------------------------------------------

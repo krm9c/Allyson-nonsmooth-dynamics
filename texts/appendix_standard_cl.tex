@@ -1,0 +1,293 @@
+\section{CL Implementation \& Condition Details}
+\label{app:standard_cl}
+
+This appendix provides implementation details for the four experimental conditions (C1--C4) used in this paper. All algorithms use the notation from the main text: $\weight(t)$ denotes weights at task $t$, $\psi(t)$ denotes architecture, $\tx(t)$ denotes task data, $\fhat(\weight,\psi)$ denotes the neural network, and $\mathcal{E}$ denotes the experience replay buffer.
+
+
+%=======This is Appendix J=======%
+\subsection{Experimental Conditions Overview \& Algorithm}
+
+\cref{fig:alg_conditions} presents the four experimental conditions as a unified algorithmic framework. Each condition builds upon the previous one:
+\begin{itemize}
+    \item \textbf{C1 (Baseline)}: Fixed architecture, constant learning rate, no warmup
+    \item \textbf{C2 (Heuristics)}: Adds task warmup, cosine LR schedule, adaptive gradient weights
+    \item \textbf{C3 (Arch Search)}: Adds architecture search at task boundaries with random reinitialization
+    \item \textbf{C4 (AWB Full)}: Adds knowledge transfer via $A$, $B$ matrices instead of random reinitialization
+\end{itemize}
+
+\begin{figure}[!htb]
+\centering
+
+% Panel (a) - C1 Baseline
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption*{\textbf{(a) C1: Baseline}}
+\label{alg:c1}
+\KwIn{$\weight(0), \psi_0, \{\tx(t)\}_{t=0}^T$}
+\KwOut{$\weight(T)$}
+\textbf{Init:} $\eta = 10^{-4}$, $[\alpha,\beta,\gamma] = [0.4, 0.4, 0.1]$\;
+\For{$t = 0$ \KwTo $T$}{
+    \For{$e = 1$ \KwTo $N_{\text{epochs}}$}{
+        $\mathcal{B}_c \gets$ \texttt{sample}$(\tx(t))$\;
+        $\mathcal{B}_e \gets$ \texttt{sample}$(\mathcal{E})$\;
+        $\nabla H \gets$ \textsc{HamGrad}$(\weight, \mathcal{B}_c, \mathcal{B}_e)$\;
+        $\weight \gets \weight - \eta \cdot \nabla H$\;
+    }
+    $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
+}
+{\bfseries Return} $\weight$\;
+\end{algorithm}
+\vspace{0.3em}
+{\footnotesize \textit{Fixed $\psi_0$, constant $\eta$, no warmup.}}
+\end{minipage}
+\hfill
+% Panel (b) - C2 Heuristics
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption*{\textbf{(b) C2: Heuristics}}
+\label{alg:c2}
+\KwIn{$\weight(0), \psi_0, \{\tx(t)\}_{t=0}^T$}
+\KwOut{$\weight(T)$}
+\textbf{Init:} $\eta_0 = 10^{-4}$, $[\alpha,\beta,\gamma] = [0.4, 0.4, 0.1]$\;
+\For{$t = 0$ \KwTo $T$}{
+    \If{$t > 0$}{
+        $\weight \gets$ \textsc{Warmup}$(\weight, \tx(t))$ \tcp*[f]{\cref{alg:warmup}}\;
+        $[\alpha,\beta,\gamma] \gets$ \textsc{AdaptGrad}$(J_t, J_{t-1})$ \tcp*[f]{\cref{alg:adaptive}}\;
+    }
+    \For{$e = 1$ \KwTo $N_{\text{epochs}}$}{
+        $\mathcal{B}_c, \mathcal{B}_e \gets$ \texttt{sample}$(\tx(t)), $ \textsc{BalReplay}$(\mathcal{E})$\;
+        $\nabla H \gets$ \textsc{HamGrad}$(\weight, \mathcal{B}_c, \mathcal{B}_e)$\;
+        $\eta \gets$ \textsc{CosineDecay}$(\eta_0, e)$\;
+        $\weight \gets \weight - \eta \cdot \nabla H$\;
+    }
+    $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
+}
+{\bfseries Return} $\weight$\;
+\end{algorithm}
+\vspace{0.3em}
+{\footnotesize \textit{Fixed $\psi_0$, adds warmup + cosine LR + adaptive gradients.}}
+\end{minipage}
+
+\vspace{1em}
+
+% Panel (c) - C3 Arch Search
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption*{\textbf{(c) C3: Architecture Search}}
+\label{alg:c3}
+\KwIn{$\weight(0), \psi(0), \{\tx(t)\}_{t=0}^T$}
+\KwOut{$\weight(T), \psi(T)$}
+\textbf{Init:} As C2\;
+\For{$t = 0$ \KwTo $T$}{
+    \If{$t > 0$}{
+        $\weight \gets$ \textsc{Warmup}$(\weight, \tx(t))$\;
+        $[\alpha,\beta,\gamma] \gets$ \textsc{AdaptGrad}$(J_t, J_{t-1})$\;
+        \If{\textsc{ShouldChange}$(J_t, J_{t-1})$}{
+            $\psi^* \gets$ \textsc{ArchSearch}$(\psi, \tx(t))$ \tcp*[f]{\cref{alg:arch_search}}\;
+            $\weight \gets$ \textsc{GlorotInit}$(\psi^*)$ \tcp*[f]{Random reinit}\;
+            $\psi \gets \psi^*$\;
+        }
+    }
+    \For{$e = 1$ \KwTo $N_{\text{epochs}}$}{
+        \tcp{Same training loop as C2}
+        $\nabla H \gets$ \textsc{HamGrad}$(\weight, \mathcal{B}_c, \mathcal{B}_e)$\;
+        $\weight \gets \weight - \eta \cdot \nabla H$\;
+    }
+    $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
+}
+{\bfseries Return} $\weight, \psi$\;
+\end{algorithm}
+\vspace{0.3em}
+{\footnotesize \textit{Adaptive $\psi(t)$, random reinit after arch change.}}
+\end{minipage}
+\hfill
+% Panel (d) - C4 AWB Full
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption*{\textbf{(d) C4: AWB Full}}
+\label{alg:c4}
+\KwIn{$\weight(0), \psi(0), \{\tx(t)\}_{t=0}^T$}
+\KwOut{$\weight(T), \psi(T)$}
+\textbf{Init:} As C2\;
+\For{$t = 0$ \KwTo $T$}{
+    \If{$t > 0$}{
+        $\weight \gets$ \textsc{Warmup}$(\weight, \tx(t))$\;
+        $[\alpha,\beta,\gamma] \gets$ \textsc{AdaptGrad}$(J_t, J_{t-1})$\;
+        \If{\textsc{ShouldChange}$(J_t, J_{t-1})$}{
+            $\psi^* \gets$ \textsc{ArchSearch}$(\psi, \tx(t))$\;
+            $A, B \gets$ \textsc{TrainAB}$(\weight, \psi, \psi^*, \tx(t))$ \tcp*[f]{\cref{alg:train_ab}}\;
+            $\weight \gets A \cdot \weight \cdot B^T$ \tcp*[f]{AWB transfer}\;
+            $\psi \gets \psi^*$\;
+        }
+    }
+    \For{$e = 1$ \KwTo $N_{\text{epochs}}$}{
+        \tcp{Same training loop as C2}
+        $\nabla H \gets$ \textsc{HamGrad}$(\weight, \mathcal{B}_c, \mathcal{B}_e)$\;
+        $\weight \gets \weight - \eta \cdot \nabla H$\;
+    }
+    $\mathcal{E} \gets \mathcal{E} \cup \tx(t)$\;
+}
+{\bfseries Return} $\weight, \psi$\;
+\end{algorithm}
+\vspace{0.3em}
+{\footnotesize \textit{Adaptive $\psi(t)$, knowledge transfer via $V = A\weight B^T$.}}
+\end{minipage}
+
+\caption{Four experimental conditions for Hamiltonian Continual Learning. (a) C1 uses fixed architecture and constant hyperparameters. (b) C2 adds heuristics: task warmup, cosine LR decay, and adaptive gradient weights. (c) C3 adds architecture search with random reinitialization. (d) C4 replaces random reinitialization with AWB transfer to preserve learned knowledge.}
+\label{fig:alg_conditions}
+\end{figure}
+
+
+
+\subsection{Supporting Algorithm References}
+\label{sec:supporting_algs}
+
+The supporting algorithms referenced in \cref{fig:alg_conditions} are described as follows:
+
+\begin{itemize}
+\item \textbf{Task Warmup}\phantomsection\label{alg:warmup}: Initialize with reduced learning rate $\eta_w = 0.1 \cdot \eta_0$ and gradient weights $[\alpha,\beta,\gamma] = [1, 0, 0]$. Train on new task data for $N_{\text{warmup}}$ epochs before engaging experience replay.
+
+\item \textbf{Adaptive Gradient Weights}\phantomsection\label{alg:adaptive}: Compute loss ratio $r = J_{\text{curr}} / J_{\text{prev}}$ and adjust weights: $\alpha = \min(0.7, 0.3 + 0.4(r-1))$, $\beta = \max(0.2, 0.6 - 0.4(r-1))$, $\gamma = 0.1$.
+
+\item \textbf{Architecture Search}\phantomsection\label{alg:arch_search}: Extract layer dimensions $\{d_1, \ldots, d_L\}$, generate candidate architectures $\mathcal{S} = \{d_i \pm k \cdot 16 : k \in \{1,2,3\}\}$, select $\psi^* = \arg\min_{\psi' \in \mathcal{S}} J(\texttt{init}(\psi'), \psi', \tx_{\text{val}})$.
+
+\item \textbf{Train A/B Matrices}\phantomsection\label{alg:train_ab}: Initialize $A, B$ as identity matrices. For $N_{\text{AB}}$ epochs: sample batch, compute $V = A \cdot \weight \cdot B^T$, update $A, B$ via gradient descent on reconstruction loss.
+
+\item \textbf{Hamiltonian Gradient}\phantomsection\label{alg:hamiltonian}: Compute $\nabla_c = \nabla_{\weight} \ell(\mathcal{B}_{\text{curr}})$, $\nabla_e = \nabla_{\weight} \ell(\mathcal{B}_{\text{exp}})$, $\delta V = \textsc{PerturbationGrad}$. Return $\nabla H = \alpha \nabla_c + \beta \nabla_e + \gamma \delta V$.
+\end{itemize}
+
+\subsection{Hyperparameter Reference}
+
+\cref{tab:hyperparameters} summarizes all default hyperparameters used in the standard CL implementation. \cref{tab:sine_hyperparams,tab:mnist_hyperparams} provide dataset-specific configurations.
+
+{\small
+\begin{table}[h]
+\centering
+\caption{Default Hyperparameters}
+\label{tab:hyperparameters}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{Default} & \textbf{Description} \\
+\hline
+\multicolumn{3}{l}{\textit{Gradient Computation}} \\
+$\alpha$ & 0.4 & Current task gradient weight \\
+$\beta$ & 0.4 & Experience replay gradient weight \\
+$\gamma$ & 0.1 & Regularization gradient weight \\
+$\sigma_x^2$ & $10^{-4}$ & Input perturbation variance \\
+$\sigma_{\weight}^2$ & $10^{-8}$ & Parameter perturbation variance \\
+\hline
+\multicolumn{3}{l}{\textit{Optimization}} \\
+$\eta_0$ & $10^{-4}$ & Base learning rate \\
+$\eta_{\min}$ & $10^{-6}$ & Minimum learning rate \\
+Optimizer & AdamW & Default optimizer \\
+Gradient clip & 1.0 & Maximum gradient norm \\
+LR schedule & Cosine & Learning rate decay (C2--C4) \\
+\hline
+\multicolumn{3}{l}{\textit{Task Warmup (C2--C4)}} \\
+$N_{\text{warmup}}$ & 25 & Warmup epochs per task \\
+LR factor & 0.1 & Warmup LR multiplier \\
+\hline
+\multicolumn{3}{l}{\textit{Experience Replay}} \\
+Buffer size & 200,000 & Maximum samples \\
+Recent quota & 10\% & From task $t-1$ \\
+Older quota & 80\% & From tasks $0$ to $t-2$ \\
+Random quota & 10\% & Uniform random \\
+\hline
+\multicolumn{3}{l}{\textit{AWB Pipeline (C4)}} \\
+$N_{\text{prelim}}$ & 1--2 & Preliminary training epochs \\
+$N_{\text{AB}}$ & 500 & A/B training epochs \\
+$\eta_{\text{AB}}$ & $10^{-3}$ & A/B training learning rate \\
+$\theta_{\text{loss}}$ & 1.1 & Loss ratio threshold for arch change \\
+Search step & 16 & Dimension search step \\
+\hline
+\end{tabular}
+\end{table}
+}
+
+{\small
+\begin{table}[h]
+\centering
+\caption{Sine Regression Hyperparameters}
+\label{tab:sine_hyperparams}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\hline
+\multicolumn{3}{l}{\textit{Network Architecture}} \\
+Network type & FCNN & Fully-connected neural network \\
+Layers & 4 & Number of layers \\
+Hidden size & 64 & Neurons per hidden layer \\
+Activation & ReLU & Hidden layer activation \\
+\hline
+\multicolumn{3}{l}{\textit{Training}} \\
+Tasks & 10 & Number of continual learning tasks \\
+Epochs/task & 500 & Training epochs per task \\
+Batch size & 1024 & Mini-batch size \\
+Learning rate & $10^{-4}$ & Base learning rate \\
+Optimizer & AdamW & Optimizer with weight decay \\
+\hline
+\multicolumn{3}{l}{\textit{Dataset}} \\
+Input domain & $[-90, 90]$ & Uniform sampling domain for $x$ \\
+Task variation & Amplitude, phase & How tasks differ \\
+Train/test split & 80\%/20\% & Data partition \\
+\hline
+\end{tabular}
+\end{table}
+}
+
+{\small
+\begin{table}[h]
+\centering
+\caption{MNIST Classification Hyperparameters}
+\label{tab:mnist_hyperparams}
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\hline
+\multicolumn{3}{l}{\textit{Network Architecture}} \\
+Network type & CNN & Convolutional neural network \\
+Conv layers & 2 & Number of convolutional layers \\
+Filter size & 3 & Convolutional kernel size \\
+Output channels & 3 & Channels per conv layer \\
+Pool size & $2 \times 2$ & Max pooling kernel \\
+FF hidden & [512, 64] & Feedforward hidden layer sizes \\
+Activation & ReLU & Hidden layer activation \\
+\hline
+\multicolumn{3}{l}{\textit{Training}} \\
+Tasks & 2 & Number of continual learning tasks \\
+Epochs/task & 200 & Training epochs per task \\
+Batch size & 1024 & Mini-batch size \\
+Learning rate & $10^{-4}$ & Base learning rate \\
+Optimizer & AdamW & Optimizer with weight decay \\
+\hline
+\multicolumn{3}{l}{\textit{Dataset}} \\
+Input size & $28 \times 28$ & MNIST image dimensions \\
+Task 0 & Digits 0--4 & First task classes \\
+Task 1 & Digits 5--9 & Second task classes \\
+Train/test split & 80\%/20\% & Data partition \\
+\hline
+\end{tabular}
+\end{table}
+}
+
+\subsection{Implementation Notes}
+
+\subsubsection{Gradient Normalization}
+
+The $\nabla_{\weight} \delta V$ component is normalized by task count:
+\begin{equation}
+    \text{dV\_norm} = \frac{\|\nabla_{\weight} \delta V\|_2}{t + 1}
+\end{equation}
+This prevents the regularization term from dominating as more tasks are learned.
+
+\subsubsection{Learning Rate Schedules}
+
+The framework supports multiple LR schedules: constant, step, exponential, cosine, and linear. Default is cosine annealing with warm restarts.
+
+\subsubsection{JAX Implementation}
+
+All gradient computations are JIT-compiled using JAX with 8 variants for different problem types (regression/classification, standard/AWB, vector/graph).
+
+\subsubsection{Model Partitioning}
+
+Equinox models are partitioned for selective training: (1) standard training (all weights), (2) A/B training (freeze W), (3) V training (freeze A, B).

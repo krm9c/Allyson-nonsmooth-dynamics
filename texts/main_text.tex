@@ -129,7 +129,7 @@
 \section{Introduction}
 With the advent of large-scale AI models, the computational expense of training such models has increased drastically. In particular, training AI models efficiently often requires large-scale high-performance computing~(HPC) infrastructure. Despite such drastic expenditure, these models quickly become stale because in my real world applications, the data distribution shifts as new data gets generated due to regime change or changes in the scientific experimentation parameters.  In such scenarios, it is necesary to re-align the model to the new data, however, this necessity presents a quandary. Naive realignment leads to a phenomenon called catastrophic forgetting, where the model overwrites prior information. On the other hand, a complete retraining of the model would require significant resources, a solution that is extremely unattractive. 
 
-A more viable option is continual learning~(CL), where one seeks to control catastrophic forgetting. Several works in the literature have attempted to constrain the weights of the AI model to minimize forgettin, starting from early work on multilayer perceptrons~\cite{mccloskey1989catastrophic} to recent works on large language models such as \cite{luo2025empirical, lai2025reinforcement, biderman2024lora} and \cite{lin2025continual}. On the other hand, and more appropriately, many recent approaches have also sought a balance between catastrophic forgetting and the learning of new data~(generalization); see, for example, ~\cite{raghavan2021formalizing, lu2025rethinking,lin2023theory}. Despite demonstrated success, this is not the full story. In fact,  under mild assumptions, it has been proven that the capacity of the neural network~(its ability to represent tasks) eventually diverges if the data distribution keeps changing ~\cite{chakraborty2025understanding}. The intractability results from \cite{chakraborty2025understanding} highlight a conundrum:  if the capacity of the network eventually diverges, then should we still aim to continually train AI models? In this paper we demonstrate that the answer to this question is indeed ``yes"; in fact, \textit{the solution in the presence of diverging capacity is to reliably change the architecture of the AI model on the fly according to the needs of the data distribution.} 
+A more viable option is continual learning~(CL), where one seeks to control catastrophic forgetting. Several works in the literature have attempted to constrain the weights of the AI model to minimize forgettin, starting from early work on multilayer perceptrons~\cite{mccloskey1989catastrophic} to recent works on large language models such as \cite{luo2025empirical, lai2025reinforcement, biderman2024lora} and \cite{lin2025continual}. On the other hand, and more appropriately, many recent approaches have also sought a balance between catastrophic forgetting and the learning of new data~(generalization); see, for example, ~\cite{raghavan2021formalizing, lu2025rethinking,Lin2023Theory}. Despite demonstrated success, this is not the full story. In fact,  under mild assumptions, it has been proven that the capacity of the neural network~(its ability to represent tasks) eventually diverges if the data distribution keeps changing ~\cite{chakraborty2025understanding}. The intractability results from \cite{chakraborty2025understanding} highlight a conundrum:  if the capacity of the network eventually diverges, then should we still aim to continually train AI models? In this paper we demonstrate that the answer to this question is indeed ``yes"; in fact, \textit{the solution in the presence of diverging capacity is to reliably change the architecture of the AI model on the fly according to the needs of the data distribution.} 
 
 However, two key bottlenecks remain before attaining this goal. (i) Reliably changing the architecture requires a methodical understanding of ``how the tasks, the weights and the architecture of the model interact with each other." This understanding is dificult to observe with current optimization theory tools because architecture dependencies are not visible when the problem of continual learning is defined just over the weights as is done typically~\cite{chakraborty2025understanding, raghavan2021formalizing} or \cite{lu2025rethinking}. Recent works such as CLEAS~\cite{CLEASgao2022CLEAS} and SEAL~\cite{SEALgambella2025SEAL}     
   dynamically expand model capacity by adding layers. However, none enables generic          
@@ -1107,36 +1107,26 @@ In addition, many works have sought to study the capacity of the network in the 
 In this section we evaluate  \cref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in \cref{sec:motivation}? Does changing the architecture actually help with learning over consecutive tasks~(\cref{sec:upper_weight})? Does changing the architecture improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? We examine these questions for three continual learning problems: regression, image classification, and graph classification.
 
 %========datasets and Metrics============%
-\subsection{Datasets and Metrics}
+% \subsection{Datasets and Metrics}
 
-\textbf{Datasets and Task Splits:} We utilize three data sets. \textit{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
-
-\textit{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale. We introduce distribution shifts by applying a unique random rotation to the images of each task. For Task $t,$ we apply a random rotation of $\theta_t = 10t$ degrees.
-
-\textit{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. 
+\textbf{Datasets and Task Splits:} We utilize three data sets.  \textit{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task. \textit{mnist:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale. We introduce distribution shifts by applying a unique random rotation to the images of each task. For Task $t,$ we apply a random rotation of $\theta_t = 10t$ degrees. \textit{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. 
 % More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 
-\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy. \textbf{Average Performance:} The mean performance across all tasks after training:
-$ \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i};$ \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient} such that $\text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right).$ Note that for MSE, positive BWT indicates improvement. \textbf{Forgetting (Forward Transfer FWT):} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}: $  \text{FWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right).$ For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
+\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy. \textit{Average Performance:} The mean performance across all tasks after training:
+$ \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i};$ \textit{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient} such that $\text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right).$ Note that for MSE, positive BWT indicates improvement. \textit{Forgetting (Forward Transfer FWT):} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}: $  \text{FWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right).$ For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
 
-\subsection{Experimental Conditions}\label{sec:implementdetails}
-We evaluate four conditions that progressively isolate the contributions of architecture search and knowledge transfer. \textbf{C1~(Baseline)} uses fixed architecture and constant learning rate $\eta=10^{-4}$ with replay-driven CL~\cite{raghavan2021formalizing,raghavan2023learningcontinuallysequencegraphs}. \textbf{C2~(Heuristics)} keeps the architecture fixed but adds cosine LR decay ($10^{-4}\!\to\!10^{-6}$), task warm-up epochs~(\cref{alg:warmup}), and adaptive gradient weights $[\alpha,\beta,\gamma]$~(\cref{alg:adaptive}), testing whether empirical smoothing to introduce continuity suffices to find solutions to the CL problem. \textbf{C3~(Architecture Search)} applies NDDS~(\cref{DDSalg}) at each task to find $\psi^*(t)$, then reinitializes weights via Glorot uniform~\cite{GlorotB10}, isolating the effect of architecture change without knowledge transfer. \textbf{C4~(AWB Full)} is our complete method: NDDS selects $\psi^*(t)$, then $A$ and $B$ are trained with $\weight(t)$ frozen so that $V=A\weight(t)B^\top$ transfers knowledge to the new parameter space~(\cref{alg:train_ab},\cref{thm:lower_HJB}); see \cref{alg:c4} for the full algorithm. The contrast between C3 and C4 isolates the contribution of low-rank knowledge transfer from architecture search alone. All experiments use JAX~\cite{jax} and Equinox~\cite{kidger2021equinox} on an H100 gpu with 96 core cpu; code is at \url{https://github.com/krm9c/ContLearn.git}. 
+\paragraph{Experimental Conditions:} We evaluate four conditions that progressively isolate the contributions of architecture search and knowledge transfer. \textit{C1~(Baseline)} uses fixed architecture and constant learning rate $\eta=10^{-4}$ with replay-driven CL~\cite{raghavan2021formalizing, raghavan2023learningcontinuallysequencegraphs}. \underline{\textit{C2~(Heuristics)}} keeps the architecture fixed but adds cosine LR decay ($10^{-4}\!\to\!10^{-6}$), task warm-up epochs~(\cref{alg:warmup}), and adaptive gradient weights $[\alpha,\beta,\gamma]$~(\cref{alg:adaptive}), testing whether empirical smoothing to introduce continuity suffices to find solutions to the CL problem. \underline{\textit{C3~(Architecture Search)}} applies NDDS~(\cref{DDSalg}) at each task to find $\psi^*(t)$, then reinitializes weights via Glorot uniform~\cite{GlorotB10}, isolating the effect of architecture change without knowledge transfer. \underline{\textit{C4~(AWB Full)}} is our complete method: NDDS selects $\psi^*(t)$, then $A$ and $B$ are trained with $\weight(t)$ frozen so that $V=A\weight(t)B^\top$ transfers knowledge to the new parameter space~(\cref{alg:train_ab},\cref{thm:lower_HJB}). The contrast between C3 and C4 isolates the contribution of low-rank knowledge transfer from architecture search alone. All experiments use JAX~\cite{jax} and Equinox~\cite{kidger2021equinox} on an H100 gpu with 96 core cpu; code is at \url{https://github.com/krm9c/ContLearn.git}. 
 
-The focus of this experimental results is to demonstrate that our theory holds in practice and that indeed the better CL performance can be attained by changing architecture to expand the solution space and transferring learning to the new architecture. Thus, we do not seek to compare our method with other methods in the literature such as CLEAS, as no methods have been proposed that utilize both architecture search and knowledge transfer in the streaming CL setting. Moreover, methods that utilize only architecture search and rudimentary knowledge transfer, such as CLEAS, can be captured by C3, which isolates the effect of architecture search without knowledge transfer.
-
-We provide further details on hyperparameters and implementation in \cref{app:standard_cl}. 
+The focus of this experimental results is to demonstrate that our theory holds in practice and that indeed the better CL performance can be attained by changing architecture to expand the solution space and transferring learning to the new architecture. Thus, we do not seek to compare our method with other methods in the literature such as CLEAS, where rudimentary architecture search and knowledge transfer is employed. Moreover, methods that utilize only architecture search and rudimentary knowledge transfer, such as CLEAS, can be captured by C3, which isolates the effect of architecture search without knowledge transfer. We provide further details on hyperparameters and implementation in \cref{app:standard_cl}. 
 
 
 %=======Reg Experiments==============%
 \subsection{Regression Experiments}~\label{sec:reg}
 In this section, we complete and analyze  three regression experiments: learning two tasks, learning ten tasks, and learning five tasks with the introduction of noise into each task. In each experiment, we compare the four experimental conditions previously discussed.
 
-\subsubsection{Overview of Experiments}
-Below, we specify the details of data, task splits, and hyperparameter choices for such experiments.
+\textbf{Dataset and Task Splits:} As stated in the beginning of \cref{sec: experiments}, we will be utilizing a randomly generated sine dataset for our regression experiments. Recall that each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ 
 
-\textbf{Dataset and Task Splits:} As stated in the beginning of \cref{sec: experiments}, we will be utilizing a randomly generated sine dataset for our regression experiments, as it is a standard benchmark for continual learning in regression settings. Recall that each task is defined by a sine function with a distinct amplitude and/or phase, where inputs $x,$ are sampled from a fixed domain $x \sim \mathcal{U}([-90, 90]).$ This controlled variation across tasks provides a simple, yet nontrivial, setting to evaluate a model’s ability to learn sequentially and resist catastrophic forgetting.
-
-\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2,C3, and C4 we use a cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in \cref{tab:hyperparameters,tab:sine_hyperparams} of \cref{app:standard_cl}
+\textbf{Hyperparameter Choices:}  For the regression problem, we utilize a standard feedforward neural network with 4 layers. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, and Glorot uniform~\cite{GlorotB10} initialization. For C2 and C4 we use a cosine learning rate scheduling with 25 warm-up epochs at each task transition. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task, experience replay, and regularization respectively. See further hyperparameter details in \cref{tab:hyperparameters,tab:sine_hyperparams} of \cref{app:standard_cl}
 
 \begin{figure}[!htb]
     \centering
@@ -1145,25 +1135,14 @@ Below, we specify the details of data, task splits, and hyperparameter choices f
     \label{fig:sine_2task_comprehensive}
 \end{figure}
 
-\subsubsection{Experiment 1}
- For the first experiment, we learn two tasks and train $500$ epochs on each task. \cref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions for this two task experiment. In \cref{fig:sine_2task_comprehensive} (b), with introduction of a new task, we observe that the model's Hamiltonian loss does not reduce under baseline CL condition (C1) or Heuristic condition (C2). This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in \cref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. 
- 
-To obviate this behavior, we seek to change the architecture on the fly. The architecture is changed with random reinitialization of weights in C3, and in C4 the architecture is changed with knowledge transfer of weights via transfer matrices $A$ and $B.$ In \cref{fig:sine_2task_comprehensive} (b) and (c), we observe that while the architecture search alone (C3) reduces the Hamiltonian loss compared to the baseline (C1) or Heuristics (C2) by 7\%, 
-with the addition of the $AWB$ transfer (C4), we achieve a 33\% improvement over the baseline (C1). 
-
-We note that the transfer between parameter spaces completed in C4 not only counters the effect of changing tasks, as proved in \cref{thm:lower_HJB}, but also intuitively provides a better starting point for learning the new tasks. The difference is that learning behavior between the baseline (C1) and $AWB$ Full (C4) implies that the conclusions from \cref{lem:upper_arch,lem:upper_weight} are indeed valid, where change in the architecture lowers the upper bound indicated by the lower loss values. All conclusions from \cref{fig:sine_2task_comprehensive} (b) extend to \cref{fig:sine_2task_comprehensive} (c), where the test MSE values are graphed.
-
-
-\subsubsection{Experiment 2}
-For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of tasks. In this process, we learn $10$ tasks of data and train $500$ epochs on each task. To ensure statistical reliability we run this $10$ task experiment with three random seeds. The results and an extensive comparison of the four conditions is provided in \cref{fig:sine_10task_comprehensive} and \cref{tab:sine_cl_metrics}. In \cref{tab:sine_cl_metrics}, we observe that AWB Full (C4) achieves a 39\% reduction in average MSE compared to the baseline (C1). Additionally, we see a 37\% reduction in forgetting over the baseline (0.0144 vs. 0.0227) and an increase in backwards transfer. More importantly though, AWB Full (C4) achieves a 37\% improvement in average MSE and 35\% improvement in forgetting in comparison to architecture search alone without knowledge transfer (C3). This is crucial, as we again observe the significant impact of transferring knowledge over architecture search alone, and we validate the theory we developed. These concludes are also reflected in the test MSE displayed in \cref{fig:sine_10task_comprehensive} (a), and the gradient norm evolution in (c) indicates training stability.
-
-In \cref{fig:sine_10task_comprehensive} (d), (e), and (f), error bands ($\pm$ 1 std) across the three seeds. We observe a large error bound in the AWB Full (C4) condition across panels (d), (e), and (f). This is due to the inherent instability of architecture search methods and is expected. We again note that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}.
-
-
-\begin{table}[!htb]
+% --- Table + Figures combined on one float page ---
+\begin{figure}[p]
 \centering
-\caption{Continual learning metrics for sine regression (10 tasks, 3 seeds). Values reported as mean $\pm$ std. Best values are highlighted in \textbf{bold}. Improvement equates to reduced Avg MSE and Forgetting values and increased BWT and FWT.}
+
+% Table
+\captionof{table}{Continual learning metrics for sine regression (10 tasks, 3 seeds). Values reported as mean $\pm$ std. Best values are highlighted in \textbf{bold}. Improvement equates to reduced Avg MSE and Forgetting values and increased BWT and FWT.}
 \label{tab:sine_cl_metrics}
+\smallskip
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Condition} & \textbf{Avg MSE ($\downarrow$)} & \textbf{BWT ($\uparrow$)} & \textbf{FWT ($\uparrow$)} & \textbf{Forgetting ($\downarrow$)} \\
@@ -1174,102 +1153,101 @@ C3: Arch Search      & $0.0251 \pm 0.0001$ & $0.0014 \pm 0.0001$ & $0.0000 \pm 0
 C4: AWB Full         & $\mathbf{0.0156 \pm 0.0027}$ & $\mathbf{0.0005 \pm 0.0018}$ & $\mathbf{0.0000 \pm 0.0000}$ & $\mathbf{0.0144 \pm 0.0026}$ \\
 \bottomrule
 \end{tabular}
-\end{table}
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/sine_10task_3seed_results.pdf}
-    \caption{Sine regression (10 tasks, 3 seeds): Comparison of conditions C1--C4. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting.}
-    \label{fig:sine_10task_comprehensive}
+\vspace{0.4em}
+
+% Figure 1
+\includegraphics[width=0.95\linewidth, height=0.25\textheight, keepaspectratio]{paperFigures/sine_10task_3seed_results.pdf}
+\captionof{figure}{Sine regression (10 tasks, 3 seeds): Comparison of conditions C1--C4. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting.}
+\label{fig:sine_10task_comprehensive}
+
+\vspace{0.4em}
+
+% Figure 2
+\includegraphics[width=0.95\linewidth, height=0.25\textheight, keepaspectratio]{paperFigures/sine_noise_5task_3seed_results.pdf}
+\captionof{figure}{Noisy sine regression (5 tasks, 3 seeds): Comparison of conditions C1--C4 with noise introduced at each task. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting. C4 (AWB Full) achieves 4\% lower MSE than the baseline while maintaining positive backward transfer.}
+\label{fig:sine_noise_comprehensive}
+
 \end{figure}
 
-
-\subsubsection{Experiment 3}
-For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of \cref{lem:upper_arch,lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior.
-
-In \cref{fig:sine_noise_comprehensive}, we provide a comprehensive comparison across the four conditions on the noisy data with three random seeds. We note that panels (a), (b), and (c) are on a logarithmic scale.  We observe a continual decrease in the Hamiltonian loss of the baseline (C1) and heuristic (C2) conditions, which contrasts results of experiments 1 and 2. Additionally, we achieve consistently lower error throughout training on C4. In panels (d), (e), and (f), we see that C4 provides a 4\% improvement in average MSE over C1. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data, and supports the conclusions from \cref{thm:contMeasure} and \cref{lem:upper_arch,lem:upper_weight},
-
+\paragraph{Experiment 1:} For the first experiment, we learn two tasks and train $500$ epochs on each task. \cref{fig:sine_2task_comprehensive} provides a comprehensive comparison of all four conditions for this two task experiment. In \cref{fig:sine_2task_comprehensive} (b), with introduction of a new task, we observe that the model's Hamiltonian loss does not reduce under baseline CL condition (C1) or Heuristic condition (C2). This behavior suggests that, with changing tasks, the change in the weight parameters has no effect on the training and the learning stagnates. Notably, we argued in our theory, particularly in \cref{lem:upper_weight}, that the change in the tasks can lead to a loss of continuity of the forgetting cost, leading to the conclusion that just changing the weights is not enough. 
  
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/sine_noise_5task_3seed_results.pdf}
-    \caption{Noisy sine regression (5 tasks, 3 seeds): Comparison of conditions C1--C4 with noise introduced at each task. Shaded regions show $\pm$1 std. (a) Test MSE on experience replay. (b) Hamiltonian loss. (c) Gradient norm. (d) Average MSE. (e) Backward transfer (BWT). (f) Forgetting. C4 (AWB Full) achieves 4\% lower MSE than the baseline while maintaining positive backward transfer.}
-    \label{fig:sine_noise_comprehensive}
-\end{figure}
+To obviate this behavior, we seek to change the architecture on the fly. The architecture is changed with random reinitialization of weights in C3, and in C4 the architecture is changed with knowledge transfer of weights via transfer matrices $A$ and $B.$ In \cref{fig:sine_2task_comprehensive} (b) and (c), we observe that while the architecture search alone (C3) reduces the Hamiltonian loss compared to the baseline (C1) or Heuristics (C2) by 7\%, 
+with the addition of the $AWB$ transfer (C4), we achieve a 33\% improvement over the baseline (C1). 
 
-\textbf{Architecture Evolution:} \cref{fig:arch_evolution} visualizes the Hamiltonian loss alongside the change in architecture at each task. Under architecture search alone (C3), such search occurs without previous task knowledge since we randomly reinitialize weights. This results in the spikes in loss values at each task transition. In C4, we observe that transferring the learning via the AWB method, allows for the knowledge of previous tasks upon searching. This leads not only to smoother transitions between tasks, but consistent reduction in Hamiltonian loss. This visualization provides direct evidence that architecture adaptation combined with low-rank transfer (C4) outperforms architecture adaptation alone (C3).
+We note that the transfer between parameter spaces completed in C4 not only counters the effect of changing tasks, as proved in \cref{thm:lower_HJB}, but also intuitively provides a better starting point for learning the new tasks. The difference is that learning behavior between the baseline (C1) and $AWB$ Full (C4) implies that the conclusions from \cref{lem:upper_arch,lem:upper_weight} are indeed valid, where change in the architecture lowers the upper bound indicated by the lower loss values. All conclusions from \cref{fig:sine_2task_comprehensive} (b) extend to \cref{fig:sine_2task_comprehensive} (c), where the test MSE values are graphed.
 
-\begin{figure}[!htb]
+
+\paragraph{Experiment 2:} For the second experiment, we seek to determine whether  the performance from the previous experiment extends to a larger number of tasks. In this process, we learn $10$ tasks of data and train $500$ epochs on each task. To ensure statistical reliability we run this $10$ task experiment with three random seeds. The results and an extensive comparison of the four conditions is provided in \cref{fig:sine_10task_comprehensive} and \cref{tab:sine_cl_metrics}. In \cref{tab:sine_cl_metrics}, we observe that AWB Full (C4) achieves a 39\% reduction in average MSE compared to the baseline (C1). Additionally, we see a 37\% reduction in forgetting over the baseline (0.0144 vs. 0.0227) and an increase in backwards transfer. More importantly though, AWB Full (C4) achieves a 37\% improvement in average MSE and 35\% improvement in forgetting in comparison to architecture search alone without knowledge transfer (C3). This is crucial, as we again observe the significant impact of transferring knowledge over architecture search alone, and we validate the theory we developed. These concludes are also reflected in the test MSE displayed in \cref{fig:sine_10task_comprehensive} (a), and the gradient norm evolution in (c) indicates training stability. In \cref{fig:sine_10task_comprehensive} (d), (e), and (f), error bands ($\pm$ 1 std) across the three seeds. We observe a large error bound in the AWB Full (C4) condition across panels (d), (e), and (f). This is due to the inherent instability of architecture search methods and is expected. We again note that  any architecture search approach can be introduced here, including popular  methods such as DeepHyper~\cite{Balaprakash2018DeepHyper}.
+
+
+
+
+
+\paragraph{Experiment 3:} For the third experiment, we learn $5$ tasks of data and train $500$ epochs on each task. To  understand the implications of \cref{lem:upper_arch,lem:upper_weight}, we introduce noise into each subsequent task and observe the learning behavior. In \cref{fig:sine_noise_comprehensive}, we provide a comprehensive comparison across the four conditions on the noisy data with three random seeds. We note that panels (a), (b), and (c) are on a logarithmic scale.  We observe a continual decrease in the loss of the baseline (C1) and heuristic (C2) conditions, which contrasts results of experiments 1 and 2. Additionally, we achieve consistently lower error throughout training on C4. In panels (d), (e), and (f), we see that C4 provides a 4\% improvement in average MSE over C1. The backward transfer (BWT) metric confirms that C4 maintains positive transfer while minimizing forgetting. These results demonstrate that the AWB transfer mechanism remains effective even in the presence of noisy data, and supports the conclusions from \cref{thm:contMeasure} and \cref{lem:upper_arch,lem:upper_weight},
+
+
+\begin{wrapfigure}{r}{0.45\textwidth}
     \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/hamiltonian_arch_evolution_c3c4.pdf}
-    \caption{Hamiltonian loss evolution with architecture changes marked at task boundaries. Top: C3 (architecture search without transfer). Bottom: C4 (AWB full with transfer). Labels show network architecture at each task transition. C4 demonstrates smoother transitions and lower overall loss due to the AWB transfer mechanism.}
+    \includegraphics[width=0.45\columnwidth]{paperFigures/hamiltonian_arch_evolution_c3c4.pdf}
+    \caption{Hamiltonian loss for C3 (arch search, no transfer) and C4 (AWB full, with transfer) plotted on the same axis. Both conditions select identical architectures.}
     \label{fig:arch_evolution}
-\end{figure}
+    \vspace{-10mm}
+\end{wrapfigure}
+\textbf{Architecture Evolution:} \cref{fig:arch_evolution} visualizes the cost function alongside the change in architecture at each task. Notably, both for C3 and C4, the architecture choices are identical at each task boundary (shown below the plot). Under architecture search alone (C3), however, the loss values are much higher compared to C4. In C4, we observe that transferring the learning via the AWB method, allows for the knowledge of previous tasks upon searching. This leads not only to smoother transitions between tasks, but consistent reduction in cost function. 
 
 \subsection{Image Classification Experiments}
 To evaluate our approach on image classification, we conduct experiments on the MNIST dataset~\cite{lecun1998mnist}. We perform two classification experiments: learning two tasks and learning 10 tasks.
-
-\subsubsection{Overview of Experiments}
 
 \textbf{Dataset and Task Splits:} As stated above, we will be utilizing the $28 \times 28$ grayscale images in the MNIST dataset for our experiments. We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For our first experiment, we group digits $0$ through $4$ in Task $0$ and digits $5$ through $9$ in Task $1.$ For our second experiment (where we seek to learn $10$ tasks), each task consists of images of a different digit.
 
 \textbf{Hyperparameter Choices:} We use a convolutional neural network with two convolutional layers (filter size 3, 3 output channels each) followed by $2 \times 2$ max-pooling and ReLU activations. The flattened features pass through a feedforward network with hidden layers of size 512 and 64. Training uses AdamW~\cite{loshchilov2017fixing} with learning rate $10^{-4}$, batch size 1024, for 200 epochs per task. For C2--C4, we use cosine learning rate scheduling with 25 warm-up epochs. Gradient weights are $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$.
 
 
-\subsubsection{Experiment 1}
+\paragraph{Experiment 1:} In the first experiment, we learn two tasks and train for $500$ epochs on each task. Full hyperparameter details for this experiment are in \cref{app:standard_cl}. Below we see that \cref{fig:mnist_comprehensive} compares the four conditions (C1--C4) for this experiment. In panel (a), we see the test accuracy on the experience replay data, which exhibits that condition C4 (AWB Full) achieves the highest accuracy throughout training. In panel (b), we have the Hamiltonian loss evolution, where C4 shows fastest convergence. Finally, in panel (c), we summarize the average accuracy, showing that C4 achieves 94.5\% accuracy compared to 92.8\% for the baseline (C1).
 
-In the first experiment, we learn two tasks and train for $500$ epochs on each task. Full hyperparameter details for this experiment are in \cref{app:standard_cl}. Below we see that \cref{fig:mnist_comprehensive} compares the four conditions (C1--C4) for this experiment. In panel (a), we see the test accuracy on the experience replay data, which exhibits that condition C4 (AWB Full) achieves the highest accuracy throughout training. In panel (b), we have the Hamiltonian loss evolution, where C4 shows fastest convergence. Finally, in panel (c), we summarize the average accuracy, showing that C4 achieves 94.5\% accuracy compared to 92.8\% for the baseline (C1).
+Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while C4 shows zero forgetting. This demonstrates that random re-initialization after architecture changes leads to catastrophic forgetting, while the AWB transfer mechanism preserves learned knowledge. These results validate the conclusions from \cref{thm:lower_HJB} for classification tasks. Notably, a significant tuning of the learning algorithm and hyperparameters would improve this gap, however, that is not the focus of this work. 
 
-Notably, C3 (architecture search without transfer) shows 3.4\% forgetting while C4 shows zero forgetting. This demonstrates that random re-initialization after architecture changes leads to catastrophic forgetting, while the AWB transfer mechanism preserves learned knowledge. These results validate the conclusions from \cref{thm:lower_HJB} for classification tasks.
 
+\paragraph{Experiment 2:} As an extension to \cref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in \cref{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. It is observed from \cref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the task data, which leads to the model performing poorly. Our proposed A/B training is expected to smooth over this change, but this expected behavior is not observed in \cref{fig:mnist_comprehensive}. Upon careful investigation, it was observed that the smoothing behavior is proportional to how many epochs are utilized for A/B training. To understand the effect of A/B training epochs, we perform the following experiment. 
+
+
+% --- Three MNIST figures combined on one float page ---
+\begin{figure}[p]
+\centering
+
+\includegraphics[width=0.95\linewidth, height=0.28\textheight, keepaspectratio]{paperFigures/mnist_2task_results.pdf}
+\captionof{figure}{MNIST classification (2 tasks): Comparison of conditions C1--C4. (a) Test accuracy on experience replay. (b) Hamiltonian loss. (c) Average accuracy showing C4 achieves 94.5\% vs 92.8\% for baseline.}
+\label{fig:mnist_comprehensive}
+
+\vspace{0.8em}
+
+\includegraphics[width=0.95\linewidth, height=0.28\textheight, keepaspectratio]{paperFigures/mnist_publication_figure.pdf}
+\captionof{figure}{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the MNIST dataset.}
+\label{cnn}
+
+\vspace{0.8em}
+
+\includegraphics[width=0.95\linewidth, height=0.28\textheight, keepaspectratio]{paperFigures/mnist_diagnostic.pdf}
+\captionof{figure}{Classification experiment: More insight into the jump observed in the MNIST data set experiment.}
+\label{fig:diagnostics}
+
+\end{figure}
+
+\paragraph{Analysis of Reduced Accuracy in Experiment 2:} To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. \cref{fig:transform_heatmap}, panel (a) shows how task difficulty varies with transform angle. At Task 3, we see a $92^\circ$ angle was applied. As an example, the corresponding unrecognizable transform of a digit '1' is shown in the top right of the panel.
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_2task_results.pdf}
-    \caption{MNIST classification (2 tasks): Comparison of conditions C1--C4. (a) Test accuracy on experience replay. (b) Hamiltonian loss. (c) Average accuracy showing C4 achieves 94.5\% vs 92.8\% for baseline.}
-    \label{fig:mnist_comprehensive}
-\end{figure}
-
-\subsubsection{Experiment 2}
-As an extension to \cref{fig:mnist_comprehensive}, we conduct an experiment where we learn 10 tasks and plot the results in \cref{cnn}. We note now, that instead of the blanket improvement we observed in the sine dataset, we observe a significant improvement at the beginning for the first three tasks and then there is a significant jump that leads to significant deterioration. It is observed from \cref{fig:diagnostics} that Task 3 introduces a problematic behavior with a sudden and sharp change into the task data, which leads to the model performing poorly. Our proposed A/B training is expected to smooth over this change, but this expected behavior is not observed in \cref{fig:mnist_comprehensive}. Upon careful investigation, it was observed that the smoothing behavior is proportional to how many epochs are utilized for A/B training. To understand the effect of A/B training epochs, we perform the following experiment in the next section. 
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/mnist_publication_figure.pdf}
-    \caption{Classification experiment: Comparing loss values on training data for baseline continual learning method and method of learning optimal task architecture for the MNIST dataset}
-    \label{cnn}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/mnist_diagnostic.pdf}
-    \caption{Classification experiment: More insight into the jump observed in the MNIST data set experiment}
-    \label{fig:diagnostics}
-\end{figure}
-
-\subsubsection{Analysis of Reduced Accuracy in Experiment 2}
-\label{sec:transform_analysis}
-To understand the source of this performance drop in this experiment, we analyze A/B parameters affect classification difficulty. In our implementation, each task applies a random rotation angle $\theta \in [0, 180]^\circ$ and, importantly, uses the same angle for shearing: $\text{shear} = \theta$. This coupling of rotation and shear creates a compound distortion effect that varies non-linearly with the angle. Each task applies a random rotation and shear transform to MNIST digits, creating distribution shift between tasks. \cref{fig:transform_heatmap} shows how task difficulty varies with transform angle. At Task 3, we see a $92^\circ$ angle was applied. As an example, this would result in attempting to classify that an image showing a ``figure-eight" is the digit $8.$
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_transform_analysis.pdf}
-    \caption{Task difficulty varies with transform angle. Top: transformed digit samples for each task. Task 3 (coral highlight) falls in a difficult region where combined rotation and shear severely distort digit shapes, resulting in lower accuracy.}
-    \label{fig:transform_heatmap}
-\end{figure}
-
-As discussed in theory, that the prime way of handling such cases is to smoothen out the effect using A/B matrices which we use in this work. The key find is that the quality of smoothing is proportional to the number of epochs A/B matrices are trained for. A study of using different A/B matrices and their effect on the jump introduced by a rotation angle of 92 deg is shown in \cref{fig:AB_ablation}.
-
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/mnist_awb_recovery.png}
-    \caption{Comparison of how different number of epochs effect the performance of the smoothing.}
+    \includegraphics[width=\linewidth]{paperFigures/mnist_transform_recovery_combined.pdf}
+    \caption{Task difficulty and AWB recovery across tasks. (a)~Test accuracy vs.\ transform angle: higher rotation--shear angles produce harder tasks, with Task~3 ($92^\circ$) being the most difficult. (b)~Task~0 accuracy as subsequent tasks are trained: C4 (AWB Full) better preserves Task~0 performance than C1 (Baseline), particularly after the difficult Task~3. (c)~Final per-task accuracy after all tasks; C4 consistently outperforms C1, with the largest gain at Task~3.}
+    \label{fig:transform_and_recovery}%
+    \label{fig:transform_heatmap}%
     \label{fig:AB_ablation}
 \end{figure}
 
-It is clear from \cref{fig:AB_ablation} that, with an increase in the number of epochs for AB training, the test accuracy improves and forgetting reduces. This increase in the number of AB training epochs improves the smoothing of the forgetting costs over tasks and thus improves forgetting. 
+We argue in this paper, that, the recovery from such a drstic change is done by changing the architecture and transferring leraning to the new architecture using A/B matrices. The key find is that the quality of smoothing is proportional to the number of epochs A/B matrices are trained for. This is evident in the b panel where, with an increase in the number of epochs for AB training, the test accuracy improves and forgetting reduces.
+
+
 % \subsection{Omniglot Classification}
-
-
 % \textbf{Dataset and Task Splits:} The Omniglot dataset~\cite{Lake_2015} is a cornerstone benchmark for few-shot and meta-learning, designed to test how well models can learn new concepts from extremely limited data. Comprising $1,623$ handwritten characters from $50$ diverse alphabets, each rendered $20$ times by different individuals, it captures rich variation in writing style and structure. Its $105 \times 105$ grayscale images provide clean, simple inputs while still offering enough complexity to challenge learning algorithms. We split the Omniglot dataset into multiple tasks by randomly selecting three classes and applying rotational transformations on them to generate a task.
 
 % \textbf{Hyperparameter Choices:} For the classification experiment, we use a convolutional neural network with one feedforward layer. The convolutional layers are followed by max-pooling and a $ReLU$ activation function, which extract spatial features from the input. Flattened convolutional outputs are passed through a small feedforward network with fully connected layers. We initialize the architecture with a convolutional filter size of $3$ and hidden layers sizes of $512$ and $64.$  We learn $5$ tasks of data based on the Omniglot dataset and train $500$ epochs on each task. We use AdamW~\cite{loshchilov2017fixing}  with a learning rate of $1\times 10^{-4}$ in the training regime. 
@@ -1296,27 +1274,11 @@ To further evaluate the AWB framework under controlled domain shift, we investig
 
 \textbf{Dataset and Task Split:} As stated at the beginning of \cref{sec: experiments}, generate random graphs using PyTorch Geometric's FakeDataset. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 
-
 \textbf{Hyperparameter Choices:} We utilize a Graph Convolutional Network (GCN) consisting of two graph convolution layers with hidden dimensions $[10 \rightarrow 32 \rightarrow 32]$, followed by max pooling and a 3-layer feedforward classifier with dimensions $[32 \rightarrow 32 \rightarrow 16 \rightarrow 5]$. All layers use LeakyReLU activations except the final classification layer. The model is trained using the Adam optimizer with learning rate $\eta = 10^{-4}$, batch size 128, and gradient clipping at norm 1.0. The Hamiltonian gradient is computed with weights $[\alpha, \beta, \gamma] = [0.4, 0.4, 0.1]$ for current task loss, experience replay loss, and regularization respectively. Each task is trained for 200 epochs with task warm-up enabled (20 epochs at 10\% learning rate). For the AWB Full condition (Condition 4), architecture search is performed with the following settings: 5 preliminary training epochs, 150 A/B matrix training epochs, 50 warmup epochs, and modified Adam betas $(0.5, 0.999)$ for V-training to enable faster adaptation after the warmup-to-main transition.
 
 
-\textbf{Results:} \cref{fig:synthetic_graph_results} presents the comprehensive results across three experimental conditions: Baseline (fixed architecture, constant learning rate), Heuristics (task warmup, adaptive learning rate), and AWB Full (architecture search with A/B transfer). The top row shows training dynamics: (a) test accuracy on experience replay, (b) Hamiltonian loss, and (c) gradient norm over the 10-task sequence. The bottom row presents summary metrics: (d) average accuracy, (e) backward transfer (BWT), and (f) forgetting.
+% \cref{fig:synthetic_graph_results} presents the comprehensive results across three experimental conditions: Baseline (fixed architecture, constant learning rate), Heuristics (task warmup, adaptive learning rate), and AWB Full (architecture search with A/B transfer). The top row shows training dynamics: (a) test accuracy on experience replay, (b) Hamiltonian loss, and (c) gradient norm over the 10-task sequence. The bottom row presents summary metrics: (d) average accuracy, (e) backward transfer (BWT), and (f) forgetting. 
 
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=1\linewidth]{paperFigures/synthetic_graph_10task_3seed_results.pdf}
-    \caption{Synthetic graph classification with domain shift (10 tasks, 3 seeds). Top row: (a) Test accuracy on experience replay shows AWB Full maintaining high accuracy throughout training; (b) Hamiltonian loss; (c) Gradient norm. Bottom row: (d) AWB Full achieves 89.3\% average accuracy vs 79.4\% for Baseline; (e) Backward transfer; (f) Forgetting measure.}
-    \label{fig:synthetic_graph_results}
-\end{figure}
-
-\cref{fig:task_accuracy_noise} provides deeper insight into the accuracy-forgetting trade-off by showing per-task final accuracy alongside the increasing noise level. Despite the linearly increasing perturbation (dashed line), AWB Full maintains consistently high accuracy (87--92\%) across all tasks, while baseline exhibits flat but lower accuracy (74--81\%).
-
-\begin{figure}[!htb]
-    \centering
-    \includegraphics[width=0.95\linewidth]{paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf}
-    \caption{Per-task accuracy vs domain shift. Grouped bars show final accuracy on each task after training all 10 tasks. The dashed line indicates increasing feature noise ($\sigma$). AWB Full maintains high accuracy despite increasing perturbation, while baseline shows flat but lower performance.}
-    \label{fig:task_accuracy_noise}
-\end{figure}
 
 \begin{table}[!htb]
 \centering
@@ -1335,25 +1297,45 @@ AWB Full   & 0.87 & 0.92 & \textbf{0.05} & $\mathbf{0.893 \pm 0.015}$ & High acc
 
 \begin{table}[!htb]
 \centering
-\caption{Forgetting statistics for synthetic graph experiments. While AWB Full shows forgetting on more tasks, the absolute magnitude remains small (3.6\% average), representing a favorable trade-off for the 12.5\% accuracy improvement.}
+\caption{Forgetting statistics for synthetic graph experiments. The gain/forgetting ratio measures accuracy improvement over baseline per unit of forgetting; AWB Full gains ${\approx}2.8\%$ accuracy for every $1\%$ of forgetting incurred.}
 \label{tab:forgetting_stats}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Method} & \textbf{Avg Forgetting} & \textbf{Max Forgetting} & \textbf{Tasks w/ Forgetting} \\
+\textbf{Method} & \textbf{Avg Forgetting} & \textbf{Max Forgetting} & \textbf{Gain / Forgetting} \\
 \midrule
-Baseline   & \textbf{0.005} & 0.03 & 2/10 \\
-Heuristics & 0.013 & 0.04 & 5/10 \\
-AWB Full   & 0.036 & 0.07 & 8/10 \\
+Baseline   & \textbf{0.005} & 0.03 & Ref. \\
+Heuristics & 0.013          & 0.04 & $-6.5\times$ \\
+AWB Full   & 0.036          & 0.07 & $\mathbf{+2.75\times}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-These results reveal a favorable accuracy-forgetting trade-off for the AWB approach. The baseline model displays accuracy of 74--81\% and range of 7\% across all domain shifts. Thus, it neither learns effectively from new domains nor does it forget significantly. On the other hand, the AWB Full condition (C4) achieves 12.5\% higher average accuracy (89.3\% vs 79.4\%) while maintaining a tighter accuracy range (5\% vs 7\%). This demonstrates a consistent high performance despite the increased perturbation.
+\textbf{Results:} The numerical values for the average accuracy and forgetting metrics are provided in \cref{tab:accuracy_range} and \cref{tab:forgetting_stats}, respectively. These results reveal a favorable accuracy-forgetting trade-off for the AWB approach. Note that the forgetting measure is a function of the hyperparamters chosen in the CL training mechanism and can be tuned to prioritize forgetting or accuracy. In this experiment, The baseline model displays accuracy of 74--81\% and range of 7\% across all domain shifts. Thus, it neither learns effectively from new domains nor does it forget significantly. On the other hand, the AWB Full condition (C4) achieves 12.5\% higher average accuracy (89.3\% vs 79.4\%) while maintaining a tighter accuracy range (5\% vs 7\%). This demonstrates a consistent high performance despite the increased perturbation. However, this improvement comes at the cost of increased forgetting (3.6\% average) compared to the baseline (0.5\% average). The gain/forgetting ratio of +2.75x for AWB Full indicates that for every 1\% of forgetting incurred, there is a 2.75\% improvement in accuracy over the baseline, which is a favorable trade-off in many CL applications. This is observed from \cref{tab:forgetting_stats}.
 
+\cref{fig:task_accuracy_noise} provides deeper insight into the accuracy-forgetting trade-off by showing per-task final accuracy alongside the increasing noise level. Despite the linearly increasing perturbation (dashed line), AWB Full maintains consistently high accuracy (87--92\%) across all tasks, while baseline exhibits flat but lower accuracy (74--81\%) in the presence of noise. The r
+
+% \begin{figure}[!htb]
+%     \centering
+%     \includegraphics[width=1\linewidth]{paperFigures/synthetic_graph_10task_3seed_results.pdf}
+%     \caption{Synthetic graph classification with domain shift (10 tasks, 3 seeds). Top row: (a) Test accuracy on experience replay shows AWB Full maintaining high accuracy throughout training; (b) Hamiltonian loss; (c) Gradient norm. Bottom row: (d) AWB Full achieves 89.3\% average accuracy vs 79.4\% for Baseline; (e) Backward transfer; (f) Forgetting measure.}
+%     \label{fig:synthetic_graph_results}
+% \end{figure}
+
+
+
+
+
+\begin{wrapfigure}{r}{0.45\linewidth}
+    \centering
+    \includegraphics[width=0.45\columnwidth]{paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf}
+    \caption{Per-task accuracy vs domain shift. Grouped bars show final accuracy on each task after training all 10 tasks. The dashed line indicates increasing feature noise ($\sigma$).}
+    \label{fig:task_accuracy_noise}
+    \vspace{-10mm}
+\end{wrapfigure}
 The forgetting analysis shown in (\cref{tab:forgetting_stats}) exhibits that AWB Full has marginal forgetting (3.6\% average) on 8 out of 10 tasks, compared to near-zero forgetting for the baseline C1 condition (0.5\% average on 2 tasks). However, this small forgetting cost is offset by dramatically superior learning capacity, as AWB Full (C4) starts at higher accuracy and remains above baseline (C1) even after forgetting. Thus, the low-rank transfer mechanism preserves learning while also adapting to new domains.
 
 \section{Conclusion}\label{sec:conclusion}
-In this paper we elucidated the dependency between the architecture, weights, and  loss function through a Sobolev space design. We derive the necessary condition for the existence of the continual learning problem and show that it requires the forgetting cost to be absolutely continuous. We show both theoretically and with experimentation that just changing the weights of the network is not enough to satisfy the necessary condition, and we devise an approach to change the architecture of the model on the fly. We show  that  our approach  substantially improvement the training and test performance even in the presence of noise in the tasks. We  also  show that, for a series of neural network architectures, we have better performance when changing architectures while learning continually on the series of tasks. 
+In this paper we elucidated the dependency between the architecture, weights, and  loss function through a Sobolev space design. We derive the necessary condition for the existence of the continual learning problem and show that it requires the forgetting cost to be absolutely continuous. We show both theoretically and with experimentation that just changing the weights of the network is not enough to satisfy the necessary condition, and we devise an approach to change the architecture of the model on the fly. We show  that  our approach  substantially improvement the training and test performance even in the presence of noise in the tasks. We  also  show that, for a series of neural network architectures, we have better performance when changing architectures while learning continually on the series of tasks. We also show that the improvement is not just due to the change in architecture, but also due to the transfer of learning to the new architecture.
 
 % \textbf{GAIL - throughout, are you talking about necessary condition or conditions?}
 % ---------------------

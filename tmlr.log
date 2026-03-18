@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  18 MAR 2026 08:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  18 MAR 2026 15:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -565,6 +565,12 @@ Package caption Info: Standard document class detected.
 \c@continuedfloat=\count325
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count326
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count327
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
 File: tikzlibraryshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
@@ -630,7 +636,7 @@ Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
 \XKV@toks=\toks37
 \XKV@tempa@toks=\toks38
 )
-\XKV@depth=\count326
+\XKV@depth=\count328
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/adjustbox/adjcalc.sty
 Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back-ends (calc, etex, pgfmath)
@@ -658,11 +664,11 @@ File: tc-pdftex.def 2025/02/26 v2.3 Clipping driver for pdftex
 \adjbox@ptotalheight=\dimen295
  (/usr/local/texlive/2025/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
 Package: ifoddpage 2022/10/18 v1.2 Conditionals for odd/even page detection
-\c@checkoddpage=\count327
+\c@checkoddpage=\count329
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box89
-\sift@deathcycles=\count328
+\sift@deathcycles=\count330
 \@vwid@loff=\dimen296
 \@vwid@roff=\dimen297
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/base/latexsym.sty
@@ -682,16 +688,16 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \cmidrulesep=\dimen305
 \cmidrulekern=\dimen306
 \defaultaddspace=\dimen307
-\@cmidla=\count329
-\@cmidlb=\count330
+\@cmidla=\count331
+\@cmidlb=\count332
 \@aboverulesep=\dimen308
 \@belowrulesep=\dimen309
-\@thisruleclass=\count331
-\@lastruleclass=\count332
+\@thisruleclass=\count333
+\@lastruleclass=\count334
 \@thisrulewidth=\dimen310
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
 Package: algorithm2e 2017/07/18 v5.2 algorithms environments
-\c@AlgoLine=\count333
+\c@AlgoLine=\count335
  (/usr/local/texlive/2025/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 )
@@ -731,21 +737,21 @@ Package: relsize 2013/03/29 ver 4.1
 \algoheightrule=\skip90
 \algotitleheightruledefault=\skip91
 \algotitleheightrule=\skip92
-\c@algocfline=\count334
-\c@algocfproc=\count335
-\c@algocf=\count336
+\c@algocfline=\count336
+\c@algocfproc=\count337
+\c@algocf=\count338
 \algocf@algoframe=\box96
 \algocf@algobox=\box97
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2024/09/14 v1.9i multicolumn formatting (FMi)
-\c@tracingmulticols=\count337
+\c@tracingmulticols=\count339
 \mult@box=\box98
 \multicol@leftmargin=\dimen317
-\c@unbalance=\count338
-\c@collectmore=\count339
-\doublecol@number=\count340
-\multicoltolerance=\count341
-\multicolpretolerance=\count342
+\c@unbalance=\count340
+\c@collectmore=\count341
+\doublecol@number=\count342
+\multicoltolerance=\count343
+\multicolpretolerance=\count344
 \full@width=\dimen318
 \page@free=\dimen319
 \premulticols=\dimen320
@@ -796,15 +802,15 @@ Package: multicol 2024/09/14 v1.9i multicolumn formatting (FMi)
 \@tempa=\box139
 \@tempa=\box140
 \@tempa=\box141
-\c@minrows=\count343
-\c@columnbadness=\count344
-\c@finalcolumnbadness=\count345
+\c@minrows=\count345
+\c@columnbadness=\count346
+\c@finalcolumnbadness=\count347
 \last@try=\dimen323
 \multicolovershoot=\dimen324
 \multicolundershoot=\dimen325
 \mult@nat@firstbox=\box142
 \colbreak@box=\box143
-\mc@col@check@num=\count346
+\mc@col@check@num=\count348
 ) (./new_commands.tex) (/usr/local/texlive/2025/texmf-dist/tex/latex/oberdiek/aliascnt.sty
 Package: aliascnt 2018/09/07 v1.5 Alias counters (HO)
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/cleveref/cleveref.sty
@@ -827,56 +833,55 @@ Package cleveref Info: always capitalise cross-reference names on input line 785
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen326
 \WF@size=\dimen327
-\c@WF@wrappedlines=\count347
+\c@WF@wrappedlines=\count349
 \WF@box=\box144
 \WF@everypar=\toks39
 Package: wrapfig 2003/01/31  v 3.6
 )
-\c@theorem=\count348
-\c@remark=\count349
-\c@proof=\count350
-\c@pot=\count351
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 166.
+\c@theorem=\count350
+\c@remark=\count351
+\c@proof=\count352
+\c@pot=\count353
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 167.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count352
+\l__color_backend_stack_int=\count354
 \l__pdf_internal_box=\box145
-)
-No file tmlr.aux.
+) (./tmlr.aux)
 \openout1 = `tmlr.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 166.
-LaTeX Font Info:    ... okay on input line 166.
-(/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+ (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count353
+\scratchcounter=\count355
 \scratchdimen=\dimen328
 \scratchbox=\box146
-\nofMPsegments=\count354
-\nofMParguments=\count355
+\nofMPsegments=\count356
+\nofMParguments=\count357
 \everyMPshowfont=\toks40
-\MPscratchCnt=\count356
+\MPscratchCnt=\count358
 \MPscratchDim=\dimen329
-\MPnumerator=\count357
-\makeMPintoPDFobject=\count358
+\MPnumerator=\count359
+\makeMPintoPDFobject=\count360
 \everyMPtoPDFconversion=\toks41
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -884,154 +889,89 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 166.
+Package hyperref Info: Link coloring OFF on input line 167.
+ (./tmlr.out) (./tmlr.out)
 \@outlinefile=\write4
 \openout4 = `tmlr.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 168.
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 168.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 168.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 168.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 168.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 168.
+(Font)              <10> on input line 169.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 168.
+(Font)              <7> on input line 169.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 168.
-LaTeX Font Info:    Trying to load font information for U+wasy on input line 168.
+(Font)              <5> on input line 169.
+LaTeX Font Info:    Trying to load font information for U+wasy on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/wasysym/uwasy.fd
 File: uwasy.fd 2020/01/19 v2.4 Wasy-2 symbol font definitions
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 168.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 168.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 169.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <7> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 168.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 169.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <5> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 168.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 169.
 
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 168.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 169.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 168.
+(Font)              <8> on input line 169.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 168.
+(Font)              <6> on input line 169.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <8> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 168.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 169.
 
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <6> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 168.
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 169.
 
 (./texts/main_text.tex
-
-Package natbib Warning: Citation `mccloskey1989catastrophic' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `luo2025empirical' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `lai2025reinforcement' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `biderman2024lora' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `lin2025continual' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `lu2025rethinking' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `lin2023theory' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 1 undefined on input line 132.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 1 undefined on input line 134.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 1 undefined on input line 134.
-
-
-Package natbib Warning: Citation `lu2025rethinking' on page 1 undefined on input line 134.
-
-
-Package natbib Warning: Citation `CLEASgao2022CLEAS' on page 1 undefined on input line 134.
-
-
-Package natbib Warning: Citation `SEALgambella2025SEAL' on page 1 undefined on input line 134.
-
-
 
 [1
 
 {/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-
-LaTeX Warning: Reference `sec:motivation' on page 1 undefined on input line 157.
-
-
-LaTeX Warning: Reference `sec:sobolev' on page 1 undefined on input line 157.
-
-
-LaTeX Warning: Reference `sec:existence' on page 1 undefined on input line 157.
-
-
-LaTeX Warning: Reference `sec:clsolution' on page 1 undefined on input line 157.
-
-
-LaTeX Warning: Reference `sec:related' on page 1 undefined on input line 157.
-
-
-LaTeX Warning: Reference `sec: experiments' on page 1 undefined on input line 157.
-
-
-Package natbib Warning: Citation `kolda2009tensor' on page 2 undefined on input line 161.
-
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <7> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 161.
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 161.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 208.
+
 
 LaTeX Font Warning: Font shape `U/wasy/b/n' in size <9> not available
 (Font)              Font shape `U/wasy/m/n' tried instead on input line 208.
@@ -1045,173 +985,18 @@ LaTeX Font Info:    Font shape `U/lasy/b/n' in size <9> not available
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <6> not available
 (Font)              Font shape `U/lasy/m/n' tried instead on input line 224.
 
-LaTeX Warning: Reference `fig:CL1' on page 1 undefined on input line 229.
-
-
 
 [2{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
 
-LaTeX Warning: Reference `eq:CL_for' on page 3 undefined on input line 237.
-
-
-LaTeX Warning: Reference `fig:CL1' on page 1 undefined on input line 239.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 3 undefined on input line 244.
-
-
-LaTeX Warning: Reference `fig:CL1' on page 1 undefined on input line 247.
-
-
-LaTeX Warning: Reference `fig:CL1' on page 1 undefined on input line 249.
-
-
-
 [3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
-
-LaTeX Warning: Reference `defn:sobo' on page 1 undefined on input line 260.
-
-
-Package natbib Warning: Citation `huang2023normalization' on page 4 undefined on input line 260.
-
-
-Package natbib Warning: Citation `rudin1976principles' on page 4 undefined on input line 260.
-
-
-Package natbib Warning: Citation `kingmaAdamMethodStochastic2017' on page 4 undefined on input line 263.
-
-
-Package natbib Warning: Citation `petersenTopologicalPropertiesSet2021a' on page 4 undefined on input line 263.
-
-
-Package natbib Warning: Citation `adegokeHigherDerivativesInverse2016' on page 4 undefined on input line 263.
-
-
-LaTeX Warning: Reference `defn:sobo' on page 1 undefined on input line 299.
-
-
-LaTeX Warning: Reference `defn:sobo' on page 1 undefined on input line 309.
-
-
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 309.
-
-
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 312.
-
-
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 312.
-
-
-Package natbib Warning: Citation `jax' on page 4 undefined on input line 312.
-
-
-Package natbib Warning: Citation `kidger2021equinox' on page 4 undefined on input line 312.
-
-
-LaTeX Warning: Reference `defn:sobo' on page 1 undefined on input line 314.
-
-
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 314.
-
-
 
 [4]
 
-Package natbib Warning: Citation `mahanNonclosednessSetsNeural2021a' on page 5 undefined on input line 323.
-
-
-LaTeX Warning: Reference `defn:NN_learning' on page 1 undefined on input line 325.
-
-
-Package natbib Warning: Citation `son2021sobolev' on page 5 undefined on input line 325.
-
-
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 325.
-
-
-LaTeX Warning: Reference `defn:NN_learning' on page 1 undefined on input line 327.
-
-
-LaTeX Warning: Reference `eq:CL_for' on page 1 undefined on input line 327.
-
-
-Package natbib Warning: Citation `CASpasunuru2019continual' on page 5 undefined on input line 331.
-
-
-Package natbib Warning: Citation `kingmaAdamMethodStochastic2017' on page 5 undefined on input line 331.
-
-
-Package natbib Warning: Citation `kingmaAdamMethodStochastic2017' on page 5 undefined on input line 331.
-
-
-LaTeX Warning: Reference `fig:CL1' on page 1 undefined on input line 331.
-
-
-Package natbib Warning: Citation `bertsekas2012dynamic' on page 5 undefined on input line 331.
-
-
-Package natbib Warning: Citation `bertsekas2012dynamic' on page 5 undefined on input line 331.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 5 undefined on input line 335.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 5 undefined on input line 335.
-
-
-
 [5]
-
-LaTeX Warning: Reference `sec:motivation' on page 1 undefined on input line 424.
-
-
-LaTeX Warning: Reference `fig:challenge' on page 1 undefined on input line 424.
-
-
-LaTeX Warning: Reference `fig:challenge' on page 1 undefined on input line 425.
-
-
-LaTeX Warning: Reference `sec:motivation' on page 1 undefined on input line 426.
-
-
-LaTeX Warning: Reference `fig:challenge' on page 1 undefined on input line 427.
-
-
-LaTeX Warning: Reference `defn:NN_learning' on page 1 undefined on input line 428.
-
-
-LaTeX Warning: Reference `defn:intersect' on page 1 undefined on input line 482.
-
-
-Package natbib Warning: Citation `weaver2013measure' on page 6 undefined on input line 483.
-
-
-LaTeX Warning: Reference `fig:setsim' on page 1 undefined on input line 488.
-
-
-LaTeX Warning: Reference `defn:intersect' on page 1 undefined on input line 494.
-
-
 
 [6]
 
-LaTeX Warning: Reference `defn:intersect' on page 1 undefined on input line 499.
-
-
-LaTeX Warning: Reference `defn:intersect' on page 1 undefined on input line 530.
-
-
-
 [7]
-
-LaTeX Warning: Reference `lem:simtaskssimloss' on page 1 undefined on input line 567.
-
-
-LaTeX Warning: Reference `lem:simtaskssimloss' on page 1 undefined on input line 568.
-
-
-LaTeX Warning: Reference `defn:intersect' on page 1 undefined on input line 575.
-
 
 LaTeX Warning: Command \d invalid in math mode on input line 588.
 
@@ -1234,18 +1019,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 588--595
  []
 
 
-LaTeX Warning: Reference `eq:clcum' on page 8 undefined on input line 628.
-
-
-LaTeX Warning: Reference `thm:contMeasure' on page 1 undefined on input line 631.
-
-
-LaTeX Warning: Reference `eq:clcum' on page 8 undefined on input line 631.
-
-
-LaTeX Warning: Reference `thm:contMeasure' on page 1 undefined on input line 631.
-
-
 
 [8]
 Overfull \hbox (2.48619pt too wide) detected at line 644
@@ -1253,25 +1026,9 @@ Overfull \hbox (2.48619pt too wide) detected at line 644
  []
 
 
-Package natbib Warning: Citation `evans2022partial' on page 9 undefined on input line 656.
-
-
-LaTeX Warning: Reference `taylorexparch' on page 9 undefined on input line 657.
-
-
-LaTeX Warning: Reference `thm:contMeasure' on page 1 undefined on input line 660.
-
-
-LaTeX Warning: Reference `sec:upper_weight' on page 1 undefined on input line 670.
-
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 672.
-
-
-LaTeX Warning: Reference `sec:upper_arch' on page 1 undefined on input line 680.
-
-
-LaTeX Warning: Reference `sec:upper_arch' on page 1 undefined on input line 680.
+Underfull \hbox (badness 2452) in paragraph at lines 655--658
+\T1/lmr/m/it/10 ([]2022[]). We can do so be-cause $\OML/lmm/m/it/10 `$ \T1/lmr/m/it/10 is real-valued and bounded and $\OML/lmm/m/it/10 `[]$ \T1/lmr/m/it/10 is con-tin-u-ously dif-fer-en-
+ []
 
 
 
@@ -1296,494 +1053,114 @@ Underfull \hbox (badness 5105) in paragraph at lines 685--688
  []
 
 
-LaTeX Warning: Reference `thm:intersection' on page 1 undefined on input line 799.
-
-
-LaTeX Warning: Reference `fig:solution' on page 1 undefined on input line 799.
-
-
 
 [10]
 
-LaTeX Warning: Reference `eq:clcum' on page 11 undefined on input line 802.
-
-
-Package natbib Warning: Citation `larson2019derivative' on page 11 undefined on input line 802.
-
-
-LaTeX Warning: Reference `fig:solution' on page 1 undefined on input line 802.
-
-
-LaTeX Warning: Reference `sec:HJB' on page 1 undefined on input line 817.
-
-
-LaTeX Warning: Reference `eq:HJB' on page 11 undefined on input line 820.
-
-
-LaTeX Warning: Reference `thm:intersection' on page 1 undefined on input line 821.
-
-
-LaTeX Warning: Reference `HJB' on page 1 undefined on input line 823.
-
-
-LaTeX Warning: Reference `sec:lower_HJB' on page 1 undefined on input line 823.
-
-
-
 [11]
 
-LaTeX Warning: Reference `thm:lower_HJB' on page 1 undefined on input line 826.
-
-
-Package natbib Warning: Citation `larson2019derivative' on page 12 undefined on input line 875.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 12 undefined on input line 875.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 12 undefined on input line 875.
-
-
-Package natbib Warning: Citation `larson2019derivative' on page 12 undefined on input line 875.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 12 undefined on input line 875.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 12 undefined on input line 875.
-
-
-LaTeX Warning: Reference `fig:method' on page 1 undefined on input line 879.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 12 undefined on input line 879.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 12 undefined on input line 879.
-
-
-Package natbib Warning: Citation `larson2019derivative' on page 12 undefined on input line 885.
-
-
-LaTeX Warning: Reference `DDSalg' on page 1 undefined on input line 942.
-
-
-LaTeX Warning: Reference `fig:ndds' on page 1 undefined on input line 942.
-
-
-Underfull \hbox (badness 5077) in paragraph at lines 942--946
-[][]\T1/lmr/m/n/10 The in-tu-ition be-hind this pro-posed
- []
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
 [12]
+Underfull \hbox (badness 5077) in paragraph at lines 942--946
+[][]\T1/lmr/m/n/10 The in-tu-ition be-hind this pro-posed
+ []
+
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 953.
- (/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmtt.fd
+(/usr/local/texlive/2025/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-
-LaTeX Warning: Reference `DDSalg' on page 13 undefined on input line 1006.
-
-
-LaTeX Warning: Reference `alg:lrt' on page 13 undefined on input line 1006.
-
-
 Overfull \hbox (0.9415pt too wide) in paragraph at lines 1006--1006
 []$[]\OT1/lmr/m/n/10 ([](\OML/lmm/m/it/10 t[]\OT1/lmr/m/n/10 1)\OML/lmm/m/it/10 ;  \OT1/lmr/m/n/10 (\OML/lmm/m/it/10 t[]\OT1/lmr/m/n/10 1)\OML/lmm/m/it/10 ; []\OT1/lmr/m/n/10 (\OML/lmm/m/it/10 t\OT1/lmr/m/n/10 )\OML/lmm/m/it/10 ; []\OT1/lmr/m/n/10 )$  
  []
 
 
-LaTeX Warning: Reference `defn:NN' on page 1 undefined on input line 1066.
-
-
 
 [13]
-
-LaTeX Warning: Reference `fig:LRT' on page 1 undefined on input line 1070.
-
-
-LaTeX Warning: Reference `alg:lrt' on page 14 undefined on input line 1070.
-
-
-LaTeX Warning: Reference `fig:LRT' on page 1 undefined on input line 1070.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 14 undefined on input line 1072.
-
-
-Package natbib Warning: Citation `chakraborty2025understanding' on page 14 undefined on input line 1072.
-
-
-LaTeX Warning: Reference `alg:three' on page 1 undefined on input line 1073.
-
-
-Package natbib Warning: Citation `liu2021survey' on page 14 undefined on input line 1079.
-
-
-Package natbib Warning: Citation `LORAhu2022lora' on page 14 undefined on input line 1079.
-
-
-Package natbib Warning: Citation `han2024parameter' on page 14 undefined on input line 1079.
-
-
-Package natbib Warning: Citation `rusu2016progressive' on page 14 undefined on input line 1083.
-
-
-Package natbib Warning: Citation `yoon2017lifelong' on page 14 undefined on input line 1083.
-
-
-Package natbib Warning: Citation `rusu2016progressive' on page 14 undefined on input line 1085.
-
-
-Package natbib Warning: Citation `yoon2017lifelong' on page 14 undefined on input line 1085.
-
-
-Package natbib Warning: Citation `CLEASgao2022CLEAS' on page 14 undefined on input line 1087.
-
-
-Package natbib Warning: Citation `CASpasunuru2019continual' on page 14 undefined on input line 1089.
-
-
-Package natbib Warning: Citation `SEALgambella2025SEAL' on page 14 undefined on input line 1089.
-
-
-Package natbib Warning: Citation `Pentina2014PACBayes' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Evron2022Catastrophic' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Lin2023Theory' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Doan2021NTK' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Kong2022NullSpace' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Zhao2024Statistical' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Friedman2025Forgetting' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Benjamin2024NTEnsemble' on page 14 undefined on input line 1094.
-
-
-Package natbib Warning: Citation `Scannell2024FunctionSpace' on page 14 undefined on input line 1094.
+Underfull \vbox (badness 4279) has occurred while \output is active []
 
 
 
 [14]
 
-LaTeX Warning: Reference `alg:three' on page 1 undefined on input line 1107.
-
-
-LaTeX Warning: Reference `sec:motivation' on page 1 undefined on input line 1107.
-
-
-LaTeX Warning: Reference `sec:upper_weight' on page 1 undefined on input line 1107.
-
-
-Package natbib Warning: Citation `lecun1998mnist' on page 15 undefined on input line 1114.
-
-
-Package natbib Warning: Citation `pyg' on page 15 undefined on input line 1116.
-
-
-Package natbib Warning: Citation `lopez2017gradient' on page 15 undefined on input line 1119.
-
-
-Package natbib Warning: Citation `chaudhry2018riemannian' on page 15 undefined on input line 1119.
-
-
-Package natbib Warning: Citation `diaz2018dont' on page 15 undefined on input line 1119.
-
-
-Package natbib Warning: Citation `lopez2017gradient' on page 15 undefined on input line 1120.
-
-
-Package natbib Warning: Citation `chaudhry2018riemannian' on page 15 undefined on input line 1120.
-
-
-Package natbib Warning: Citation `raghavan2021formalizing' on page 15 undefined on input line 1123.
-
-
-Package natbib Warning: Citation `raghavan2023learningcontinuallysequencegraphs' on page 15 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `alg:warmup' on page 1 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `alg:adaptive' on page 1 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `DDSalg' on page 1 undefined on input line 1123.
-
-
-Package natbib Warning: Citation `GlorotB10' on page 15 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `alg:train_ab' on page 1 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `thm:lower_HJB' on page 1 undefined on input line 1123.
-
-
-LaTeX Warning: Reference `alg:c4' on page 1 undefined on input line 1123.
-
-
-Package natbib Warning: Citation `jax' on page 15 undefined on input line 1123.
-
-
-Package natbib Warning: Citation `kidger2021equinox' on page 15 undefined on input line 1123.
-
-
-
 [15]
 
-LaTeX Warning: Reference `app:standard_cl' on page 1 undefined on input line 1127.
+LaTeX Warning: Reference `tab:sine_hyperparams' on page 1 undefined on input line 1129.
 
 
-LaTeX Warning: Reference `sec: experiments' on page 1 undefined on input line 1137.
 
-
-Package natbib Warning: Citation `loshchilov2017fixing' on page 16 undefined on input line 1139.
-
-
-Package natbib Warning: Citation `GlorotB10' on page 16 undefined on input line 1139.
-
-
-LaTeX Warning: Reference `tab:sine_hyperparams' on page 1 undefined on input line 1139.
-
-
-LaTeX Warning: Reference `tab:hyperparameters' on page 1 undefined on input line 1139.
-
-
-LaTeX Warning: Reference `app:standard_cl' on page 1 undefined on input line 1139.
-
-<paperFigures/sine_2task_results.pdf, id=174, 717.69319pt x 247.51802pt>
+[16]
+<paperFigures/sine_2task_results.pdf, id=566, 717.69319pt x 247.51802pt>
 File: paperFigures/sine_2task_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_2task_results.pdf>
-Package pdftex.def Info: paperFigures/sine_2task_results.pdf  used on input line 1143.
+Package pdftex.def Info: paperFigures/sine_2task_results.pdf  used on input line 1133.
 (pdftex.def)             Requested size: 446.2658pt x 153.90524pt.
-
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 1 undefined on input line 1149.
-
-
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 1 undefined on input line 1149.
-
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 1149.
-
-
-Underfull \vbox (badness 2359) has occurred while \output is active []
-
-
-
-[16 <./paperFigures/sine_2task_results.pdf>]
-
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 1 undefined on input line 1151.
-
-
-LaTeX Warning: Reference `thm:lower_HJB' on page 1 undefined on input line 1154.
-
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 1154.
-
-
-LaTeX Warning: Reference `lem:upper_arch' on page 1 undefined on input line 1154.
-
-
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 1 undefined on input line 1154.
-
-
-LaTeX Warning: Reference `fig:sine_2task_comprehensive' on page 1 undefined on input line 1154.
-
-
-LaTeX Warning: Reference `fig:sine_10task_comprehensive' on page 1 undefined on input line 1158.
-
-
-LaTeX Warning: Reference `tab:sine_cl_metrics' on page 1 undefined on input line 1158.
-
-
-LaTeX Warning: Reference `tab:sine_cl_metrics' on page 1 undefined on input line 1158.
-
-
-LaTeX Warning: Reference `fig:sine_10task_comprehensive' on page 1 undefined on input line 1158.
-
-
-LaTeX Warning: Reference `fig:sine_10task_comprehensive' on page 1 undefined on input line 1160.
-
-
-Package natbib Warning: Citation `Balaprakash2018DeepHyper' on page 17 undefined on input line 1160.
-
-<paperFigures/sine_10task_3seed_results.pdf, id=243, 862.21812pt x 502.3342pt>
+<paperFigures/sine_10task_3seed_results.pdf, id=567, 862.21812pt x 502.3342pt>
 File: paperFigures/sine_10task_3seed_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_10task_3seed_results.pdf>
-Package pdftex.def Info: paperFigures/sine_10task_3seed_results.pdf  used on input line 1181.
-(pdftex.def)             Requested size: 446.2658pt x 260.00421pt.
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 1188.
-
-
-LaTeX Warning: Reference `lem:upper_arch' on page 1 undefined on input line 1188.
-
-
-LaTeX Warning: Reference `fig:sine_noise_comprehensive' on page 1 undefined on input line 1190.
-
-
-LaTeX Warning: Reference `thm:contMeasure' on page 1 undefined on input line 1190.
-
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 1190.
-
-
-LaTeX Warning: Reference `lem:upper_arch' on page 1 undefined on input line 1190.
-
-
-
-[17]
-<paperFigures/sine_noise_5task_3seed_results.pdf, id=252, 863.60968pt x 502.3342pt>
+Package pdftex.def Info: paperFigures/sine_10task_3seed_results.pdf  used on input line 1160.
+(pdftex.def)             Requested size: 279.09927pt x 162.60515pt.
+<paperFigures/sine_noise_5task_3seed_results.pdf, id=568, 863.60968pt x 502.3342pt>
 File: paperFigures/sine_noise_5task_3seed_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_noise_5task_3seed_results.pdf>
-Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used on input line 1195.
-(pdftex.def)             Requested size: 446.2658pt x 259.58264pt.
+Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used on input line 1167.
+(pdftex.def)             Requested size: 279.54973pt x 162.60515pt.
 
 
-LaTeX Warning: Reference `fig:arch_evolution' on page 1 undefined on input line 1200.
+[17 <./paperFigures/sine_2task_results.pdf>]
 
-<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=253, 717.67813pt x 573.2065pt>
+[18 <./paperFigures/sine_10task_3seed_results.pdf> <./paperFigures/sine_noise_5task_3seed_results.pdf>]
+<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=807, 424.40758pt x 203.2905pt>
 File: paperFigures/hamiltonian_arch_evolution_c3c4.pdf Graphic file (type pdf)
 <use paperFigures/hamiltonian_arch_evolution_c3c4.pdf>
-Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used on input line 1204.
-(pdftex.def)             Requested size: 446.2658pt x 356.43391pt.
-
-Package natbib Warning: Citation `lecun1998mnist' on page 18 undefined on input line 1210.
+Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used on input line 1192.
+(pdftex.def)             Requested size: 211.3883pt x 101.25414pt.
 
 
-
-[18 <./paperFigures/sine_10task_3seed_results.pdf>]
-
-Package natbib Warning: Citation `loshchilov2017fixing' on page 19 undefined on input line 1216.
-
-
-LaTeX Warning: Reference `app:standard_cl' on page 1 undefined on input line 1221.
-
-
-LaTeX Warning: Reference `fig:mnist_comprehensive' on page 1 undefined on input line 1221.
-
-
-LaTeX Warning: Reference `thm:lower_HJB' on page 1 undefined on input line 1223.
-
-<paperFigures/mnist_2task_results.pdf, id=331, 717.68187pt x 247.51802pt>
+[19 <./paperFigures/hamiltonian_arch_evolution_c3c4.pdf>]
+<paperFigures/mnist_2task_results.pdf, id=856, 717.68187pt x 247.51802pt>
 File: paperFigures/mnist_2task_results.pdf Graphic file (type pdf)
 <use paperFigures/mnist_2task_results.pdf>
-Package pdftex.def Info: paperFigures/mnist_2task_results.pdf  used on input line 1227.
-(pdftex.def)             Requested size: 446.2658pt x 153.9128pt.
-
-LaTeX Warning: Reference `fig:mnist_comprehensive' on page 1 undefined on input line 1233.
-
-
-LaTeX Warning: Reference `cnn' on page 1 undefined on input line 1233.
-
-
-LaTeX Warning: Reference `fig:diagnostics' on page 1 undefined on input line 1233.
-
-
-LaTeX Warning: Reference `fig:mnist_comprehensive' on page 1 undefined on input line 1233.
-
-
-
-[19 <./paperFigures/sine_noise_5task_3seed_results.pdf>]
-
-LaTeX Warning: Text page 20 contains only floats.
-
-
-
-[20 <./paperFigures/hamiltonian_arch_evolution_c3c4.pdf> <./paperFigures/mnist_2task_results.pdf>]
-<paperFigures/mnist_publication_figure.pdf, id=554, 862.22186pt x 502.3342pt>
+Package pdftex.def Info: paperFigures/mnist_2task_results.pdf  used on input line 1219.
+(pdftex.def)             Requested size: 446.27228pt x 153.9128pt.
+<paperFigures/mnist_publication_figure.pdf, id=857, 862.22186pt x 502.3342pt>
 File: paperFigures/mnist_publication_figure.pdf Graphic file (type pdf)
 <use paperFigures/mnist_publication_figure.pdf>
-Package pdftex.def Info: paperFigures/mnist_publication_figure.pdf  used on input line 1237.
-(pdftex.def)             Requested size: 469.75499pt x 273.67856pt.
-<paperFigures/mnist_diagnostic.pdf, id=555, 1011.78pt x 722.7pt>
+Package pdftex.def Info: paperFigures/mnist_publication_figure.pdf  used on input line 1225.
+(pdftex.def)             Requested size: 312.59676pt x 182.12022pt.
+<paperFigures/mnist_diagnostic.pdf, id=858, 862.26077pt x 284.04994pt>
 File: paperFigures/mnist_diagnostic.pdf Graphic file (type pdf)
 <use paperFigures/mnist_diagnostic.pdf>
-Package pdftex.def Info: paperFigures/mnist_diagnostic.pdf  used on input line 1245.
-(pdftex.def)             Requested size: 469.75499pt x 335.54475pt.
+Package pdftex.def Info: paperFigures/mnist_diagnostic.pdf  used on input line 1231.
+(pdftex.def)             Requested size: 446.2599pt x 147.009pt.
+<paperFigures/mnist_transform_recovery_combined.pdf, id=860, 1079.68652pt x 500.51932pt>
+File: paperFigures/mnist_transform_recovery_combined.pdf Graphic file (type pdf)
+<use paperFigures/mnist_transform_recovery_combined.pdf>
+Package pdftex.def Info: paperFigures/mnist_transform_recovery_combined.pdf  used on input line 1240.
+(pdftex.def)             Requested size: 469.75499pt x 217.76996pt.
 
 
-LaTeX Warning: Reference `fig:transform_heatmap' on page 1 undefined on input line 1252.
+[20]
 
-<paperFigures/mnist_transform_analysis.pdf, id=556, 717.76971pt x 356.22398pt>
-File: paperFigures/mnist_transform_analysis.pdf Graphic file (type pdf)
-<use paperFigures/mnist_transform_analysis.pdf>
-Package pdftex.def Info: paperFigures/mnist_transform_analysis.pdf  used on input line 1255.
-(pdftex.def)             Requested size: 446.2658pt x 221.48167pt.
-
-LaTeX Warning: Reference `fig:AB_ablation' on page 1 undefined on input line 1260.
-
-<paperFigures/mnist_awb_recovery.png, id=557, 1003.5894pt x 710.655pt>
-File: paperFigures/mnist_awb_recovery.png Graphic file (type png)
-<use paperFigures/mnist_awb_recovery.png>
-Package pdftex.def Info: paperFigures/mnist_awb_recovery.png  used on input line 1264.
-(pdftex.def)             Requested size: 446.2658pt x 316.00734pt.
-
-LaTeX Warning: Reference `fig:AB_ablation' on page 1 undefined on input line 1269.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[21 <./paperFigures/mnist_publication_figure.pdf>]
-
-[22 <./paperFigures/mnist_diagnostic.pdf>]
-
-LaTeX Warning: Text page 23 contains only floats.
-
-
-
-[23 <./paperFigures/mnist_transform_analysis.pdf> <./paperFigures/mnist_awb_recovery.png>]
-
-LaTeX Warning: Reference `sec: experiments' on page 1 undefined on input line 1297.
-
-
-LaTeX Warning: Reference `fig:synthetic_graph_results' on page 1 undefined on input line 1303.
-
-<paperFigures/synthetic_graph_10task_3seed_results.pdf, id=811, 862.18106pt x 502.41963pt>
-File: paperFigures/synthetic_graph_10task_3seed_results.pdf Graphic file (type pdf)
-<use paperFigures/synthetic_graph_10task_3seed_results.pdf>
-Package pdftex.def Info: paperFigures/synthetic_graph_10task_3seed_results.pdf  used on input line 1307.
-(pdftex.def)             Requested size: 469.75499pt x 273.74045pt.
-
-LaTeX Warning: Reference `fig:task_accuracy_noise' on page 1 undefined on input line 1312.
-
-<paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf, id=812, 717.55327pt x 356.13551pt>
+[21 <./paperFigures/mnist_2task_results.pdf> <./paperFigures/mnist_publication_figure.pdf> <./paperFigures/mnist_diagnostic.pdf>]
+<paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf, id=1092, 717.55327pt x 356.13551pt>
 File: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf Graphic file (type pdf)
 <use paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf>
-Package pdftex.def Info: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf  used on input line 1316.
-(pdftex.def)             Requested size: 446.2658pt x 221.49187pt.
+Package pdftex.def Info: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf  used on input line 1330.
+(pdftex.def)             Requested size: 211.3883pt x 104.91234pt.
 
+Underfull \vbox (badness 3907) has occurred while \output is active []
+
+
+
+[22 <./paperFigures/mnist_transform_recovery_combined.pdf>]) (./tmlr.bbl
+
+[23 <./paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf>]
 
 [24]
-Underfull \vbox (badness 1210) has occurred while \output is active []
 
-
-
-[25 <./paperFigures/synthetic_graph_10task_3seed_results.pdf> <./paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf>]
-
-LaTeX Warning: Reference `tab:forgetting_stats' on page 1 undefined on input line 1353.
-
-)
-
-[26] (./tmlr.bbl) (./texts/supp.tex
-
-LaTeX Warning: Reference `lem:upper_weight' on page 1 undefined on input line 3.
-
+[25]) (./texts/supp.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 3.
@@ -1793,19 +1170,13 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `subscript' on input line 3.
 
 
-LaTeX Warning: Reference `lem:taylor' on page 1 undefined on input line 5.
-
-
 Overfull \hbox (7.63908pt too wide) detected at line 13
 []
  []
 
 
 
-[27]
-
-LaTeX Warning: Reference `lem:upper_arch' on page 1 undefined on input line 54.
-
+[26]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 54.
@@ -1815,19 +1186,18 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `subscript' on input line 54.
 
 
-LaTeX Warning: Reference `lem:taylor' on page 1 undefined on input line 56.
-
-
 Overfull \hbox (7.63908pt too wide) detected at line 67
 []
  []
 
 
+Underfull \vbox (badness 2772) has occurred while \output is active []
+
+
+
+[27]
 
 [28]
-
-LaTeX Warning: Reference `HJB' on page 1 undefined on input line 115.
-
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 115.
@@ -1835,15 +1205,6 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 
 [29]
-
-LaTeX Warning: Reference `a' on page 30 undefined on input line 130.
-
-
-LaTeX Warning: Reference `b' on page 30 undefined on input line 130.
-
-
-LaTeX Warning: Reference `thm:lower_HJB' on page 1 undefined on input line 152.
-
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\new@ifnextchar' on input line 152.
@@ -1853,187 +1214,47 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `subscript' on input line 152.
 
 
-LaTeX Warning: Reference `HJB' on page 1 undefined on input line 154.
 
-
-
-[30]
-
-[31]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 216.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 216.
-
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 227.
-(/usr/local/texlive/2025/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 253.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 253.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 253.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 253.
-
-
-
-[32{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 283.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 283.
-
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <20.74> on input line 303.
-
-
-[33]
-
-[34]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 497.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 497.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 497.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 497.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 499--500
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 501--502
-
- []
-
-
-
-[35]
-Overfull \hbox (40.47336pt too wide) in paragraph at lines 612--613
- [] 
- []
-
-
-
-[36]
-
-[37]) (./texts/appendix_standard_cl.tex
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 1 undefined on input line 10.
-
-
+[30]) (./texts/appendix_standard_cl.tex
 pdfTeX warning (ext4): destination with the same identifier (name{algocf.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.24 \caption*{\textbf{(a) C1: Baseline}}
-                                         
+l.7 \caption*{\textbf{(a) C1: Baseline}}
+                                        
 pdfTeX warning (ext4): destination with the same identifier (name{algocf.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.47 \caption*{\textbf{(b) C2: Heuristics}}
+l.25 \caption*{\textbf{(b) C2: Heuristics}}
                                            
-
-LaTeX Warning: Reference `alg:warmup' on page 1 undefined on input line 65.
-
-
-LaTeX Warning: Reference `alg:adaptive' on page 1 undefined on input line 65.
-
-
 pdfTeX warning (ext4): destination with the same identifier (name{algocf.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.76 ...ion*{\textbf{(c) C3: Architecture Search}}
+l.49 ...ion*{\textbf{(c) C3: Architecture Search}}
                                                   
 
 LaTeX Font Warning: Font shape `T1/lmr/m/scit' undefined
-(Font)              using `T1/lmr/m/scsl' instead on input line 98.
-
-
-LaTeX Warning: Reference `alg:arch_search' on page 1 undefined on input line 98.
+(Font)              using `T1/lmr/m/scsl' instead on input line 66.
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{algocf.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.107 \caption*{\textbf{(d) C4: AWB Full}}
-                                          
+l.72 \caption*{\textbf{(d) C4: AWB Full}}
+                                         
 
 LaTeX Font Warning: Font shape `T1/lmr/m/scit' undefined
-(Font)              using `T1/lmr/m/scsl' instead on input line 130.
-
-
-LaTeX Warning: Reference `alg:train_ab' on page 1 undefined on input line 130.
-
-LaTeX Font Info:    Font shape `U/lasy/b/n' in size <8> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 133.
-
-LaTeX Warning: Reference `fig:alg_conditions' on page 1 undefined on input line 145.
-
-
-Underfull \hbox (badness 4634) in paragraph at lines 156--157
-[]\T1/lmr/bx/n/10 Hamiltonian Gra-di-ent[][][]\T1/lmr/m/n/10 : Com-pute $\OMS/lmsy/m/n/10 r[] \OT1/lmr/m/n/10 = \OMS/lmsy/m/n/10 r[]\OML/lmm/m/it/10 `\OT1/lmr/m/n/10 (\OMS/lmsy/m/n/10 B[]\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , $\OMS/lmsy/m/n/10 r[] \OT1/lmr/m/n/10 = \OMS/lmsy/m/n/10 r[]\OML/lmm/m/it/10 `\OT1/lmr/m/n/10 (\OMS/lmsy/m/n/10 B[]\OT1/lmr/m/n/10 )$\T1/lmr/m/n/10 , $\OML/lmm/m/it/10 ^^NV \OT1/lmr/m/n/10 =
- []
-
-
-LaTeX Warning: Reference `tab:hyperparameters' on page 1 undefined on input line 161.
-
-
-LaTeX Warning: Reference `tab:mnist_hyperparams' on page 1 undefined on input line 161.
-
-
-LaTeX Warning: Reference `tab:sine_hyperparams' on page 1 undefined on input line 161.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
+(Font)              using `T1/lmr/m/scsl' instead on input line 91.
 
 
 
-[38])
-Underfull \vbox (badness 1314) has occurred while \output is active []
+[31]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[39]
+[32])
 
-Package natbib Warning: There were undefined citations.
-
-
-
-[40]
-
-[41] (./tmlr.aux)
+[33] (./tmlr.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -2042,31 +1263,22 @@ L3 programming layer <2025-01-18>
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `tmlr.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `tmlr.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  8A85F370A178AE0EAC84407B18DD0B3F;9581.
+Package rerunfilecheck Info: File `tmlr.out' has not changed.
+(rerunfilecheck)             Checksum: 32E34FB445464EA3EAAD9DAFA2C4D7B8;4528.
  ) 
 Here is how much of TeX's memory you used:
- 31698 strings out of 473190
- 613784 string characters out of 5715801
- 1052336 words of memory out of 5000000
- 54113 multiletter control sequences out of 15000+600000
- 734221 words of font info for 173 fonts, out of 8000000 for 9000
+ 31852 strings out of 473190
+ 617849 string characters out of 5715801
+ 1056087 words of memory out of 5000000
+ 54297 multiletter control sequences out of 15000+600000
+ 718395 words of font info for 159 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,26n,107p,1921b,914s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy9.pfb>
-Output written on tmlr.pdf (41 pages, 1391023 bytes).
+ 102i,23n,107p,1921b,916s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy9.pfb>
+Output written on tmlr.pdf (33 pages, 1065804 bytes).
 PDF statistics:
- 1402 PDF objects out of 1440 (max. 8388607)
- 608 compressed objects within 7 object streams
- 215 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1611 PDF objects out of 1728 (max. 8388607)
+ 922 compressed objects within 10 object streams
+ 184 named destinations out of 1000 (max. 500000)
+ 250 words of extra memory for PDF output out of 10000 (max. 10000000)
 

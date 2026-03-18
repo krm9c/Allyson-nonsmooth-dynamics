@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pdflatex -interaction=nonstopmode tmlr.tex 2>&1 | grep -iE \"\\(error|! \\)\" | head -10)"
+      "Bash(pdflatex -interaction=nonstopmode tmlr.tex 2>&1 | grep -iE \"\\(error|! \\)\" | head -10)",
+      "Bash(pdflatex -interaction=nonstopmode tmlr.tex 2>&1 | grep -E \"^!|Float too large\" | head -10)"
     ]
   }
 }

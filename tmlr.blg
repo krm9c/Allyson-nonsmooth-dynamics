@@ -1,58 +1,49 @@
 This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: tmlr.aux
-Case mismatch error between cite keys Lin2023Theory and lin2023theory
----line 150 of file tmlr.aux
- : \citation{Evron2022Catastrophic,Lin2023Theory
- :                                              }
-I'm skipping whatever remains of this command
 The style file: tmlr.bst
 Database file #1: NNbib.bib
-Repeated entry---line 605 of file NNbib.bib
- : @inproceedings{Lin2023Theory
- :                             ,
-I'm skipping whatever remains of this entry
 Warning--empty journal in mahanNonclosednessSetsNeural2021a
 Warning--empty journal in petersenTopologicalPropertiesSet2021a
 You've used 48 entries,
             2773 wiz_defined-function locations,
-            873 strings with 15113 characters,
-and the built_in function-call counts, 26079 in all, are:
-= -- 2229
+            874 strings with 15141 characters,
+and the built_in function-call counts, 25842 in all, are:
+= -- 2196
 > -- 1932
 < -- 35
 + -- 648
 - -- 600
-* -- 2216
-:= -- 4036
+* -- 2208
+:= -- 4015
 add.period$ -- 164
 call.type$ -- 48
 change.case$ -- 337
 chr.to.int$ -- 48
 cite$ -- 98
-duplicate$ -- 1090
-empty$ -- 1873
+duplicate$ -- 1078
+empty$ -- 1855
 format.name$ -- 674
-if$ -- 5446
+if$ -- 5382
 int.to.chr$ -- 1
 int.to.str$ -- 1
 missing$ -- 47
 newline$ -- 258
 num.names$ -- 192
-pop$ -- 701
+pop$ -- 700
 preamble$ -- 1
 purify$ -- 292
 quote$ -- 0
-skip$ -- 922
+skip$ -- 904
 stack$ -- 0
-substring$ -- 669
-swap$ -- 159
+substring$ -- 621
+swap$ -- 148
 text.length$ -- 18
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 508
 warning$ -- 2
-while$ -- 191
+while$ -- 188
 width$ -- 0
 write$ -- 643
-(There were 2 error messages)
+(There were 2 warnings)

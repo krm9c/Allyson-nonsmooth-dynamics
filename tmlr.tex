@@ -17,6 +17,7 @@
 \usepackage{url}
 \usepackage{amsfonts,bm, amssymb}
 \usepackage{caption}
+\usepackage{subcaption}
 
 
 \usetikzlibrary{shapes,arrows,positioning,calc,matrix,patterns}
@@ -169,16 +170,14 @@
 Continual learning~(CL) is the problem of learning a sequence of tasks while retaining knowledge from previous tasks. However, typical CL methods involve prefixed architectures leading to limited model capacity when data distribution shifts significantly across tasks. We introduce a mathematical framework  enabling a rigorous investigation into the interplay between model capacity and effective CL. We derive the necessary conditions for CL solution and prove that learning only the model weights is insufficient to mitigate catastrophic forgetting under distribution shifts. Consequently, we prove that by learning the architecture and the weights simultaneously at each task, rather than the weights alone, we can reduce catastrophic forgetting. However, changing architectures on the fly requires a principled approach to knowledge transfer between weight spaces of different dimensions. We develop a low-rank transfer mechanism to map knowledge across architectures of mismatched dimensions. Empirical studies across regression and classification problems, including feedforward, convolutional, and graph neural networks, demonstrate that our approach of learning the optimal architecture and weights simultaneously yields substantially improved performance~(up to two orders of magnitude), reduced forgetting, and enhanced robustness in the presence of noise compared with static architecture approaches. 
 \end{abstract}
 \input{texts/main_text}
-
-\newpage
 \bibliography{NNbib.bib}
 \bibliographystyle{tmlr}
 \appendix
-\section{Appendix}
+\section*{Proofs of Theoretical Results}
 \input{texts/supp}
+% \section*{Details of A/B Matric Calculations}
+% \input{texts/app_c}
 \input{texts/appendix_standard_cl}
-
-
 \begin{flushright}
   \scriptsize
 

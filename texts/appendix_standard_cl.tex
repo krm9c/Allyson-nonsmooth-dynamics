@@ -137,9 +137,6 @@ Search step & 16 & — & — \\
 \end{table}
 }
 
-
-
-
 This appendix details the four experimental conditions (C1--C4). Notation follows the main text: $\weight(t)$, $\psi(t)$, $\tx(t)$, $\fhat$, $\mathcal{E}$ denote weights, architecture, task data, network, and experience buffer respectively.
 
 \subsection{Experimental Conditions}
@@ -154,12 +151,5 @@ This appendix details the four experimental conditions (C1--C4). Notation follow
 \textsc{TrainAB}: initialise $A,B$ as identity; minimise reconstruction loss $\|A\weight B^T - V_{\text{target}}\|$ for $N_{\text{AB}}$ epochs.
 \textsc{HamGrad}: $\nabla H = \alpha\nabla_{\weight}\ell(\mathcal{B}_c)+\beta\nabla_{\weight}\ell(\mathcal{B}_e)+\gamma\,\delta V/(t+1)$.
 
-
-
 \subsection{Implementation Notes}
-
 The $\delta V$ regularisation term is normalised by task count ($/(t+1)$) to prevent accumulation. The framework supports constant, step, exponential, cosine, and linear LR schedules (default: cosine annealing). All gradient computations are JIT-compiled in JAX across 8 variants (regression/classification $\times$ standard/AWB $\times$ vector/graph).
-
-\subsubsection{Model Partitioning}
-
-Equinox models are partitioned for selective training: (1) standard training (all weights), (2) A/B training (freeze W), (3) V training (freeze A, B).

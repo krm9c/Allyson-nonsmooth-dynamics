@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  18 MAR 2026 15:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  18 MAR 2026 15:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1091,17 +1091,17 @@ LaTeX Warning: Reference `tab:sine_hyperparams' on page 1 undefined on input lin
 
 
 [16]
-<paperFigures/sine_2task_results.pdf, id=566, 717.69319pt x 247.51802pt>
+<paperFigures/sine_2task_results.pdf, id=562, 717.69319pt x 247.51802pt>
 File: paperFigures/sine_2task_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_2task_results.pdf>
 Package pdftex.def Info: paperFigures/sine_2task_results.pdf  used on input line 1133.
 (pdftex.def)             Requested size: 446.2658pt x 153.90524pt.
-<paperFigures/sine_10task_3seed_results.pdf, id=567, 862.21812pt x 502.3342pt>
+<paperFigures/sine_10task_3seed_results.pdf, id=563, 862.21812pt x 502.3342pt>
 File: paperFigures/sine_10task_3seed_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_10task_3seed_results.pdf>
 Package pdftex.def Info: paperFigures/sine_10task_3seed_results.pdf  used on input line 1160.
 (pdftex.def)             Requested size: 279.09927pt x 162.60515pt.
-<paperFigures/sine_noise_5task_3seed_results.pdf, id=568, 863.60968pt x 502.3342pt>
+<paperFigures/sine_noise_5task_3seed_results.pdf, id=564, 863.60968pt x 502.3342pt>
 File: paperFigures/sine_noise_5task_3seed_results.pdf Graphic file (type pdf)
 <use paperFigures/sine_noise_5task_3seed_results.pdf>
 Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used on input line 1167.
@@ -1111,7 +1111,7 @@ Package pdftex.def Info: paperFigures/sine_noise_5task_3seed_results.pdf  used o
 [17 <./paperFigures/sine_2task_results.pdf>]
 
 [18 <./paperFigures/sine_10task_3seed_results.pdf> <./paperFigures/sine_noise_5task_3seed_results.pdf>]
-<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=807, 424.40758pt x 203.2905pt>
+<paperFigures/hamiltonian_arch_evolution_c3c4.pdf, id=803, 424.40758pt x 203.2905pt>
 File: paperFigures/hamiltonian_arch_evolution_c3c4.pdf Graphic file (type pdf)
 <use paperFigures/hamiltonian_arch_evolution_c3c4.pdf>
 Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used on input line 1192.
@@ -1119,22 +1119,22 @@ Package pdftex.def Info: paperFigures/hamiltonian_arch_evolution_c3c4.pdf  used 
 
 
 [19 <./paperFigures/hamiltonian_arch_evolution_c3c4.pdf>]
-<paperFigures/mnist_2task_results.pdf, id=856, 717.68187pt x 247.51802pt>
+<paperFigures/mnist_2task_results.pdf, id=852, 717.68187pt x 247.51802pt>
 File: paperFigures/mnist_2task_results.pdf Graphic file (type pdf)
 <use paperFigures/mnist_2task_results.pdf>
 Package pdftex.def Info: paperFigures/mnist_2task_results.pdf  used on input line 1219.
 (pdftex.def)             Requested size: 446.27228pt x 153.9128pt.
-<paperFigures/mnist_publication_figure.pdf, id=857, 862.22186pt x 502.3342pt>
+<paperFigures/mnist_publication_figure.pdf, id=853, 862.22186pt x 502.3342pt>
 File: paperFigures/mnist_publication_figure.pdf Graphic file (type pdf)
 <use paperFigures/mnist_publication_figure.pdf>
 Package pdftex.def Info: paperFigures/mnist_publication_figure.pdf  used on input line 1225.
 (pdftex.def)             Requested size: 312.59676pt x 182.12022pt.
-<paperFigures/mnist_diagnostic.pdf, id=858, 862.26077pt x 284.04994pt>
+<paperFigures/mnist_diagnostic.pdf, id=854, 862.26077pt x 284.04994pt>
 File: paperFigures/mnist_diagnostic.pdf Graphic file (type pdf)
 <use paperFigures/mnist_diagnostic.pdf>
 Package pdftex.def Info: paperFigures/mnist_diagnostic.pdf  used on input line 1231.
 (pdftex.def)             Requested size: 446.2599pt x 147.009pt.
-<paperFigures/mnist_transform_recovery_combined.pdf, id=860, 1079.68652pt x 500.51932pt>
+<paperFigures/mnist_transform_recovery_combined.pdf, id=856, 1079.68652pt x 500.51932pt>
 File: paperFigures/mnist_transform_recovery_combined.pdf Graphic file (type pdf)
 <use paperFigures/mnist_transform_recovery_combined.pdf>
 Package pdftex.def Info: paperFigures/mnist_transform_recovery_combined.pdf  used on input line 1240.
@@ -1144,7 +1144,7 @@ Package pdftex.def Info: paperFigures/mnist_transform_recovery_combined.pdf  use
 [20]
 
 [21 <./paperFigures/mnist_2task_results.pdf> <./paperFigures/mnist_publication_figure.pdf> <./paperFigures/mnist_diagnostic.pdf>]
-<paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf, id=1092, 717.55327pt x 356.13551pt>
+<paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf, id=1088, 717.55327pt x 356.13551pt>
 File: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf Graphic file (type pdf)
 <use paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf>
 Package pdftex.def Info: paperFigures/synthetic_graph_task_accuracy_vs_noise.pdf  used on input line 1330.
@@ -1264,21 +1264,21 @@ L3 programming layer <2025-01-18>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `tmlr.out' has not changed.
-(rerunfilecheck)             Checksum: 32E34FB445464EA3EAAD9DAFA2C4D7B8;4528.
+(rerunfilecheck)             Checksum: 64BD760AED40F1C2FC6A9F0BFFAB2340;4367.
  ) 
 Here is how much of TeX's memory you used:
- 31852 strings out of 473190
- 617849 string characters out of 5715801
+ 31850 strings out of 473190
+ 617809 string characters out of 5715801
  1056087 words of memory out of 5000000
- 54297 multiletter control sequences out of 15000+600000
+ 54296 multiletter control sequences out of 15000+600000
  718395 words of font info for 159 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,23n,107p,1921b,916s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmcsco10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/wasy-type1/wasy9.pfb>
-Output written on tmlr.pdf (33 pages, 1065804 bytes).
+Output written on tmlr.pdf (33 pages, 1065357 bytes).
 PDF statistics:
- 1611 PDF objects out of 1728 (max. 8388607)
- 922 compressed objects within 10 object streams
- 184 named destinations out of 1000 (max. 500000)
- 250 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1607 PDF objects out of 1728 (max. 8388607)
+ 918 compressed objects within 10 object streams
+ 183 named destinations out of 1000 (max. 500000)
+ 242 words of extra memory for PDF output out of 10000 (max. 10000000)
 

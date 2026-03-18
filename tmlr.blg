@@ -1,49 +1,58 @@
 This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: tmlr.aux
+Case mismatch error between cite keys Lin2023Theory and lin2023theory
+---line 150 of file tmlr.aux
+ : \citation{Evron2022Catastrophic,Lin2023Theory
+ :                                              }
+I'm skipping whatever remains of this command
 The style file: tmlr.bst
 Database file #1: NNbib.bib
+Repeated entry---line 605 of file NNbib.bib
+ : @inproceedings{Lin2023Theory
+ :                             ,
+I'm skipping whatever remains of this entry
 Warning--empty journal in mahanNonclosednessSetsNeural2021a
 Warning--empty journal in petersenTopologicalPropertiesSet2021a
-You've used 42 entries,
+You've used 48 entries,
             2773 wiz_defined-function locations,
-            828 strings with 13518 characters,
-and the built_in function-call counts, 22084 in all, are:
-= -- 1860
-> -- 1698
-< -- 24
-+ -- 570
-- -- 528
-* -- 1888
-:= -- 3483
-add.period$ -- 139
-call.type$ -- 42
-change.case$ -- 295
-chr.to.int$ -- 42
-cite$ -- 86
-duplicate$ -- 896
-empty$ -- 1547
-format.name$ -- 592
-if$ -- 4550
+            873 strings with 15113 characters,
+and the built_in function-call counts, 26079 in all, are:
+= -- 2229
+> -- 1932
+< -- 35
++ -- 648
+- -- 600
+* -- 2216
+:= -- 4036
+add.period$ -- 164
+call.type$ -- 48
+change.case$ -- 337
+chr.to.int$ -- 48
+cite$ -- 98
+duplicate$ -- 1090
+empty$ -- 1873
+format.name$ -- 674
+if$ -- 5446
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 41
-newline$ -- 227
-num.names$ -- 168
-pop$ -- 605
+missing$ -- 47
+newline$ -- 258
+num.names$ -- 192
+pop$ -- 701
 preamble$ -- 1
-purify$ -- 256
+purify$ -- 292
 quote$ -- 0
-skip$ -- 768
+skip$ -- 922
 stack$ -- 0
-substring$ -- 513
-swap$ -- 96
-text.length$ -- 9
+substring$ -- 669
+swap$ -- 159
+text.length$ -- 18
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 442
+type$ -- 508
 warning$ -- 2
-while$ -- 161
+while$ -- 191
 width$ -- 0
-write$ -- 553
-(There were 2 warnings)
+write$ -- 643
+(There were 2 error messages)

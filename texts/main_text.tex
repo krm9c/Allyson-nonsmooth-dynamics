@@ -808,6 +808,7 @@ Towards this end, we define two matrices $\mathrm{A}(t)$ and $\mathrm{B}(t)$ tha
     \weight(t+\Delta~t) = \mathrm{A}^*(t) \weight(t) \mathrm{B}(t)^{*T},
 \end{align}
  where $\mathrm{A}^*, \mathrm{B}^*$ are the optimal values such that loss of information is minimal implying that, $\mathrm{A}(t)$ and $\mathrm{B}(t)$  are updated. To update these matrices, we need to identify how this change in the weight space effects the CL problem and preserve information to minimize this loss of information. The following result therefore provides the total variation~(the dynamics) of architecture change on $V^*$ as a function of tasks.
+
 \begin{proposition}\label{HJB}
     The total variation in $V^*(t)$ at any given task $t$ is given by
     \begin{align}\label{eq:HJB}
@@ -815,6 +816,7 @@ Towards this end, we define two matrices $\mathrm{A}(t)$ and $\mathrm{B}(t)$ tha
     \end{align}
     where $\mathrm{A}^*(t),B^*(t)$ are optimal $\mathrm{A}(t)$ and $\mathrm{B}(t)$ for task $t$ and where $u(t)$ represents the updates made to the each weights matrix of the new dimensions. \textbf{The proof is in \cref{sec:HJB}}.
 \end{proposition}
+
 Observe that \eqref{eq:HJB} is missing the term $\frac{\partials V^*}{\partials \psi}\frac{\partials \psi}{\partials t}.$ This omission is intentional because the exact effects of architecture cannot be measured through derivatives in this partial differential equation (PDE). Instead, in this PDE the effect is absorbed through the change in tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$.
 Because of this absorption we can now define a lower bound on $\partials_{t} V^*(t).$ This lower bound, which is essentially a lower bound on the variation, is equivalent to the lower bound on $\varepsilon$ in \cref{thm:intersection} with the distinction that the lower bound is derived on $V^*$ instead of just the forgetting cost $J.$ The idea covers the effects of the complete CL problem and thus guarantees that the loss of information is minimized.
 \begin{theorem}\label{thm:lower_HJB}
@@ -823,357 +825,307 @@ Given \cref{HJB}, assume there exists a stochastic-gradient-based optimization p
 Therefore, when $\alpha(i)$ is chosen such that $\norm{\mathrm{g}_{\mathrm{MIN} }}  \norm{\sum^{I} \alpha(i) } $ as $I \rightarrow \infty,$ $\sing \delta$ can be countered by 
 $\singw \norm{\mathrm{A}^*(t)\weight(t)( \mathrm{B}^*(t))^T}$ the total variance is bounded for all $t$ and $V^*$ is absolutely continuous as long as $\varepsilon$ is small for all $\delta >0.$ \cref{thm:lower_HJB} is crucial because it shows that, in the presence of a perfect stochastic gradient algorithm, the change in the tasks can be countered by the choice of the architecture. By choosing a new architecture and introducing the $A$ and $B$ matrices such that within the CL problem the effect of varying data distribution can be mitigated,  the CL problem can be acceptably solved. Given this guarantee, the rest of this section is dedicated to constructing an algorithm such that the condition to ensure this bounded variance is satisfied. 
 
+
 \subsection{Algorithm}
+\begin{figure}[h]
+\centering
+\vspace{4pt}
+\begin{tikzpicture}[scale=0.80, every node/.style={scale=0.80},
+    box/.style={draw, rounded corners, thick, minimum height=1.6cm, minimum width=3.0cm, align=center, font=\small},
+    arr/.style={->, thick, black!70}]
+%
+% === Step boxes (defined first for arrow references) ===
+\node[box, fill=matrixB!15] (step1) at (4.5, 0)
+    {\textbf{Step 1:}\\NDDS};
+\node[box, fill=matrixA!15] (step2) at (8.7, 0)
+    {\textbf{Step 2:}\\Low-Rank Transfer\\($V\!=\!AWB^\top$)};
+\node[box, fill=matrixV!15] (step3) at (12.9, 0)
+    {\textbf{Step 3:}\\CL Training};
+%
+% === Left: two disjoint task circles (vertical) ===
+\draw[thick, fill=matrixW!12] (0.8,  0.70) circle (0.55cm);
+\draw[thick, fill=matrixW!12] (0.8, -0.70) circle (0.55cm);
+\node[font=\small] at (0.8,  1.55) {$\mathcal{F}_1$};
+\node[font=\small] at (0.8, -1.55) {$\mathcal{F}_2$};
+\node[font=\large, matrixV!80!black] at (0.8,  0.70) {$\boldsymbol{+}$};
+\node[font=\large, matrixV!80!black] at (0.8, -0.70) {$\boldsymbol{+}$};
+%
+% === Right: overlapping circles (vertical, result) ===
+\begin{scope}[shift={(16.5, 0)}]
+    % F1 circle (top), F2 circle (bottom), overlapping vertically
+    \draw[thick, fill=matrixW!12] (0,  0.70) circle (0.85cm);
+    \draw[thick, fill=matrixW!12] (0, -0.70) circle (0.85cm);
+    \begin{scope}
+        \clip (0,  0.70) circle (0.85cm);
+        \fill[matrixA!35] (0, -0.70) circle (0.85cm);
+    \end{scope}
+    \node[font=\small] at (0,  1.82) {$\mathcal{F}_1$};
+    \node[font=\small] at (0, -1.82) {$\mathcal{F}_2$};
+    \node[font=\Large, matrixA!80!black] at (0, 0) {\smiley{}};
+    \node[font=\scriptsize] at (1.15, 0) {$\weight^\infty\!(2)$};
+\end{scope}
+%
+% === Arrows (short, labels at scriptsize for visibility) ===
+\draw[arr] (1.38, 0) -- (step1.west);
+\draw[arr] (step1.east) -- node[above, font=\scriptsize] {$\psi^\infty\!(2)$} (step2.west);
+\draw[arr] (step2.east) -- node[above, font=\scriptsize] {$\weight$} (step3.west);
+\draw[arr] (step3.east) -- (15.65, 0);
+%
+\end{tikzpicture}
+\caption{Three-step approach at each task boundary: (1) NDDS architecture search for $\psi^\infty\!(2)$~\cite{larson2019derivative}, (2) low-rank transfer via $V\!=\!AWB^\top$, and (3) CL training~\cite{chakraborty2025understanding,raghavan2021formalizing} to obtain $\weight^\infty\!(2) \in \mathcal{F}_1 \cap \mathcal{F}_2$.}
+\label{fig:method}
+\vspace{-4pt}
+\end{figure}
 In summary~(refer to \cref{fig:method}), for every new task, our algorithm comprises of three steps, first, we utilize an off-the-shelf algorithm to search for a new optimal architecture. Second, once a new architecture is found, we complete a low-rank transfer from the previous task's optimal weights to the new task parameter space. Third, using an off-the-shelf continual learning algorithm, we train the new architecture for the new task while balancing memory on all the prior tasks. While step 3 is directly adapted from \cite{chakraborty2025understanding, raghavan2021formalizing}, steps 1 and 2 are novel contributions for this work.
 
 % \\
 % \Ally{In the previous sentence, what function/parameter we taking the partial derivative of? Additionally, what is $\eta?$ Previously, it appears on page 4 that it denotes "The threshold to identify acceptable loss values." Maybe we remind the reader of this since we are now on page 17.}
 
 
-\subsubsection{\underline{Step 1:}  Architecture Search}\label{archsearch}
-Notably, there are numerous architecture search methods that we could employ. To incorporate the idea of weak derivatives into the architecture, we develop a derivative free approach modified from \cite{larson2019derivative} which utilized an approximate weak derivative using finite difference approximations. 
+\textbf{\underline{Step 1:}  Architecture Search:} Notably, there are numerous architecture search methods that we could employ. To incorporate the idea of weak derivatives into the architecture, we develop a derivative free approach modified from \cite{larson2019derivative} which utilized an approximate weak derivative using finite difference approximations. 
 
-
-\begin{wrapfigure}{r}{0.40\textwidth}
+\begin{wrapfigure}{l}{0.60\textwidth}
     \centering
-    \vspace{-10pt}
-    \begin{tikzpicture}[scale=0.95, every node/.style={scale=0.95},
-        box/.style={draw, rounded corners, thick, minimum height=1.0cm, minimum width=3.2cm, align=center, font=\normalsize},
-        arr/.style={->, thick, black!70}]
+    \vspace{-8pt}
+    \begin{tikzpicture}[scale=0.80, every node/.style={scale=0.80},
+        archbox/.style={draw, rounded corners, thick, minimum height=0.65cm,
+            minimum width=2.8cm, align=center, font=\scriptsize},
+        pollbox/.style={draw, rounded corners, thick, minimum height=0.90cm,
+            minimum width=2.8cm, align=center, font=\scriptsize},
+        arr/.style={->, thick, black!60}]
     %
-    % === Top: Two small non-overlapping circles (task 1 & task 2) ===
-    \begin{scope}[shift={(0, 10.5)}]
-        % F1 circle (left)
-        \draw[thick, fill=matrixW!12] (-1.1,0) circle (0.8cm);
-        \node[font=\normalsize] at (-1.1, 1.1) {$\mathcal{F}_1$};
-        \node[font=\normalsize, matrixV!80!black] at (-1.1,-0.1) {$\boldsymbol{+}$};
-        \node[font=\scriptsize] at (-1.1,-0.5) {$\weight^*(1)$};
-        % F2 circle (right)
-        \draw[thick, fill=matrixW!12] (1.1,0) circle (0.8cm);
-        \node[font=\normalsize] at (1.1, 1.1) {$\mathcal{F}_2$};
-        \node[font=\normalsize, matrixV!80!black] at (1.1,-0.1) {$\boldsymbol{+}$};
-        \node[font=\scriptsize] at (1.1,-0.5) {$\weight^*(2)$};
-    \end{scope}
+    % === Step labels on LEFT at same y as each row — clear of all arrows ===
+    \node[font=\scriptsize\bfseries, black!75, anchor=east] at (-4.8,  0.00) {Step 1};
+    \node[font=\scriptsize\bfseries, black!75, anchor=east] at (-4.8, -2.35) {Step 2};
+    \node[font=\scriptsize\bfseries, black!75, anchor=east] at (-4.8, -4.85) {Step 3};
     %
-    % === Step 1: Architecture Search ===
-    \node[box, fill=matrixB!15] (step1) at (0, 7.8)
-        {\textbf{Step 1:} Derivative-Free\\Architecture Search};
-    \draw[arr] (0, 9.0) -- node[left, font=\scriptsize] {$\hat{f}(\weight^0\!(2),\psi^\infty\!(2))$} (step1.north);
+    % === Row 1: Current architecture ===
+    \node[font=\scriptsize, black!55] at (0, 0.60) {$J = 0.42$};
+    \node[archbox, fill=matrixB!20] (xs) at (0, 0) {$[784,50,50,10]$};
     %
-    % === Step 2: Low-Rank Transfer ===
-    \node[box, fill=matrixA!15] (step2) at (0, 5.5)
-        {\textbf{Step 2:} Low-Rank\\Transfer ($V\!=\!AWB^\top$)};
-    \draw[arr] (step1.south) -- node[left, font=\scriptsize] {$\hat{f}(\weight^N\!(2),\psi^\infty\!(2))$} node[right, font=\scriptsize] {new $\psi^\infty\!(2)$} (step2.north);
+    % === Row 2: Poll points (J inside boxes) ===
+    \node[pollbox, fill=matrixA!25] (p1) at (-3.2, -2.35)
+        {$[784,\mathbf{60},50,10]$\\[1pt]
+        {\color{matrixA!80!black}$J\!=\!0.31$\;\ding{51}}};
     %
-    % === Step 3: CL Training ===
-    \node[box, fill=matrixV!15] (step3) at (0, 3.2)
-        {\textbf{Step 3:} CL Training\\\cite{chakraborty2025understanding},\\\cite{raghavan2021formalizing}};
-    \draw[arr] (step2.south) -- node[right, font=\scriptsize] {transferred $\weight$} (step3.north);
+    \node[pollbox, fill=matrixW!15] (p2) at (0, -2.35)
+        {$[784,50,\mathbf{60},10]$\\[1pt]
+        {\color{red!60!black}$J\!=\!0.48$\;\ding{55}}};
     %
-    % === Bottom: F1 ∩ F2 (result) ===
-    \begin{scope}[shift={(0, 0.5)}]
-        \draw[thick, fill=matrixW!12] (-0.7,0) circle (1.2cm);
-        \draw[thick, fill=matrixW!12] (0.7,0) circle (1.2cm);
-        \begin{scope}
-            \clip (-0.7,0) circle (1.2cm);
-            \fill[matrixA!25] (0.7,0) circle (1.2cm);
-        \end{scope}
-        \node[font=\normalsize] at (-1.6, 1.1) {$\mathcal{F}_1$};
-        \node[font=\normalsize] at (1.6, 1.1) {$\mathcal{F}_2$};
-        \node[font=\normalsize, matrixV!80!black] at (-1.0,-0.2) {$\boldsymbol{+}$};
-        \node[font=\scriptsize] at (-1.0,-0.6) {$\weight^*(1)$};
-        \node[font=\normalsize, matrixV!80!black] at (1.0,-0.2) {$\boldsymbol{+}$};
-        \node[font=\scriptsize] at (1.0,-0.6) {$\weight^*(2)$};
-        \node[font=\normalsize, matrixA!80!black] at (0.0,0.0) {\smiley{}};
-        \node[font=\scriptsize] at (0.0,0.45) {$\weight^\infty\!(2)$};
-        \node[font=\scriptsize, black!60] at (0,-1.6) {$\hat{f}(\weight^\infty\!(2),\psi^\infty\!(2)) \in \mathcal{F}_1 \cap \mathcal{F}_2$};
-    \end{scope}
+    \node[pollbox, fill=matrixW!15] (p3) at (3.2, -2.35)
+        {$[784,\mathbf{60},\mathbf{60},10]$\\[1pt]
+        {\color{red!60!black}$J\!=\!0.45$\;\ding{55}}};
     %
-    % === Arrow from Step 3 down to result ===
-    \draw[arr] (step3.south) -- (0, 2.0);
+    % Dashed arrows: xs -> poll points
+    \draw[arr, dashed, black!40] (xs.south west)
+        to node[left, font=\tiny] {$\alpha_s d_1$} (p1.north);
+    \draw[arr, dashed, black!40] (xs.south)
+        to node[right, font=\tiny] {$\alpha_s d_2$} (p2.north);
+    \draw[arr, dashed, black!40] (xs.south east)
+        to node[right, font=\tiny, xshift=3pt] {$\alpha_s(d_1\!+\!d_2)$} (p3.north);
+    %
+    % === Row 3: Best selected ===
+    \node[pollbox, fill=matrixA!30] (next) at (-3.2, -4.85)
+        {$[784,\mathbf{60},50,10]$\\[1pt]
+        {\color{matrixA!80!black}$J\!=\!0.31$}};
+    %
+    % Bold select arrow: vertical, clear of all labels
+    \draw[->, very thick, matrixA!80!black] (p1.south)
+        -- node[right, font=\scriptsize, matrixA!80!black] {\textbf{select}}
+        (next.north);
+    %
     \end{tikzpicture}
-    \caption{Three-step approach at each task boundary: (1) architecture search for $\psi^\infty\!(2)$, (2) low-rank transfer via $V\!=\!AWB^\top$, and (3) CL training to obtain $\weight^\infty\!(2) \in \mathcal{F}_1 \cap \mathcal{F}_2$.}
-    \label{fig:method}
-    \vspace{-25pt}
+    \caption{One iteration of NDDS.  Start from current architecture.  Generate and evaluate poll points along $d_i$. Move to the best poll point if $J$ improves; repeat until $J \leq \tau$.}
+    \label{fig:ndds}
+    \vspace{-10pt}
 \end{wrapfigure}
-The intuition behind this proposed method~(neighborhood derivative free direct search ~(NDDS)) is that we check ``neighboring" architectures and compare the current architecture with the expected value of the neural network when it trains on the neighboring architecture. If the neighboring architecture has a smaller expected value, then we ``move" in that direction by selecting it as the new architecture. We then check the ``neighbors" of this new architecture. Since the architecture is a discrete variable, this search method provides a notion of a ``weak derivative" as a sum of finite differences over all possible neighboring architectures.
-
-
-For a full description of the NDDS algorithm, consult \cref{DDSalg}. In particular, for task $t\in \tT,$ we choose a ``step size" $\alpha_s\in \mathbb{N}.$ In this paper, we focus on changing the number of neurons in each hidden layer, however, the method can work on all hyperparameter within the architecture. Using a step size for the number of neurons, we generate the ``neighboring" points, called \textit{poll points} and define them as follows:
+The intuition behind this proposed method~(Neighborhood Directional Direct Search~(NDDS)) is that we check ``neighboring" architectures and compare the current architecture with the expected value of the neural network when it trains on the neighboring architecture. If the neighboring architecture has a smaller expected value, then we ``move" in that direction by selecting it as the new architecture. We then check the ``neighbors" of this new architecture. Since the architecture is a discrete variable, this search method provides a notion of a ``weak derivative" as a sum of finite differences over all possible neighboring architectures. For a full description of the NDDS algorithm, consult \cref{DDSalg} and \cref{fig:ndds}. In particular, for task $t\in \tT,$ we choose a ``step size" $\alpha_s\in \mathbb{N}.$  Using a step size for the number of neurons, we generate the ``neighboring" points, called \textit{poll points} and define them as follows:
 $Poll Points = \{x_s + \alpha_s d_i: d_i\in D_s\}.$
-for some parameters $x_s$ and some direction set $D_s.$ Next, using a randomly selected subset of our data, we determine the expected value of $V$ approximated by the forgetting cost for each poll points.To evaluate the cost value, we perform a training loop for each poll point architecture. Using these cost values, we identify the poll point corresponding to the 
+for some parameters $x_s$ and some direction set $D_s.$ Next, using a randomly selected subset of our data, we determine the expected value of $V$ approximated by the forgetting cost for each poll points. To evaluate the cost value, we perform a training loop for each poll point architecture. Using these cost values, we identify the poll point corresponding to the 
 smallest value of $V$ and this new poll point becomes the new architecture. We repeat this process until the expected value of $V$ is beneath a previously chosen threshold or after five times of repeating. In practice, we chose the threshold to be a percentage lower than the expected value produced by the original architecture.
 
-% We identify, the smallest point at which the smallest value of the cost is achieved, with randomly initialized weights according to each poll point architecture. If one of these poll points results in a smaller expected value than $x_s,$ we set $x_s$ equal to the poll point. We then repeat this process starting with this new architecture. This search terminates when the expected value is beneath a previously chosen threshold or after five times of repeating. In practice, we chose the threshold to be a percentage lower than the expected value produced by the original architecture.
-% \KR{Allyson, wasnt there a nice diagram you had to illustrate this?}
-
-\begin{wrapfigure}{r}{0.45\textwidth}
-    \centering
-    \vspace{-10pt}
-    \begin{tikzpicture}[scale=0.90, every node/.style={scale=0.90},
-        archbox/.style={draw, rounded corners, thick, minimum height=0.65cm, minimum width=2.6cm, align=center, font=\scriptsize},
-        arr/.style={->, thick, black!70}]
-    %
-    % === Current architecture (center bottom) ===
-    \node[archbox, fill=matrixB!15] (xs) at (0, 0)
-        {$x_s\!=\![784,50,50,10]$};
-    \node[font=\scriptsize, black!60] at (0, -0.55) {$J = 0.42$};
-    %
-    % === Poll point 1 (left) — winner ===
-    \node[archbox, fill=matrixA!20] (p1) at (-2.0, 2.6)
-        {$[784,\mathbf{60},50,10]$};
-    \node[font=\scriptsize, matrixA!80!black] at (-2.0, 2.0) {$J = 0.31$ \ding{51}};
-    %
-    % === Poll point 2 (right) ===
-    \node[archbox, fill=matrixW!8, dashed] (p2) at (2.0, 2.6)
-        {$[784,50,\mathbf{60},10]$};
-    \node[font=\scriptsize, red!60!black] at (2.0, 2.0) {$J = 0.48$ \ding{55}};
-    %
-    % === Poll point 3 (top center) ===
-    \node[archbox, fill=matrixW!8, dashed] (p3) at (0, 4.4)
-        {$[784,\mathbf{60},\mathbf{60},10]$};
-    \node[font=\scriptsize, red!60!black] at (0, 3.8) {$J = 0.45$ \ding{55}};
-    %
-    % === Dashed arrows from center to poll points ===
-    \draw[arr, dashed, black!40] (xs.north west) -- node[left, font=\tiny] {$\alpha_s d_1$} (p1.south);
-    \draw[arr, dashed, black!40] (xs.north east) -- node[right, font=\tiny] {$\alpha_s d_2$} (p2.south);
-    \draw[arr, dashed, black!40] (xs.north) -- node[right, font=\tiny] {$\alpha_s(d_1\!+\!d_2)$} (p3.south);
-    %
-    % === Bold move arrow to winner ===
-    \draw[->, very thick, matrixA!80!black] ([xshift=-3pt]xs.west) to[bend left=35] node[left, font=\scriptsize, matrixA!80!black] {\textbf{move}} ([xshift=-3pt]p1.west);
-    %
-    % === Repeat arrow from winner ===
-    \draw[->, thick, matrixV!80!black, dashed] (p1.north) to[bend left=25] node[above, font=\tiny, matrixV!80!black] {repeat} ++(1.2, 0.5);
-    \end{tikzpicture}
-    \caption{NDDS explores neighboring architectures (poll points) by perturbing $x_s$ along directions $d_i$ with step size $\alpha_s$. The poll point with the smallest loss is selected and the search repeats.}
-    \label{fig:ndds}
-    \vspace{-15pt}
-\end{wrapfigure}
-
-\textbf{Example:} Suppose we would like to learn the optimal number of neurons per layer in our hidden layers for training a feedforward neural network (FNN) on a dataset. Because of the data, suppose the input layer is fixed at $784$ neurons and the output layer is fixed at $10$ neurons per layer. Let us fix the number of hidden layers at $2$ beginning with $50$ neurons in each hidden layer. We set $\mathcal{Y}_s$  to be a randomly chosen appropriately sized subset of task $t$ data and previous task data. Our direction set is $D_s = D = \{[0,0,10,0],[0,10,0,0]\}$ and will be the same for every $s.$ We start our search by setting the step size $\alpha_s = 10.$ For the first round, we have $x_s = [784,50,50,10],$ so our poll points are $[784,60,50,10],[784,50,60,10],$ and $[784,60,60,10].$ We then train an FNN of each size on the dataset $Y_s$ and determine the corresponding expected values. If the expected value of the FNN $[784,60,50,10]$ is smaller than that of the FNN $[784,50,50,10],$ for example, then $x_s = [784,60,50,10].$ We would then continue this process until the expected value of our network was less than our set threshold or we exhausted our neighborhood search. 
 
 
-% \begin{algorithm}\label{DDSalg}
-% \caption{Neighborhood Direct-Directional Search (NDDS)}
-% Choose architecture initial point $x_s,$ and step size $\alpha_0\in \mathbb{N}$\\
-% Set step parameters
-% $\mathrm{threshold}\in \mathbb{R}$\\
-% j = 0\\
-%  loss $\gets \texttt{training\_loop}(x_s,Y_s)$\\
-%  \While{$\mathrm{loss}>\mathrm{threshold}$ or $j<5$}
-%     {pollPoints = $\{x_s+\alpha_sd_i:d_i\in D_s\}$\\
-%         \For{ $\mathrm{poll\, in\, pollPoints}$}{
-%         loss_s $\gets$ \texttt{training\_loop} $(\mathrm{poll},\mathcal{Y}_s)$\\
-%       \eIf{$\mathrm{loss}\leq \mathrm{loss}_s$}{
-%        $x_{s} = x_s$\;
-%        }{
-%        $x_{s} = \mathrm{poll}$\;
-%        $\mathrm{loss} = \mathrm{loss}_s$\\
-%       }
-      
-%       } $j= j+1;$ }
-% \end{algorithm}
-
-\begin{algorithm}[t]
-\caption{Neighborhood Directional Direct Search (NDDS)} \label{DDSalg}
-% \textbf{GAIL - Please decide here and throughout whether you are talking about a neighborhood direct-directional search, a direct-directional neighborhood search, or neighborhood directional direct search}
-\KwIn{Initial architecture $x_s$, step size $\alpha_0 \in \mathbb{N}$}
-\KwIn{Threshold parameter $\mathrm{threshold} \in \mathbb{R}$}
+\begin{figure}[t]
+%--- Left column: train_AB stacked above NDDS ---
+\begin{minipage}[t]{0.44\textwidth}
+\begin{algorithm}[H]
+\caption{\texttt{train\_AB}}\label{alg:lrt}
+\KwIn{$\{\weight_i(t)\}_{i=1}^d$, $\psi^*(t)$, data $\mathcal{Y}_s$, \texttt{epochs}}
+\KwOut{$C^*(t)$}
+\For{$i = 1,\ldots,d$}{
+    $[a_i,b_i] \gets \mathrm{dim}(\psi_i^*(t))$\;
+    $[r_i,s_i] \gets \mathrm{dim}(\weight_i(t))$\;
+    $\mathrm{A}_i \gets \texttt{rand}(a_i{\times}r_i)$\;
+    $\mathrm{B}_i \gets \texttt{rand}(b_i{\times}s_i)$\;
+    $C_i \gets \mathrm{A}_i\,\weight_i(t)\,\mathrm{B}_i^\top$\;
+}
+Freeze $\weight(t)$\;
+\For{$k = 1,\ldots,\texttt{epochs}$}{
+    gradient step on $\mathrm{A}(t), \mathrm{B}(t)$\;
+}
+\Return $C^*(t) \gets C(t)$\;
+\end{algorithm}
+\vspace{4pt}
+\begin{algorithm}[H]
+\caption{NDDS}\label{DDSalg}
+\KwIn{Architecture $x_s$, step size $\alpha_s \in \mathbb{N}$, threshold}
 \KwOut{Updated architecture $x_s$}
-
-$j \gets 0$\;
-$\mathrm{loss} \gets \texttt{training\_loop}(x_s, \mathcal{Y}_s)$\;
+$j \gets 0$;\quad $\mathrm{loss} \gets \texttt{training\_loop}(x_s, \mathcal{Y}_s)$\;
 \While{$\mathrm{loss} > \mathrm{threshold}$ \textbf{or} $j < 5$}{
-    $\mathrm{pollPoints} \gets \{x_s + \alpha_s d_i : d_i \in D_s\}$\;
-    \ForEach{$\mathrm{poll} \in \mathrm{pollPoints}$}{
-        $\mathrm{loss}_s \gets \texttt{training\_loop}(\mathrm{poll}, \mathcal{Y}_s)$\;
-        \eIf{$\mathrm{loss} \leq \mathrm{loss}_s$}{
-            $x_s \gets x_s$\;
-        }{
-            $x_s \gets \mathrm{poll}$\;
-            $\mathrm{loss} \gets \mathrm{loss}_s$\;
+    $\mathrm{polls} \gets \{x_s + \alpha_s d_i : d_i \in D_s\}$\;
+    \ForEach{$p \in \mathrm{polls}$}{
+        $\ell \gets \texttt{training\_loop}(p,\, \mathcal{Y}_s)$\;
+        \If{$\ell < \mathrm{loss}$}{
+            $x_s \gets p$;\quad $\mathrm{loss} \gets \ell$\;
         }
     }
     $j \gets j + 1$\;
 }
 \end{algorithm}
-
-
-
-\subsubsection{\underline{Step 2:}  Low-Rank Transfer}\label{LRTsec}
-
-Now that the optimal architecture (i.e., number of neurons per layer) has been determined for the current task, it is immediately obvious that  the size of the weights tensor will not match with the new architecture. Thus, we seek a method to determine a weights tensor corresponding to the new optimal architecture that retains previously learned information and transfers it. We propose a method we call low-rank transfer. 
-
-Before we dive into the steps of this method, let us set some assumptions and notation. Recall that the only component of the architecture we seek to learn is the number of neurons per layer in our neural network. Thus, we assume our network has $d$ layers, and we fix all other architecture parameters except for the number of neurons in our hidden layers. From  \cref{defn:NN},  $\psi_i(t)$  provides the dimensions for the corresponding weights matrix in each layer of our network.
-
-In order of appearance, we assign the values of $\psi(t)$ to the values $r_i,s_i$ for each $i$ such that $1\leq i\leq d.$ If $\psi^*(t)$ represents the optimal architecture returned from the NDDS completed for task $t,$ then similarly we can assign the values of the dimensions of the weights matrices of each layer of $\psi_i^*(t)$ to be $a_i,b_i$ for $1\leq i\leq d.$ Our goal is to utilize the original weights matrices to project into the weights matrix space for the new architecture.
-
-To begin, we initialize dimension $3$ tensors $\mathrm{A}(t),\mathrm{B}(t),$ which  each comprise  $d$ matrices. Let each matrix $\mathrm{A}_i(t)$ in $\mathrm{A}(t)$ be randomly generated with dimensions $a_i\times r_i$ for $1\leq i\leq d.$ Similarly, let each matrix $\mathrm{B}_i $ in $\mathrm{B}(t)$ be randomly generated with size $b_i\times s_i$ for $1\leq i\leq d.$ Then, set $C(t) = \mathrm{A}(t)\weight(t)\mathrm{B}^T(t).$ More specifically $C(t)$  comprises $d$ matrices such that $C_i(t) = \mathrm{A}_i(t)\weight_i(t)B^T_i(t)$ for all $1\leq i\leq d.$ Notice that the dimensions of each $C_i(t)$ are $a_i\times b_i.$ These are the dimensions of the weights matrices for a neural network with the new optimal architecture $\psi^*(t).$ See \cref{LRT} to understand the construction of $C(t)$ more explicitly.
-    \begin{figure}
-        \centering
-        \includegraphics[width=\linewidth]{paperFigures/CLsolution1.png}
-        \caption{Method of low-rank transfer at a single layer} \label{LRT}
-    \end{figure}
-
- To prevent loss of information from $\weight(t),$ when we make the transfer to $C(t),$ we  train only the $\mathrm{A}(t)$ and $\mathrm{B}(t)$ portions of the new weights tensor $C(t)$ on the task data for a chosen number of epochs, while freezing the $\weight(t)$ tensor. This additional training ensures a transfer of learning to the new weights corresponding to the new optimal architecture. If $C^*(t)$ represents $C(t)$ after this training on just tensors $\mathrm{A}(t)$ and $\mathrm{B}(t)$ and $\psi(t+1) = \psi^*(t),$ then we conclude our process by letting $w(t+1) = C^*(t)$ and completing the standard training of our neural network $\hat{f}(w(t+1),\psi(t+1))$ on task data. In \cref{alg:three} we summarize each step of our method described in the preceding subsections.
- 
-\begin{algorithm}
+\end{minipage}
+\hfill
+%--- Right column: simplified Main Training Loop ---
+\begin{minipage}[t]{0.50\textwidth}
+\begin{algorithm}[H]
 \caption{Main Training Loop}\label{alg:three}
 Choose $\weight(t)$ and $\psi(t)$ to begin\\
 Set \texttt{epoch hyper-parameter}\\
 \For{$t = 0,1,\ldots, T$}{
- \textbf{Step 1:} Standard Training of $\weight(t)$\\
-    $\weight(t) \gets $\texttt{training\_loop}($\weight(t),\psi(t),$ $\tx(t)$, \texttt{epochs})\\
-
- \textbf{Step 2:} Architecture Search\\
-    $\psi^*(t) \gets$ \texttt{NDDS}$(\psi(t),$ $\tx(t)$)\\
-    
-\textbf{Step 3:} Initialize $\mathrm{A}(t), \mathrm{B}(t)$\\
-\For{$i = 1,...,d$}{
-    $\mathrm{A}_i(t), \mathrm{B}_i  \gets$\texttt{init\_AB}($a_i,b_i,r_i,s_i)$}
-
- \textbf{Step 4:} Set $C(t)$\\
-    \For{$i = 1,...,d$}{$C_i(t) = \mathrm{A}_i(t)\weight_i(t)B_i^T(t)$}
-
- \textbf{Step 5:} Fix $\weight(t),$ Train $\mathrm{A}(t),\mathrm{B}(t)$ for $\hat{f}(C(t),\psi(t+1))$\\
-    $C^*(t) \gets$ \texttt{train\_AB}($C(t), \psi(t+1),$ $\tx(t)$, \texttt{epochs})\\
-
- \textbf{Step 6:} Set New Weights and Architecture\\
-    $w(t+1) = C^*(t)$\\
-    $\psi(t+1) = \psi^*(t)$\\
-
- \textbf{Step 7:} Standard Training on New NN
-    \texttt{training\_loop}\\($\weight(t+1),\psi(t+1),$ $\tx(t)$, \texttt{epochs})
+ \textbf{Step 1:} Standard Training\\
+    $\weight(t) \gets \texttt{training\_loop}(\weight(t),\psi(t),\tx(t),\texttt{epochs})$\\[15pt]
+ \textbf{Step 2:} Architecture Search~(Alg.~\ref{DDSalg})\\
+    $\psi^*(t) \gets \texttt{NDDS}(\psi(t), \tx(t))$\\[15pt]
+ \textbf{Step 3:} Low-Rank Transfer~(Alg.~\ref{alg:lrt})\\
+    $C^*(t) \gets \texttt{train\_AB}(\weight(t),\psi^*(t),\tx(t),\texttt{epochs})$\\[15pt]
+ \textbf{Step 4:} Update weights and architecture\\
+    $\weight(t{+}1) = C^*(t)$;\quad $\psi(t{+}1) = \psi^*(t)$\\[15pt]
+ \textbf{Step 5:} Train on new architecture\\
+    $\texttt{training\_loop}(\weight(t{+}1),\psi(t{+}1),\tx(t),\texttt{epochs})$\\[8pt]
 }
 \end{algorithm}
+\vspace{6pt}
+\centering
+\begin{tikzpicture}[scale=1.15]
+    % --- A matrix (green, trainable) ---
+    \fill[matrixA!30] (0, 0.20) rectangle (0.8, 1.40);
+    \begin{scope}\clip (0, 0.20) rectangle (0.8, 1.40);
+      \foreach \y in {0.60, 1.00}{\draw[white!60!matrixA, thin] (0,\y)--(0.8,\y);}
+      \foreach \x in {0.40}{\draw[white!60!matrixA, thin] (\x,0.20)--(\x,1.40);}
+    \end{scope}
+    \draw[thick, matrixA!70!black] (0, 0.20) rectangle (0.8, 1.40);
+    \node[font=\small\bfseries, matrixA!80!black] at (0.40, 0.80) {$\mathrm{A}_i$};
+    \node[font=\scriptsize, black!70] at (-0.22, 0.80) {$a_i$};
+    \node[font=\scriptsize, black!70] at (0.40, 1.58) {$r_i$};
+    \node[font=\normalsize] at (1.08, 0.80) {$\times$};
+    % --- W matrix (orange, frozen = dashed) ---
+    \fill[matrixW!25] (1.35, 0.40) rectangle (2.95, 1.20);
+    \begin{scope}\clip (1.35, 0.40) rectangle (2.95, 1.20);
+      \foreach \y in {0.80}{\draw[white!50!matrixW, thin] (1.35,\y)--(2.95,\y);}
+      \foreach \x in {1.75, 2.15, 2.55}{\draw[white!50!matrixW, thin] (\x,0.40)--(\x,1.20);}
+    \end{scope}
+    \draw[thick, dashed, matrixW!80!black] (1.35, 0.40) rectangle (2.95, 1.20);
+    \node[font=\small\bfseries, matrixW!80!black] at (2.15, 0.80) {$\mathrm{W}_i$};
+    \node[font=\scriptsize, black!70] at (2.15, 1.38) {$s_i$};
+    \node[font=\normalsize] at (3.22, 0.80) {$\times$};
+    % --- B^T matrix (blue, trainable) ---
+    \fill[matrixB!25] (3.50, 0.00) rectangle (4.70, 1.60);
+    \begin{scope}\clip (3.50, 0.00) rectangle (4.70, 1.60);
+      \foreach \y in {0.40, 0.80, 1.20}{\draw[white!60!matrixB, thin] (3.50,\y)--(4.70,\y);}
+      \foreach \x in {3.90, 4.30}{\draw[white!60!matrixB, thin] (\x,0.00)--(\x,1.60);}
+    \end{scope}
+    \draw[thick, matrixB!70!black] (3.50, 0.00) rectangle (4.70, 1.60);
+    \node[font=\small\bfseries, matrixB!80!black] at (4.10, 0.80) {$\mathrm{B}_i^\top$};
+    \node[font=\scriptsize, black!70] at (4.10, 1.78) {$b_i$};
+    \node[font=\normalsize] at (5.08, 0.80) {$=$};
+    % --- C matrix (purple, result) ---
+    \fill[matrixV!20] (5.45, 0.20) rectangle (6.65, 1.40);
+    \begin{scope}\clip (5.45, 0.20) rectangle (6.65, 1.40);
+      \foreach \y in {0.60, 1.00}{\draw[white!50!matrixV, thin] (5.45,\y)--(6.65,\y);}
+      \foreach \x in {5.85, 6.25}{\draw[white!50!matrixV, thin] (\x,0.20)--(\x,1.40);}
+    \end{scope}
+    \draw[thick, matrixV!70!black] (5.45, 0.20) rectangle (6.65, 1.40);
+    \node[font=\small\bfseries, matrixV!80!black] at (6.05, 0.80) {$\mathrm{C}_i$};
+    \node[font=\scriptsize, black!70] at (6.05, 1.58) {$b_i$};
+    % --- Annotations below ---
+    \node[font=\scriptsize] at (0.40, -0.05) {$(a_i\!\times\!r_i)$};
+    \node[font=\tiny, matrixA!80!black] at (0.40, -0.35) {\textit{trainable}};
+    \node[font=\scriptsize] at (2.15, 0.12) {$(r_i\!\times\!s_i)$};
+    \node[font=\tiny, black!55] at (2.15, -0.18) {\textit{frozen}};
+    \node[font=\scriptsize] at (4.10, -0.18) {$(s_i\!\times\!b_i)$};
+    \node[font=\tiny, matrixB!80!black] at (4.10, -0.48) {\textit{trainable}};
+    \node[font=\scriptsize] at (6.05, -0.05) {$(a_i\!\times\!b_i)$};
+\end{tikzpicture}
+\captionof{figure}{Low-rank transfer at layer $i$: $\mathrm{C}_i\!=\!\mathrm{A}_i\mathrm{W}_i\mathrm{B}_i^\top$; $\mathrm{W}_i$ frozen, $\mathrm{A}_i$ and $\mathrm{B}_i$ trained.}
+\label{fig:LRT}
+\end{minipage}
+\end{figure}
+
+
+
+\textbf{\underline{Step 2-}  Low-Rank Transfer:} Now that the optimal architecture (i.e., number of neurons per layer) has been determined for the current task, it is immediately obvious that  the size of the weights tensor will not match with the new architecture. Thus, we seek a method to determine a weights tensor corresponding to the new optimal architecture that retains previously learned information and transfers it. We propose a method we call low-rank transfer. Recall that the only component of the architecture we seek to learn is the number of neurons per layer in our neural network. Thus, we assume our network has $d$ layers, and we fix all other architecture parameters except for the number of neurons in our hidden layers. From  \cref{defn:NN},  $\psi_i(t)$  provides the dimensions for the corresponding weights matrix in each layer of our network.
+
+% In order of appearance, we assign the values of $\psi(t)$ to the values $r_i,s_i$ for each $i$ such that $1\leq i\leq d.$ If $\psi^*(t)$ represents the optimal architecture returned from the NDDS completed for task $t,$ then similarly we can assign the values of the dimensions of the weights matrices of each layer of $\psi_i^*(t)$ to be $a_i,b_i$ for $1\leq i\leq d.$ Our goal is to utilize the original weights matrices to project into the weights matrix space for the new architecture.
+
+For each layer $i,$ we have the original weights matrix $\weight_i(t)$ with dimensions $r_i\times s_i$ and the new weights matrix corresponding to the new architecture $\psi^*(t)$ with dimensions $a_i\times b_i.$ We seek to transfer information from $\weight_i(t)$ to the new weights matrix. To do this, we introduce two matrices $\mathrm{A}_i(t)$ and $\mathrm{B}_i(t)$ with dimensions $a_i\times r_i$ and $b_i\times s_i$ respectively. We then set the new weights matrix for layer $i$ to be $C_i(t) = \mathrm{A}_i(t)\weight_i(t)B^T_i(t).$ See \cref{fig:LRT} for an illustration and algorithms~\ref{alg:lrt} for a formal description of this method. To transfer information between the two parameter spaces, we freeze $\weight_i(t)$  for each layer $i$ and train only the $\mathrm{A}(t)$ and $\mathrm{B}(t)$ untill a predefined threshold on the loss function is attained and we set $C^*(t) = C(t)$ to be the new weights tensor for the new architecture according to \cref{fig:LRT}.
+ 
+\textbf{\underline{Step 3-}  Standard CL training:} Given this new architecture and the new weights tensor, we can now train on the new task. We utilize an off-the-shelf CL algorithm to train on the new task while balancing memory on all the prior tasks. This step is crucial because it allows us to further transfer learning from previous tasks to the new task and mitigate forgetting. We choose the algorithms from \cite{raghavan2021formalizing,chakraborty2025understanding} for this step, but any CL algorithm can be used. The output of this step is the weights tensor $\weight(t+1)$ corresponding to the new architecture $\psi(t+1)$ that has been trained on the new task. This concludes one stand
+ ard training of our neural network $\hat{f}(w(t+1),\psi(t+1))$ on task data. In \cref{alg:three} we summarize each step of our method described in the preceding subsections.
+ 
+
 
 
 \section{Related Works}\label{sec:related}
 As noted in the introduction, theoretical and empirical results have proven that even in traditional machine learning, training weights of the network alone is not enough. By utilizing tools such as NAS (Neural Architecture Search), LoRA (Low-Rank Adaptation), and PEFT (Parameter-Efficient Fine Tuning), the accuracy of a trained model can readily be increased (\cite{liu2021survey}, \cite{LORAhu2022lora},  \cite{han2024parameter}). In the context of CL, however, learning optimal hyperparameters or architecture for each task poses a challenge: 
 %Not only is it necessary to determine what the optimal hyperparameters are at each task, but 
- learning of previous tasks be transferred.
+learning of previous tasks be transferred.
 
 Toward this end, networks with dynamic structures, such as progressive neural networks (PNGs) and dynamically expandable networks (DENs) were introduced in \cite{rusu2016progressive} and \cite{yoon2017lifelong}. 
 %\textbf{GAIL - do you mean progressive generative networks (PGNs) or progressive neural networks )PNNs) ? I kept to PNN since the reference is to that, buy you need to check here)}
-PNNs add a layer to the neural network at each observed task \cite{rusu2016progressive}. While the model's accuracy did improve with such structure, extensive compute time is unavoidable as more tasks, and hence layers, are observed. DENs attempted to remedy the computing issues of PNNs. DENs first determine a subcollection of neurons to train on for a given task (via a metric) and then add a layer of neurons to the network where appropriate \cite{yoon2017lifelong}. This method also completes sparse regularization at each task to prune the network in an attempt to reduce compute time compared with PNNs. The use of a DEN did improve the model's accuracy. However, drawbacks such as compute time, overfitting, and transfer of learning still remained. Learning from previous tasks was not fully transferred, since the weights corresponding to the newly added network layers were randomly initialized. 
+PNNs add a layer to the neural network at each observed task \cite{rusu2016progressive}. While the model's accuracy does improve, extensive compute time is unavoidable as more tasks, and hence layers, are added. DENs attempted to remedy the computing issues of PNNs. DENs first determine a subcollection of neurons to train on for a given task (via a metric) and then add a layer of neurons to the network where appropriate \cite{yoon2017lifelong}. However, drawbacks such as compute time, overfitting, and transfer of learning are prevalent and even then, the learning from previous tasks is not fully transferred, since the weights corresponding to the newly added network layers were randomly initialized. 
 
-In more recent years researchers have built on the idea of DENs by developing methods that optimally choose how and when to adjust network architecture. CLEAS (Continual Learning with Efficient Architecture Search) is the first integration of NAS into the CL framework \cite{CLEASgao2022CLEAS}. This method  changes architecture only  when deemed necessary by utilizing a neuron-level NAS, rather than adding an entire layer to the neural network. Moreover, the network is pruned at each step to remove unnecessary layers and/or neurons. The algorithm touts its smaller, purposely learned network structure, which allows for reduced network complexity and hence reduced computation time. In particular, CLEAS improves model accuracy by up to $6.70\%$ and reduces network complexity by up to $51.0\%$ on the three benchmark datasets. A strategy similar to CLEAS is CAS (Continual Architecture Search)  \cite{CASpasunuru2019continual}. The premise of  adding and removing to the architecture only when deemed optimal for a given task remains the same. Rather than using NAS, however, they use what they call Efficient Neural Architecture Search, which incorporates a weight-sharing strategy. SEAL (Searching Expandable Architectures for Incremental Learning) again seeks to change  the hyperparameters and architecture of the neural network only when necessary, but the method differs from CLEAS in how it determines when to alter the network \cite{SEALgambella2025SEAL}. In particular, SEAL uses a capacity estimation metric to make such a decision.
+In more recent years researchers have built on the idea of DENs by developing methods that optimally choose how and when to adjust network architecture. CLEAS (Continual Learning with Efficient Architecture Search) is the first integration of NAS into the CL framework \cite{CLEASgao2022CLEAS}. This method  changes architecture only  when deemed necessary by utilizing a neuron-level NAS, rather than adding an entire layer to the neural network. Moreover, the network is pruned at each step to remove unnecessary layers and/or neurons. 
+% The algorithm touts its smaller, purposely learned network structure, which allows for reduced network complexity and hence reduced computation time. In particular, CLEAS improves model accuracy by up to $6.70\%$ and reduces network complexity by up to $51.0\%$ on the three benchmark datasets. 
+CAS~\cite{CASpasunuru2019continual} follows a similar premise but replaces NAS with an Efficient Neural Architecture Search using weight-sharing, while SEAL~\cite{SEALgambella2025SEAL} uses a capacity estimation metric to decide when to alter the network. The previous methods all sought to expand the network in some fashion to increase the accuracy of the network.
 
-The previous methods all sought to expand the network in some fashion to increase the accuracy of the network. Now we shift to how parameter-efficient fine-tuning methods have been utilized in CL. In particular, we investigate the use of LoRA (Low-Rank Adaptation) \cite{LORAhu2022lora}. The two methods we will discuss here are intended for pretrained transformers that are now attempting to learn tasks. The CoLoRA method utilizes a new LoRA adapter for each new task to train a task expert model \cite{wistuba2023continual}. The expert model is then used to train the transformer. At the time, this method produced state-of-the-art results, but at a high computational cost. Since then, the CLoRA method has been introduced \cite{CLORAmuralidhara2025}. The key difference between these two strategies is the number of LoRA adapters. Rather than reinitializing and training a new LoRA adapter for each task, a single-adapter approach is used. This reduces the compute time, while maintaining accuracy and transferring learning.
+In particular, for all these methods, either the new architecture trained on all the previous tasks starting from random initialization or one decides the possible maximum capacity of the network at the beginning of the learning problem. In contrast, our method seeks to learn the optimal architecture for each task on the fly and transfer learning from the previous task to the new architecture. Moreover, we do not seek to expand the network, but rather adjust the architecture in a way that optimally balances accuracy and saturation.
 
-In this paper we attempt to combine the most profitable aspects of methods such as CLEAS and CLoRA. In other words, our goal is to learn the optimal architecture for each task and utilize a low-rank transfer method to optimally transfer learning to the new architecture. The use of a LoRA-like method to easily guarantee transfer of learning from one architecture to another in standard CL has not been accomplished. Moreover, no previous algorithm has provided a theoretical mathematics framework to support the empirical data. 
+
+In addition, many works have sought to study the capacity of the network in the CL setting mathematically. Foundational PAC-Bayes bounds for lifelong learning were established in~\cite{Pentina2014PACBayes}, while exact forgetting expressions for overparameterized linear models characterizing the role of task ordering and dimensionality were derived in~\cite{Evron2022Catastrophic,Lin2023Theory}. From an optimization-geometry perspective, the NTK overlap matrix was introduced as a formal measure of task similarity to bound forgetting~\cite{Doan2021NTK}, and the dimension of the gradient null space was shown to directly govern the plasticity-stability tradeoff~\cite{Kong2022NullSpace}. More recent work addresses statistical optimality of regularization-based CL~\cite{Zhao2024Statistical}, model-agnostic bounds on backward transfer~\cite{Friedman2025Forgetting}, Bayesian interpretations via the NTK ensemble~\cite{Benjamin2024NTEnsemble}, and function-space parameterizations via sparse Gaussian processes~\cite{Scannell2024FunctionSpace}; however, none of these frameworks account for adaptive architecture changes or provide a Sobolev-space characterization of capacity to provide a mathematical framework for understanding the role of architecture in CL and deriving necessary condititions to find the solution to the CL problem. 
+
+
+
+% While the low rank transfer of our method is similiar to  LoRA (Low-Rank Adaptation) \cite{LORAhu2022lora} or CoLoRA~\cite{wistuba2023continual}. The use of these methods in the CL
+
+
+% The expert model is then used to train the transformer. At the time, this method produced state-of-the-art results, but at a high computational cost. Since then, the CLoRA method has been introduced \cite{CLORAmuralidhara2025}. The key difference between these two strategies is the number of LoRA adapters. Rather than reinitializing and training a new LoRA adapter for each task, a single-adapter approach is used. This reduces the compute time, while maintaining accuracy and transferring learning.
+
+% In this paper we attempt to combine the most profitable aspects of methods such as CLEAS and CLoRA. In other words, our goal is to learn the optimal architecture for each task and utilize a low-rank transfer method to optimally transfer learning to the new architecture. The use of a LoRA-like method to easily guarantee transfer of learning from one architecture to another in standard CL has not been accomplished. Moreover, no previous algorithm has provided a theoretical mathematics framework to support the empirical data. 
 
 % \KR{start this}
 \section{Experimental Results}\label{sec: experiments}
-In this section we evaluate the algorithm in \cref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in \cref{sec:motivation}? Does changing the architecture actually help with learning over consecutive tasks~(\cref{sec:upper_weight})? Does changing the architecture improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? We examine these questions for three continual learning problems: regression, image classification, and graph classification.
+In this section we evaluate  \cref{alg:three} and seek to answer the following questions: Does training with weights for a large number of tasks lead to a saturation as discussed in \cref{sec:motivation}? Does changing the architecture actually help with learning over consecutive tasks~(\cref{sec:upper_weight})? Does changing the architecture improve saturation over a series of tasks? And do these ideas carry forward to different types of neural network architectures? We examine these questions for three continual learning problems: regression, image classification, and graph classification.
 
 %========datasets and Metrics============%
 \subsection{Datasets and Metrics}
 
-\textbf{Datasets and Task Splits:} We utilize three data sets, one for each learning problem.
+\textbf{Datasets and Task Splits:} We utilize three data sets. \textit{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
 
-\begin{itemize}
-    \item \textbf{Random Sine:} For the regression experiment, we utilize a randomly generated sine data set. Each task is defined using a sine function $y = a\sin(bx + \phi) + \varepsilon,$ where $a$ is the amplitude, $b$ is the frequency, $\phi$ is the phase shift and $\epsilon \sim \mathcal{N}(0, \sigma^2)$ is Gaussian noise. Inputs are sampled from $x \sim \mathcal{U}([-90, 90])$. Tasks differ by amplitude and phase. This is ideal, as it allows for distinct, but controllable, distribution shifts in data at each task.
+\textit{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale. We introduce distribution shifts by applying a unique random rotation to the images of each task. For Task $t,$ we apply a random rotation of $\theta_t = 10t$ degrees.
 
-    \item \textbf{MNIST:}~\cite{lecun1998mnist} We split MNIST into sequential tasks by grouping digit pairs depending on the number of tasks. For example, if we are to learn $5$ tasks total, Task $0$ consists of digits $0$ and $1,$ and Task 1 consists of digits $2$ and $3.$ Moreover, images are $28 \times 28$ grayscale.
+\textit{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. 
+% More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
 
-    \item \textbf{Synthetic Graphs:} We generate random graphs using PyTorch Geometric's FakeDataset ~\cite{pyg}. Each graph contains an average of 15 nodes with 10-dimensional node features and belongs to one of 5 classes for graph-level classification. We emulate task distribution shifts in this setting by allowing all tasks to share the same five classes but we introduce progressive perturbations at each additional task learned. More specifically, at each task $t,$ we apply three types of perturbations: (1) Gaussian feature noise with standard deviation $\sigma_t = 0.02t$, (2) random edge dropout with probability $p_t = 0.01t$, and (3) constant feature shift of magnitude $s_t = 0.01t$. Thus, Task $0$ serves as the unperturbed baseline. This is an optimal choice for the continual learning setting, as it tests the models ability to adapt to distribution shift while retaining knowledge.
-\end{itemize}
+\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy. \textbf{Average Performance:} The mean performance across all tasks after training:
+$ \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i};$ \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient} such that $\text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right).$ Note that for MSE, positive BWT indicates improvement. \textbf{Forgetting (Forward Transfer FWT):} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}: $  \text{FWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right).$ For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
 
-\textbf{Metrics:} We utilize three standard metrics to evaluate continual learning performance ~\cite{lopez2017gradient, chaudhry2018riemannian, diaz2018dont}. Let $R_{j,i}$ denote the performance on task $i$ after training on task $j$. For regression, $R_{j,i}$ is the mean squared error (MSE); for classification, $R_{j,i}$ is accuracy.
+\subsection{Experimental Conditions}\label{sec:implementdetails}
+We evaluate four conditions that progressively isolate the contributions of architecture search and knowledge transfer. \textbf{C1~(Baseline)} uses fixed architecture and constant learning rate $\eta=10^{-4}$ with replay-driven CL~\cite{raghavan2021formalizing,raghavan2023learningcontinuallysequencegraphs}. \textbf{C2~(Heuristics)} keeps the architecture fixed but adds cosine LR decay ($10^{-4}\!\to\!10^{-6}$), task warm-up epochs~(\cref{alg:warmup}), and adaptive gradient weights $[\alpha,\beta,\gamma]$~(\cref{alg:adaptive}), testing whether empirical smoothing to introduce continuity suffices to find solutions to the CL problem. \textbf{C3~(Architecture Search)} applies NDDS~(\cref{DDSalg}) at each task to find $\psi^*(t)$, then reinitializes weights via Glorot uniform~\cite{GlorotB10}, isolating the effect of architecture change without knowledge transfer. \textbf{C4~(AWB Full)} is our complete method: NDDS selects $\psi^*(t)$, then $A$ and $B$ are trained with $\weight(t)$ frozen so that $V=A\weight(t)B^\top$ transfers knowledge to the new parameter space~(\cref{alg:train_ab},\cref{thm:lower_HJB}); see \cref{alg:c4} for the full algorithm. The contrast between C3 and C4 isolates the contribution of low-rank knowledge transfer from architecture search alone. All experiments use JAX~\cite{jax} and Equinox~\cite{kidger2021equinox} on an H100 gpu with 96 core cpu; code is at \url{https://github.com/krm9c/ContLearn.git}. 
 
+The focus of this experimental results is to demonstrate that our theory holds in practice and that indeed the better CL performance can be attained by changing architecture to expand the solution space and transferring learning to the new architecture. Thus, we do not seek to compare our method with other methods in the literature such as CLEAS, as no methods have been proposed that utilize both architecture search and knowledge transfer in the streaming CL setting. Moreover, methods that utilize only architecture search and rudimentary knowledge transfer, such as CLEAS, can be captured by C3, which isolates the effect of architecture search without knowledge transfer.
 
-% , and for graph classification $R_{j,i}$ is \Ally{Is $R_{j,i}$ accuracy for graph classification? I know you are still running these so this was not provided.}
+We provide further details on hyperparameters and implementation in \cref{app:standard_cl}. 
 
-\begin{itemize}
-    \item \textbf{Average Performance:} The mean performance across all tasks after training:
-    \[
-    \text{Avg} = \frac{1}{T} \sum_{i=0}^{T-1} R_{T-1,i}
-    \]
-
-    \item \textbf{Backward Transfer (BWT):} Measures how learning new tasks affects previous tasks~\cite{lopez2017gradient}.
-    \[
-    \text{BWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \left( R_{i,i} - R_{T-1,i} \right)
-    \]
-    Note that for MSE, positive BWT indicates improvement.
-
-    \item \textbf{Forgetting (Forward Transfer FWT):} The average increase in error from the best achieved performance~\cite{chaudhry2018riemannian}:
-    \[
-    \text{FWT} = \frac{1}{T-1} \sum_{i=0}^{T-2} \max\left(0, R_{T-1,i} - \min_{j \leq T-1} R_{j,i}\right)
-    \]
-    % \item \Ally{In some of the tables there is a "FWT" (forward transfer) metric. Should this be included here? }
-\end{itemize}
-
-For all experiments, we train 500 epochs per task. We use MSE loss for regression and cross-entropy loss for classification.
-
-\subsection{Experimental Conditions}
-To explore and thoroughly evaluate the theoretical work we have developed, we consider four experimental conditions. Each condition allows us to test a particular aspect of our theory by isolating the effects of learning architecture and transferring knowledge. Specific implementation details about each condition is included in \cref{sec:implementdetails}, but we provide an overview of each condition below for quick reference.
-
-
-%All the algorithms metioned below are in Appedix J
-\begin{itemize}
-    \item \textbf{C1 (Baseline):} Standard continual learning with fixed architecture. The network architecture $\psi$ remains constant across all tasks as well as the learning rate. For this baseline comparison, we use a replay-driven continual learning approach which seeks to balance forgetting and generalization \cite{raghavan2021formalizing}, ~\cite{raghavan2023learningcontinuallysequencegraphs}. See \cref{fig:alg_conditions}(a) for a description of the algorithm.
-
-
-    \item \textbf{C2 (Heuristics):} Fixed architecture with training heuristics. The architecture $\psi$ remains fixed, but we add cosine learning rate decay, task warm-up epochs (\cref{alg:warmup}), and adaptive gradient weights $[\alpha, \beta, \gamma]$ (\cref{alg:adaptive}). This condition tests whether empirical smoothing techniques alone can improve performance. See \cref{fig:alg_conditions}(b) for a full description of the algorithm.
-
-    \item \textbf{C3 (Architecture Search Only):} Architecture search without knowledge transfer. At each task, we search for a new architecture $\psi(t+1)$ using the NDDS method (\cref{DDSalg}). However, once the new architecture is determined, the weights are randomly re-initialized to the corresponding sizes rather than introducing transfer matrices $A$ and $B.$ The purpose of this method is to isolate the impact of architecture change from that of knowledge transfer. See \cref{fig:alg_conditions}(c) for an algorithm description.
-
-    \item \textbf{C4 (Knowledge Transfer via $AWB$):} This is our full approach, which combines architecture search with low-rank knowledge transfer via the  $V = A \weight B^T$. When the architecture changes, we train $A$ and $B$ matrices (\cref{alg:train_ab}) to transfer knowledge from the old parameter space to the new one, as described in \cref{thm:lower_HJB}. See \cref{fig:alg_conditions}(d) for an algorithm description.
-\end{itemize}
-
-The comparison of conditions C3 and C4 are crucial. Although both of the conditions change (learn) an optimal architecture, only C4 transfers knowledge. This isolates the contribution of the knowledge transfer from architecture search alone. 
-
-
-%========Implemnting details on device & conditions===%
-%references appendices
-
-\subsection{Implementation Details}\label{sec:implementdetails}
-
-\subsubsection{Experimental Infrastructure}  
-All experiments were conducted on a 14-inch MacBook Pro (2024) with Apple M4 Pro chip (14-core CPU, 20-core GPU, 24 GB unified memory) and the system ran macOS (Sequoia 15.6.1). The codebase uses JAX~\cite{jax} and Equinox~\cite{kidger2021equinox}. Experimental outputs were logged and visualized using TensorBoard. All runs used fixed random seeds for reproducibility. Code is available at \url{https://github.com/krm9c/ContLearn.git}.
-
-\subsubsection{Experimental Conditions Implementation Details}
-All conditions use a replay-driven continual learning approach, which seeks to balance forgetting and generalization demonstrated in ~\cite{raghavan2021formalizing} for regression and image classification experiments. For graph experiments, we use the similar approach outlined in ~\cite{raghavan2023learningcontinuallysequencegraphs} Note that we use an experience replay buffer size for all experiments and conditions.
-
-\paragraph{Conditions C1 and C2: Baseline Training }
-
-For C1, training uses constant learning rate $\eta = 10^{-4}$ with AdamW optimizer. No warm-up or adaptive mechanisms are applied.
-
-For C2, we add three heuristics to the baseline training conditions:
-\begin{itemize}
-    \item \textit{Heuristic 1:} Cosine learning rate decay from $10^{-4}$ to $10^{-6}.$
-    
-    \item \textit{Heuristic 2:} Task warm-up for $25$ epochs at the start of each new task. The purpose of the task warm-up is train on the next task for a select number of epochs prior to adjustments in other conditions. See \cref{alg:warmup} for implementation.
-
-    \item \textit{Heuristic 3:} Adaptive gradient weights $[\alpha, \beta, \gamma].$ Such weights adjust based on task transition difficulty, and are for current task, experience replay, and regularization, respectively. See \cref{alg:adaptive} for implementation.
-\end{itemize}
-
-\paragraph{Condition C3: Architecture Search }
-At each task, we use a neighborhood direct-directional search (NDDS) method to find an optimal architecture. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Below, we provide implementation examples of NDDS in the feedforward, CNN, and GCN settings, but see \cref{archsearch} and \cref{DDSalg} for specific details.
-\begin{itemize}
-    \item \textit{Feedforward Networks:} Suppose we begin with an architecture of $[10,40,40,10]$ and our step size of our search is $4.$ Our candidates to be evaluated would be:  $[10, 45, 40, 10]$, $[10, 40, 45, 10]$, and $[10, 45, 45, 10].$ After training each candidate for $100$ epochs, the best-performing architecture (smallest loss value) will be chosen for the next round.
-
-    \item \textit{CNNs and GCNs:} To jointly search for optimal filter size and hidden layers, a nested loop is used. For each filter size, multiple rounds of step-wise candidate evaluations are completed, akin to the feedforward network setting.
-\end{itemize}
-
-
-After determining the new (optimal) architecture for the given task, we must adjust the weights matrices, as the current weights will not longer match the new architecture. In C3, we choose to randomly reinitialized using Glorot uniform~\cite{GlorotB10}. The random reinitialization allows us to evaluate the effect of architecture optimization alone, without transferring previously learned information.
-
-\paragraph{Condition C4: Knowledge Transfer via AWB }
-We again use NDDS method to find optimal architecture for our given task. The search explores candidate architectures by incrementally adding neurons to hidden layers and/or adjusting the filter size. Once an optimal architecture is chosen, we must again adjust the weights matrices. In C4, we choose to transfer learned knowledge from $\weight(t)$ to $\weight(t+1)$ through the $A$ and $B$ matrices. The transformation $V = A \weight B^T$ maps parameters between architectures of different sizes, see \cref{LRTsec}. 
-
-A key component of C4 is that we allowing training of the matrices $A$ and $B,$ while freezing the matrix $\weight,$ prior to set the new weights matrix to $V = A \weight B^T.$ This is crucial as it provides tuning of the matrices $A$ and $B$ before transferring the learning in $\weight.$
-To complete this process in practice, we perform the following steps:
-\begin{itemize}
-    \item[(1)] \textit{Freeze the weights matrix $\weight$ and initialize $A$ and $B$ matrices}: The appropriate sizes for the $A$ and $B$ matrices are chosen based on the new (optimal) architecture and the previous architecture. The goal is for $V = A \weight B^T$ to be the correct size for the new architecture. In \cref{app: MLP AB}, we walk through an example of determining the correct sizes of $A$ and $B$ for each layer of a feedforward neural network, which is transitioning from an architecture of  $[64,128,128,10]$ to an architecture of $[64,256,256,10].$ In \cref{app: CNN AB}, we complete an example similar example but for the CNN setting (i.e. accounting for filter and FFN transfer).
-    
-    \item[(2)]\textit{Train $A$ and $B$ Matrices:} Training is completed for a fixed number of iterations using Adam. See \cref{alg:train_ab} for implementation details.\\
-
-    \item[(3)] \textit{Set $V = A\weight B^T$ and Train: } The weights are set to $V = A\weight B^T,$ which now corresponds to the new architecture of the network. We then the train the new weights and record necessary information. 
-\end{itemize}
-
-The transfer and training process ensures continuity of the loss function across architecture changes, as established in \cref{thm:lower_HJB}. For a succinct description of C4, see \cref{alg:c4}.
 
 %=======Reg Experiments==============%
 \subsection{Regression Experiments}~\label{sec:reg}

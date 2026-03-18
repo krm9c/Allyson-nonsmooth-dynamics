@@ -1,4 +1,4 @@
-\begin{thebibliography}{42}
+\begin{thebibliography}{48}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -15,6 +15,11 @@ Prasanna Balaprakash, Misha Salim, Taylor Uram, Venkatram Vishwanath, and Stefan
 \newblock {DeepHyper}: Asynchronous hyperparameter search for deep neural networks.
 \newblock In \emph{2018 IEEE 25th International Conference on High Performance Computing (HiPC)}, pp.\  42--51, Bengaluru, India, 2018. IEEE.
 \newblock \doi{10.1109/HiPC.2018.00013}.
+
+\bibitem[Benjamin et~al.(2024)Benjamin, Pehle, and Daruwalla]{Benjamin2024NTEnsemble}
+Ari~S. Benjamin, Christian Pehle, and Kyle Daruwalla.
+\newblock Continual learning with the neural tangent ensemble.
+\newblock In \emph{Advances in Neural Information Processing Systems}, volume~37. Curran Associates, Inc., 2024.
 
 \bibitem[Bertsekas(2012)]{bertsekas2012dynamic}
 Dimitri Bertsekas.
@@ -41,16 +46,31 @@ Natalia D{\'\i}az-Rodr{\'\i}guez, Vincenzo Lomonaco, David Filliat, and Davide M
 \newblock Don't forget, there is more than forgetting: New metrics for continual learning.
 \newblock In \emph{NeurIPS Workshop on Continual Learning}, 2018.
 
+\bibitem[Doan et~al.(2021)Doan, Bennani, Mazoure, Rabusseau, and Alquier]{Doan2021NTK}
+Thang Doan, Mehdi Bennani, Bogdan Mazoure, Guillaume Rabusseau, and Pierre Alquier.
+\newblock A theoretical analysis of catastrophic forgetting through the {NTK} overlap matrix.
+\newblock In \emph{Proceedings of the 24th International Conference on Artificial Intelligence and Statistics}, volume 130 of \emph{Proceedings of Machine Learning Research}, pp.\  1072--1080. PMLR, 2021.
+
 \bibitem[Evans(2022)]{evans2022partial}
 Lawrence~C Evans.
 \newblock \emph{Partial differential equations}, volume~19.
 \newblock American Mathematical Society, 2022.
+
+\bibitem[Evron et~al.(2022)Evron, Moroshko, Ward, Srebro, and Soudry]{Evron2022Catastrophic}
+Itay Evron, Edward Moroshko, Rachel Ward, Nati Srebro, and Daniel Soudry.
+\newblock How catastrophic can catastrophic forgetting be in linear regression?
+\newblock In \emph{35th Annual Conference on Learning Theory}, volume 178 of \emph{Proceedings of Machine Learning Research}, pp.\  4028--4079. PMLR, 2022.
 
 \bibitem[Fey et~al.(2025)Fey, Lenssen, and contributors]{pyg}
 Matthias Fey, Jan~Eric Lenssen, and contributors.
 \newblock Pytorch geomteric library.
 \newblock PyTorch Geometric, 2025.
 \newblock URL \url{https://pytorch-geometric.readthedocs.io/}.
+
+\bibitem[Friedman \& Meir(2025)Friedman and Meir]{Friedman2025Forgetting}
+Lior Friedman and Ron Meir.
+\newblock Data-dependent and oracle bounds on forgetting in continual learning.
+\newblock In \emph{4th Conference on Lifelong Learning Agents (CoLLAs)}, 2025.
 
 \bibitem[frostig et~al.(2018)frostig, sohl dickstein, stephens, adigun, bahri, bard, holliday, doucet, levenberg, mayne, oord, pfau, simonyan, slancman, sussex, vadgama, vanhoucke, wehnert, and zoph]{jax}
 jacob frostig, jascha sohl dickstein, sharad stephens, akintunde adigun, yasaman bahri, noam bard, ben holliday, arnaud doucet, matthew levenberg, alex mayne, aaron van~den oord, david pfau, karen simonyan, paul slancman, andy sussex, ashish vadgama, vincent vanhoucke, rory wehnert, and barret zoph.
@@ -102,6 +122,12 @@ Diederik~P. Kingma and Jimmy Ba.
 Tamara~G Kolda and Brett~W Bader.
 \newblock Tensor decompositions and applications.
 \newblock \emph{SIAM Review}, 51\penalty0 (3):\penalty0 455--500, 2009.
+
+\bibitem[Kong et~al.(2022)Kong, Liu, Wang, and Tao]{Kong2022NullSpace}
+Yajing Kong, Liu Liu, Zhen Wang, and Dacheng Tao.
+\newblock Balancing stability and plasticity through advanced null space in continual learning.
+\newblock In \emph{Computer Vision -- {ECCV} 2022}, volume 13671 of \emph{Lecture Notes in Computer Science}, pp.\  219--236. Springer, 2022.
+\newblock \doi{10.1007/978-3-031-19809-0_13}.
 
 \bibitem[Lai et~al.(2025)Lai, Zhao, Feng, Ma, Liu, Zhao, Lin, Yi, Xie, Zhang, et~al.]{lai2025reinforcement}
 Song Lai, Haohan Zhao, Rong Feng, Changyi Ma, Wenzhuo Liu, Hongbo Zhao, Xi~Lin, Dong Yi, Min Xie, Qingfu Zhang, et~al.
@@ -166,15 +192,15 @@ Michael McCloskey and Neal~J Cohen.
 \newblock Catastrophic interference in connectionist networks: The sequential learning problem.
 \newblock In \emph{Psychology of learning and motivation}, volume~24, pp.\  109--165. Elsevier, 1989.
 
-\bibitem[Muralidhara et~al.(2025)Muralidhara, Stricker, and Schuster]{CLORAmuralidhara2025}
-Shishir Muralidhara, Didier Stricker, and Ren{\'e} Schuster.
-\newblock {CLoRA: Parameter}-efficient continual learning with low-rank adaptation.
-\newblock \emph{arXiv preprint arXiv:2507.19887}, 2025.
-
 \bibitem[Pasunuru \& Bansal(2019)Pasunuru and Bansal]{CASpasunuru2019continual}
 Ramakanth Pasunuru and Mohit Bansal.
 \newblock Continual and multi-task architecture search.
 \newblock \emph{arXiv preprint arXiv:1906.05226}, 2019.
+
+\bibitem[Pentina \& Lampert(2014)Pentina and Lampert]{Pentina2014PACBayes}
+Anastasia Pentina and Christoph~H. Lampert.
+\newblock A {PAC}-{B}ayesian bound for lifelong learning.
+\newblock In \emph{Proceedings of the 31st International Conference on Machine Learning}, volume~32 of \emph{Proceedings of Machine Learning Research}, pp.\  991--999. PMLR, 2014.
 
 \bibitem[Petersen et~al.(2021)Petersen, Raslan, and Voigtlaender]{petersenTopologicalPropertiesSet2021a}
 Philipp Petersen, Mones Raslan, and Felix Voigtlaender.
@@ -204,6 +230,11 @@ Andrei~A Rusu, Neil~C Rabinowitz, Guillaume Desjardins, Hubert Soyer, James Kirk
 \newblock Progressive neural networks.
 \newblock \emph{arXiv preprint arXiv:1606.04671}, 2016.
 
+\bibitem[Scannell et~al.(2024)Scannell, Mereu, Chang, Tamir, Pajarinen, and Solin]{Scannell2024FunctionSpace}
+Aidan Scannell, Riccardo Mereu, Paul Chang, Ella Tamir, Joni Pajarinen, and Arno Solin.
+\newblock Function-space parameterization of neural networks for sequential learning.
+\newblock In \emph{The Twelfth International Conference on Learning Representations}, 2024.
+
 \bibitem[Son et~al.(2021)Son, Jang, Han, and Hwang]{son2021sobolev}
 Hwijae Son, Jin~Woo Jang, Woo~Jin Han, and Hyung~Ju Hwang.
 \newblock Sobolev training for physics informed neural networks.
@@ -214,14 +245,14 @@ Nik Weaver.
 \newblock \emph{Measure theory and functional analysis}.
 \newblock World Scientific Publishing Company, 2013.
 
-\bibitem[Wistuba et~al.(2023)Wistuba, Sivaprasad, Balles, and Zapper]{wistuba2023continual}
-Martin Wistuba, Prabhu~Teja Sivaprasad, Lukas Balles, and Giovanni Zapper.
-\newblock Continual learning with low rank adaptation.
-\newblock \emph{arXiv preprint arXiv:2311.17601}, 2023.
-
 \bibitem[Yoon et~al.(2017)Yoon, Yang, Lee, and Hwang]{yoon2017lifelong}
 Jaehong Yoon, Eunho Yang, Jeongtae Lee, and Sung~Ju Hwang.
 \newblock Lifelong learning with dynamically expandable networks.
 \newblock \emph{arXiv preprint arXiv:1708.01547}, 2017.
+
+\bibitem[Zhao et~al.(2024)Zhao, Wang, Huang, and Lin]{Zhao2024Statistical}
+Xuyang Zhao, Huiyuan Wang, Weiran Huang, and Wei Lin.
+\newblock A statistical theory of regularization-based continual learning.
+\newblock In \emph{Proceedings of the 41st International Conference on Machine Learning}, Proceedings of Machine Learning Research. PMLR, 2024.
 
 \end{thebibliography}
